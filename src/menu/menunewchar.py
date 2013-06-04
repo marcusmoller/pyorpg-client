@@ -80,8 +80,6 @@ class menuNewCharacter():
 		self.classIndex = 0
 
 		# - statistics
-		self.labelClassName = pygUI.pygLabel((350, 180, 100, 20), "CLASS NAME", align=pygUI.ALIGN_CENTER)
-
 		self.labelInfoStats = pygUI.pygLabel((544, 50, 256, 20), "Class Statistics", align=pygUI.ALIGN_CENTER)
 
 		self.labelHP = pygUI.pygLabel((544, 70, 10, 10), "HP: ")
@@ -93,7 +91,7 @@ class menuNewCharacter():
 		self.labelSpd = pygUI.pygLabel((544, 190, 10, 10), "Speed:")
 		self.labelMag = pygUI.pygLabel((544, 210, 10, 10), "Magic:")
 
-		self.labels = (self.labelClassName, self.labelInfoStats, self.labelHP, self.labelMP, self.labelSP, self.labelStr, self.labelDef, self.labelSpd, self.labelMag)
+		self.labels = (self.labelInfoStats, self.labelHP, self.labelMP, self.labelSP, self.labelStr, self.labelDef, self.labelSpd, self.labelMag)
 
 		# sprite image
 		self.spriteScale = 3
@@ -171,7 +169,7 @@ class menuNewCharacter():
 		self.updateCharSprite(Class[self.classIndex].sprite)
 
 	def updateCharSprite(self, sprite):
-		tempImage = pygame.image.load("data/sprites/" + str(sprite) + ".bmp").convert()
+		tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(sprite) + ".bmp").convert()
 		tempSprite = pygame.Surface((32, 32))
 
 		tempSprite.blit(tempImage, (0, 0), (128, 0, 32, 32))
