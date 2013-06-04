@@ -8,7 +8,7 @@ The client for the PyORPG project (http://www.powrtoch.org/pyorpg/)
 PyORPG carries the MIT license, which can be found both below and in the
 `LICENSE` file.
 
-This only applies to the PyORPG source itself, therefore not to the libraries and tools used. These individual copyrights can be found in `LICENSE`.
+This only applies to the PyORPG source itself, therefore not to the libraries and tools used. These individual copyrights can be found in `copying`.
 
 ```
 Copyright (c) 2013 Marcus Møller
