@@ -16,7 +16,6 @@ import global_vars as g
 
 from gamelogic import *
 from graphics import *
-from gameeditors import *
 from gui.gui import *
 from gui.pygUI import *
 from menu.menulogin import menuLogin
@@ -46,7 +45,6 @@ class Engine:
         self.menuNewChar = menuNewCharacter(g.screenSurface)
 
         self.graphicsEngine = GraphicsEngine()
-        self.gameEditor = GameEditor(self.graphicsEngine)
 
         self.tmr25 = 0
         self.tmr1000 = 0
