@@ -14,11 +14,11 @@ example, in Linux and Mac OS X this can be done from the terminal with the
 following commands:
 
 	$ cd src
-	$ python FretsOnFire.py
+	$ python pyorpg.py
 	
 You can also run the game by simply executing the launcher script:
 
-    $ sh launcher.sh
+        $ sh launcher.sh
 
 Making an installation package
 ------------------------------
