@@ -38,7 +38,7 @@ GAME_PORT   = 2727
 MAX_PLAYERS = 5
 
 # Website
-GAME_WEBSITE = "http://github.com"
+GAME_WEBSITE = "https://github.com/marcusmoller/pyorpg-client"
 
 # text colors
 class textColor():
