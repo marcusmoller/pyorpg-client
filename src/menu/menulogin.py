@@ -17,8 +17,7 @@ class loginControl(gui.Table):
 		self.engine = None
 
 		def btnLogin(btn):
-			self.engine.doLogin(self.value.items()[0][1],  self.value.items()[1][1])
-			print self.value.items()[0][1], self.value.items()[1][1]
+			self.engine.doLogin()
 
 		def btnRegister(btn):
 			g.gameState = MENU_REGISTER
@@ -49,14 +48,18 @@ class loginControl(gui.Table):
 class menuLogin():
 	def __init__(self, surface):
 
+		# variables
+		self.username = ""
+		self.password = ""
+
 		# GUI
 		self.app = gui.App()
 
-		loginCtrl = loginControl()
-		loginCtrl.engine = self
+		self.loginCtrl = loginControl()
+		self.loginCtrl.engine = self
 
 		self.c = gui.Container(align=0, valign=0)
-		self.c.add(loginCtrl, 0, 0)
+		self.c.add(self.loginCtrl, 0, 0)
 
 		self.app.init(self.c)
 
@@ -82,15 +85,9 @@ class menuLogin():
 		if event.type == KEYDOWN and event.key == K_ESCAPE:
 			g.gameEngine.quitGame()
 
-	def doLogin(self, username, password):
-		# temp:
-		#username = "admin"
-		#password = "admin"
+	def doLogin(self):
+		self.username = self.loginCtrl.value.items()[0][1]
+		self.password = self.loginCtrl.value.items()[1][1]
 
-		if len(username) >= 3 and len(password) >= 3:
-		# INITIALIZE THE CONNECTION
-			#connectionProtocol = startConnection()
-			#g.tcpConn = TCPConnection(connectionProtocol)
-
-			g.tcpConn.sendLogin(username, password)
-			g.gameState = MENU_CHAR
+		if len(self.username) >= 3 and len(self.password) >= 3:
+			g.gameEngine.initConnection()

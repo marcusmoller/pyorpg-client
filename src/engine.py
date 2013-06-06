@@ -22,9 +22,8 @@ from menu.menulogin import menuLogin
 from menu.menuregister import menuRegister
 from menu.menuchar import menuCharacters
 from menu.menunewchar import menuNewCharacter
-from sprites import *
 from objects import *
-from network.CClientTCP import *
+from network.client import *
 from network.database import *
 
 class Engine:
@@ -54,14 +53,17 @@ class Engine:
         
     def init(self):        
         pygame.display.flip()
-        
-        # initialize connection
-        connectionProtocol = startConnection()
-        g.tcpConn = TCPConnection(connectionProtocol)
         self.gameLoop()
         reactor.run()
+
+    def initConnection(self):
+        ''' starts the connection to the server '''
+        connectionProtocol = startConnection()
+        g.tcpConn = TCPConnection(connectionProtocol)
+
         
     def gameLoop(self, FPS = 25):
+        ''' the main loop of the game '''
         # TODO: DIRTY AREAS
         if g.gameState == MENU_LOGIN:
             self.menuLogin.draw()
@@ -131,6 +133,7 @@ class Engine:
         reactor.callLater(1./FPS, self.gameLoop)
 
     def quitGame(self):
+        ''' called when quitting the game '''
         g.tcpConn.sendQuit()
         reactor.stop()
         pygame.quit()
@@ -141,6 +144,7 @@ class Engine:
     #################
 
     def checkInputKeys(self):
+        ''' checks for input events '''
         def pressed(key):
             keys = pygame.key.get_pressed()
 

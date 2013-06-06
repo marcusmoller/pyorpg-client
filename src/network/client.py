@@ -11,6 +11,7 @@ from packettypes import *
 from datahandler import *
 from utils.utils import *
 from constants import *
+import global_vars as g
 
 dataHandler = None
 
@@ -29,6 +30,13 @@ class gameClientProtocol(LineReceiver):
 		self.factory = factory
 
 	def connectionMade(self):
+		''' called when connection has been made '''
+		''' used for logging in '''
+		username = g.gameEngine.menuLogin.username
+		password = g.gameEngine.menuLogin.password
+
+		g.tcpConn.sendLogin(username, password)
+		g.gameState = MENU_CHAR
 		log("Connection established to server")
 
 	def lineReceived(self, data):
