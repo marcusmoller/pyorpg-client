@@ -122,7 +122,8 @@ class Engine:
 
             if event.type == pygame.QUIT:
                 reactor.stop()
-                sys.exit()
+                pygame.quit()
+                
             elif event.type == pygame.MOUSEMOTION:
                 self.handleMouse(event)
 
@@ -133,7 +134,6 @@ class Engine:
         g.tcpConn.sendQuit()
         reactor.stop()
         pygame.quit()
-        sys.exit()
 
 
     ##################

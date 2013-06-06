@@ -80,8 +80,7 @@ class menuLogin():
 		self.app.event(event)
 
 		if event.type == KEYDOWN and event.key == K_ESCAPE:
-			reactor.stop()
-			sys.exit()
+			g.gameEngine.quitGame()
 
 	def doLogin(self, username, password):
 		# temp:
@@ -92,9 +91,6 @@ class menuLogin():
 		# INITIALIZE THE CONNECTION
 			#connectionProtocol = startConnection()
 			#g.tcpConn = TCPConnection(connectionProtocol)
-
-			#import time
-			#time.sleep(1)
 
 			g.tcpConn.sendLogin(username, password)
 			g.gameState = MENU_CHAR
