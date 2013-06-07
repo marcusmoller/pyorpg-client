@@ -58,6 +58,7 @@ class ServerPackets:
 	SPlayerData, \
 	SPlayerMove, \
 	SPlayerDir,  \
+	SAttack,     \
 	SCheckForMap,\
 	SMapData,    \
 	SMapItemData,\
@@ -72,4 +73,4 @@ class ServerPackets:
 	SMapList, \
 	SLeft,       \
 	SHighIndex   \
-	= range(27)
+	= range(28)

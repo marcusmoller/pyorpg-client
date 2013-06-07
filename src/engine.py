@@ -27,10 +27,6 @@ from network.client import *
 from network.database import *
 
 class Engine:
-    #################
-    # GAME SPECIFIC #
-    #################
-    
     def __init__(self):
         self.FRAMES_PER_SECOND = 20 
 
@@ -107,7 +103,10 @@ class Engine:
                     self.checkInputKeys()
 
                     if g.canMoveNow:
+                        # check if player is trying to move
                         checkMovement()
+                        # check if player is trying to attack
+                        checkAttack()
 
                     self.tmr25 = self.clockTick + 25
 
@@ -200,11 +199,30 @@ class Engine:
             g.inpDIR_LEFT = False
             g.inpDIR_RIGHT = True
 
+        elif pressed(pygame.K_LSHIFT) or pressed(pygame.K_RSHIFT):
+            g.inpDIR_UP = False
+            g.inpDIR_DOWN = False
+            g.inpDIR_LEFT = False
+            g.inpDIR_RIGHT = False
+            g.inpSHIFT = True
+            g.inpCTRL = False
+
+        elif pressed(pygame.K_LCTRL) or pressed(pygame.K_RCTRL):
+            g.inpDIR_UP = False
+            g.inpDIR_DOWN = False
+            g.inpDIR_LEFT = False
+            g.inpDIR_RIGHT = False
+            g.inpSHIFT = False
+            g.inpCTRL = True
+
         else:
             g.inpDIR_UP = False
             g.inpDIR_DOWN = False
             g.inpDIR_LEFT = False
             g.inpDIR_RIGHT = False
+            g.inpSHIFT = False
+            g.inpCTRL = False
+
 
     def handleMouse(self, event):
         g.cursorX = event.pos[0]

@@ -1,3 +1,4 @@
+import time
 import os.path
 
 from database import *
@@ -53,6 +54,9 @@ class DataHandler():
 
 		elif packetType == ServerPackets.SPlayerDir:
 			self.handlePlayerDir(jsonData)
+
+		elif packetType == ServerPackets.SAttack:
+			self.handleAttack(jsonData)
 
 		elif packetType == ServerPackets.SCheckForMap:
 			self.handleCheckForMap(jsonData)
@@ -229,6 +233,15 @@ class DataHandler():
 		direction = jsonData[0]["direction"]
 
 		setPlayerDir(index, direction)
+
+	def handleAttack(self, jsonData):
+		i = jsonData[0]['attacker']
+
+		Player[i].attacking = 1
+		Player[i].attackTimer = time.time()
+
+		# play attack sound
+		g.soundEngine.playAttack()
 
 	def handleCheckForMap(self, jsonData):
 		# erase other players

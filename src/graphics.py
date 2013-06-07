@@ -143,6 +143,8 @@ class GraphicsEngine():
 	def drawPlayer(self, index):
 		sprite = getPlayerSprite(index)
 
+		tickCount = time.time()
+
 		# check for animation
 		anim = 0
 		if Player[index].attacking == 0:
@@ -164,14 +166,13 @@ class GraphicsEngine():
 				if Player[index].xOffset < (SIZE_X/2 * -1):
 					anim = 1
 
-		elif (Player[index].attackTimer + 500) > time.time():
+		elif (Player[index].attackTimer + 0.5) > tickCount:
 				anim = 2
 
 		# do we want to stop sprite from attacking?
-		if (Player[index].attackTimer + 1000) < time.time():
+		if (Player[index].attackTimer + 1) < tickCount:
 			Player[index].attacking = 0
 			Player[index].attackTimer = 0
-
 
 		# rect(x, y, width, height)
 		rect = pygame.Rect((getPlayerDir(index)*3+anim)*32, 0, 32, 32)

@@ -7,7 +7,7 @@ from pygame.locals import *
 
 pygame.init()
 
-# TCPconnection (CClientTCP)
+# connection
 gameEngine = None
 soundEngine = None
 tcpConn = None
@@ -15,7 +15,7 @@ tcpConn = None
 # player variables
 myIndex = None
 
-# main gameloop
+# gameloop
 inGame = False
 isLogging = True
 gameState = 0
@@ -25,11 +25,13 @@ canMoveNow = True
 
 editor = None
 
-# Input (modInput.bas)
+# input
 inpDIR_UP = False
 inpDIR_DOWN = False
 inpDIR_LEFT = False
 inpDIR_RIGHT = False
+inpSHIFT = False
+inpCTRL = False
 
 # used for improved looping
 highIndex = 0
@@ -50,15 +52,16 @@ cursorY = 0
 # maximum classes
 maxClasses = 0
 
+# path for data files
 dataPath = os.path.join('..', 'data')
 
 # --------------------
 
-# GENERAL
+# general
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 
-# SDL
+# sdl
 screenSurface = None
 
 gameSurface = pygame.Surface((480, 352))
@@ -66,7 +69,7 @@ bgSurface = None
 
 guiSurface = pygame.Surface((800, 600))
 
-# SURFACE SPECIFIC
+# surfaces
 gameSurfaceXOffset = 0
 gameSurfaceYOffset = 0
 
@@ -75,15 +78,11 @@ guiSurfaceYOffset = 0
 
 clock = pygame.time.Clock()
 
-# FONT
+# default font
 nameFont = pygame.font.SysFont("Fixedsys", 14)
 
-# TILES
+# tiles
 tileDimension = 32
-
-# TEMPORARY (!!!)
-argUsername = None
-argPassword = None
 
 # map
 mapNames = []

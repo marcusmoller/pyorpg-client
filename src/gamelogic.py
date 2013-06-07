@@ -1,3 +1,5 @@
+import time
+
 from network.database import *
 from constants import *
 import global_vars as g
@@ -219,6 +221,15 @@ def isTryingToMove():
 		return True
 	else:
 		return False
+
+def checkAttack():
+	if g.inpCTRL == True:
+		if Player[g.myIndex].attackTimer + 1 < time.time():
+			if Player[g.myIndex].attacking == 0:
+				Player[g.myIndex].attacking = 1
+				Player[g.myIndex].attackTimer = time.time()
+
+				g.tcpConn.sendPlayerAttack()
 
 def canMove():
 	d = getPlayerDir(g.myIndex)

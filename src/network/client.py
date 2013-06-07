@@ -135,6 +135,10 @@ class TCPConnection():
 		packet = json.dumps([{"packet": ClientPackets.CPlayerMove, "direction": getPlayerDir(g.myIndex), "moving": Player[g.myIndex].moving}])
 		self.sendData(packet)
 
+	def sendPlayerAttack(self):
+		packet = json.dumps([{"packet": ClientPackets.CAttack}])
+		self.sendData(packet)
+
 	def sendPlayerDir(self):
 		packet = json.dumps([{"packet": ClientPackets.CPlayerDir, "direction": getPlayerDir(g.myIndex)}])
 		self.sendData(packet)
