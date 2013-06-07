@@ -118,7 +118,6 @@ class menuRegister():
 		pygame.display.update()
 
 	def _handleEvents(self, event):
-		# keyboard shortcuts
 		self.app.event(event)
 		
 		if event.type == KEYDOWN and event.key == K_ESCAPE:
