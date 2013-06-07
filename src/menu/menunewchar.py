@@ -147,7 +147,7 @@ class menuNewCharacter():
 		if len(name) >= 3:
 			if self.isStringLegal(name):
 				g.tcpConn.sendAddChar(name, "male", self.classIndex, (g.gameEngine.menuChar.charIndex-1))
-				g.gameState = MENU_CHAR
+				g.gameEngine.setState(MENU_CHAR)
 
 	def updateClassSelection(self):
 		if self.classIndex > (g.maxClasses-1):

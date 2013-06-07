@@ -9,6 +9,7 @@ pygame.init()
 
 # TCPconnection (CClientTCP)
 gameEngine = None
+soundEngine = None
 tcpConn = None
 
 # player variables
@@ -66,7 +67,7 @@ bgSurface = None
 guiSurface = pygame.Surface((800, 600))
 
 # SURFACE SPECIFIC
-gameSurfaceXOffset = 0    # 800 - (32*15) MAEMO
+gameSurfaceXOffset = 0
 gameSurfaceYOffset = 0
 
 guiSurfaceXOffset = 0

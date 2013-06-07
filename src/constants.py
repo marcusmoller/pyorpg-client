@@ -24,6 +24,11 @@ MENU_CHAR     = 2
 MENU_NEWCHAR  = 3
 MENU_INGAME   = 4
 
+# sound states
+SOUND_OPENING = 0
+SOUND_TOWN = 1
+SOUND_OTHER = 2
+
 # debugging
 DEBUGGING = False
 

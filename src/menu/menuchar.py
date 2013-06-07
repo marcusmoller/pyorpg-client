@@ -25,11 +25,11 @@ class characterControl(gui.Table):
 		def btnUseChar(btn):
 			if self.lblPlayerName.value != 'Create a new character':
 				g.tcpConn.sendUseChar(self.engine.charIndex-1)
-				g.gameState = MENU_INGAME
+				g.gameEngine.setState(MENU_INGAME)
 			else:
 				# new char
 				g.tcpConn.sendGetClasses()
-				g.gameState = MENU_NEWCHAR
+				g.gameEngine.setState(MENU_NEWCHAR)
 
 		def btnDelChar(btn):
 			print "lawl"
@@ -158,7 +158,3 @@ class menuCharacters():
 
 		self.spriteImage = pygame.transform.scale(tempSprite, (PIC_X * self.spriteScale, PIC_Y * self.spriteScale))
 		self.spriteImage.set_colorkey((0, 0, 0))
-
-	def doUseChar(self):
-		g.tcpConn.sendUseChar(self.charIndex-1)
-		g.gameState = MENU_INGAME

@@ -16,8 +16,8 @@ import global_vars as g
 
 from gamelogic import *
 from graphics import *
+from sound import SoundEngine
 from gui.gui import *
-from gui.pygUI import *
 from menu.menulogin import menuLogin
 from menu.menuregister import menuRegister
 from menu.menuchar import menuCharacters
@@ -33,9 +33,6 @@ class Engine:
     
     def __init__(self):
         self.FRAMES_PER_SECOND = 20 
-        
-        #INIT SETTINGS
-        if not pygame.mixer: print "Warning, sounds are disabled!"
 
         # menus
         self.menuLogin = menuLogin(g.screenSurface)
@@ -51,7 +48,12 @@ class Engine:
         self.clockTick = 0
 
         
-    def init(self):        
+    def init(self):
+        g.soundEngine = SoundEngine()
+        g.soundEngine.loadSounds()
+
+        self.setState(MENU_LOGIN)
+
         pygame.display.flip()
         self.gameLoop()
         reactor.run()
@@ -61,6 +63,24 @@ class Engine:
         connectionProtocol = startConnection()
         g.tcpConn = TCPConnection(connectionProtocol)
 
+    def setState(self, state):
+        ''' sets the game state '''
+        if state == MENU_LOGIN:
+            g.gameState = MENU_LOGIN
+            g.soundEngine.play(SOUND_OPENING, True, True)
+
+        elif state == MENU_REGISTER:
+            g.gameState = MENU_REGISTER
+
+        elif state == MENU_CHAR:
+            g.gameState = MENU_CHAR
+
+        elif state == MENU_NEWCHAR:
+            g.gameState = MENU_NEWCHAR
+
+        elif state == MENU_INGAME:
+            g.gameState = MENU_INGAME
+            g.soundEngine.play(SOUND_TOWN, True, True)
         
     def gameLoop(self, FPS = 25):
         ''' the main loop of the game '''
@@ -134,7 +154,10 @@ class Engine:
 
     def quitGame(self):
         ''' called when quitting the game '''
-        g.tcpConn.sendQuit()
+        if g.tcpConn != None:
+            # if connected to server, send quit msg
+            g.tcpConn.sendQuit()
+
         reactor.stop()
         pygame.quit()
 

@@ -36,7 +36,7 @@ class gameClientProtocol(LineReceiver):
 		password = g.gameEngine.menuLogin.password
 
 		g.tcpConn.sendLogin(username, password)
-		g.gameState = MENU_CHAR
+		g.gameEngine.setState(MENU_CHAR)
 		log("Connection established to server")
 
 	def lineReceived(self, data):

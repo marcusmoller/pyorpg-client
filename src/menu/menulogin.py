@@ -70,7 +70,6 @@ class menuLogin():
 
 		self.backgroundImage = pygame.image.load(g.dataPath + '/gui/menu_background.png')
 
-
 	def draw(self):
 		# background
 		self.surface.blit(self.backgroundImage, (0, 0))

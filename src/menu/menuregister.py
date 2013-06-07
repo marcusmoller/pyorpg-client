@@ -48,7 +48,7 @@ class registerControl(gui.Table):
 						print "Created user " + username
 
 						# return to login screen
-						g.gameState = MENU_LOGIN
+						g.gameEngine.setState(MENU_LOGIN)
 				else:
 					# todo: msgbox
 					print "passwords didn't match"
