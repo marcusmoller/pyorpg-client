@@ -9,7 +9,7 @@ import global_vars as g
 ########
 
 def addText(text, color):
-	g.gameEngine.graphicsEngine.gameGUI.guiContainer.chatCtrl.addItem(str(text))
+	g.gameEngine.graphicsEngine.gameGUI.guiContainer.chatCtrl.addText(str(text), color)
 
 def handleMsg(text):
 		msg = text.lower()

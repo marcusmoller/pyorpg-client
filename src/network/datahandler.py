@@ -153,7 +153,7 @@ class DataHandler():
 		# gameLoop
 		log("Player is ingame")
 
-		# TODO: FIX THIS FOR GOD SAKE
+		# TODO: fix this
 		initMapData()
 
 	def handlePlayerHP(self, jsonData):

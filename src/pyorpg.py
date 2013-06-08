@@ -14,6 +14,7 @@ from constants import *
 parser = argparse.ArgumentParser(prog='PyORPG')
 parser.add_argument('-ip', help='connect to server on ip')
 parser.add_argument('-p', help='connect to server on port')
+parser.add_argument('--no-sound', help='disables sound', action='store_false')
 args = vars(parser.parse_args())
 
 if args['ip'] != None:

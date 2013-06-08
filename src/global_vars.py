@@ -78,8 +78,8 @@ guiSurfaceYOffset = 0
 
 clock = pygame.time.Clock()
 
-# default font
-nameFont = pygame.font.SysFont("Fixedsys", 14)
+# fonts
+textFont = pygame.font.Font(dataPath + '/fonts/Minecraftia.ttf', 12)
 
 # tiles
 tileDimension = 32

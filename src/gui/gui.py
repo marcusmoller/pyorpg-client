@@ -55,8 +55,7 @@ class QuitDialog(gui.Dialog):
 
 		gui.Dialog.__init__(self, title, t)
 
-
-class chatControl(gui.Table):
+class ChatControl(gui.Table):
 	def __init__(self, **params):
 		gui.Table.__init__(self, **params)
 		self.value = gui.Form()
@@ -73,16 +72,22 @@ class chatControl(gui.Table):
 		self.td(self.chatMsg)
 
 		self.tr()
-		self.chatList = gui.List(width=480, height=170)
-		self.td(self.chatList)
+		self.chatList = gui.Table()
+		self.box = gui.ScrollArea(self.chatList, width=480, height=170)
+		self.td(self.box)
 
 		self.tr()
 		class Hack(gui.Spacer):
+			def __init__(self, box):
+				super(gui.Spacer, self).__init__()
+				self.box = box
+
 			def resize(self, width=None, height=None):
-				#self.chatListBox.set_vertical_scroll(65535)
+				self.box.set_vertical_scroll(65535)
 				return 1, 1
 
-		self.td(Hack(1, 1))
+		dirtyHack = Hack(self.box)
+		self.td(dirtyHack)
 
 	def lkey(self, _event):
 		e = _event
@@ -95,20 +100,13 @@ class chatControl(gui.Table):
 				g.canMoveNow = True
 				#print self.focused
 
-	def addItem(self, item):
-		self.chatList.add(item, value=self._count)
-		self.chatList.resize()
-		self.chatList.repaint()
-		self._count += 1
+	def addText(self, text, color=(0, 0, 0)):
+		self.chatList.tr()
+		self.chatList.td(gui.Label(str(text), color=color), align=-1)
+		self.box.resize()
 
-	def clearList(self):
-		self.chatList.clear()
-		self.chatList.resize()
-		self.chatList.repaint()
-
-	def addText(self, text):
-		self.lines.tr()
-		self.lines.td(gui.Label(str(text)), align=-1)
+	def clearChat(self):
+		print "todo"
 
 class uiContainer(gui.Container):
 	def __init__(self, engine, **params):
@@ -189,7 +187,7 @@ class GUIContainer(gui.Container):
 
 		self.engine = engine
 
-		self.chatCtrl = chatControl(name="chatCtrl")
+		self.chatCtrl = ChatControl(name="chatCtrl")
 		self.uiCtrl = uiContainer(self.engine, name="uiCtrl")
 		self.mapEditorControl = MapEditorContainer(self.engine.mapEditorGUI ,name="mapEditorCtrl")
 
