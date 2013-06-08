@@ -73,7 +73,7 @@ class ChatControl(gui.Table):
 
 		self.tr()
 		self.chatList = gui.Table()
-		self.box = gui.ScrollArea(self.chatList, width=480, height=170)
+		self.box = gui.ScrollArea(self.chatList, width=480, height=175)
 		self.td(self.box)
 
 		self.tr()
@@ -98,7 +98,6 @@ class ChatControl(gui.Table):
 				self.chatMsg.value = ''
 				
 				g.canMoveNow = True
-				#print self.focused
 
 	def addText(self, text, color=(0, 0, 0)):
 		self.chatList.tr()
