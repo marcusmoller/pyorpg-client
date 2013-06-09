@@ -47,23 +47,23 @@ GAME_WEBSITE = "https://github.com/marcusmoller/pyorpg-client"
 
 # text colors
 class textColor():
-	BLACK      = (  0,   0,   0)
-	BLUE       = (  0,   0, 255)
-	GREEN      = (  0, 255,   0)
-	RED        = (255,   0,   0)
-	CYAN       = (  0, 255, 255)
-	YELLOW     = (255, 255,   0)
-	GREY       = (128, 128, 128)
-	PINK       = (255,   0, 255)
-	BROWN      = (153,  76,   0)
+    BLACK      = (  0,   0,   0)
+    BLUE       = (  0,   0, 255)
+    GREEN      = (  0, 255,   0)
+    RED        = (255,   0,   0)
+    CYAN       = (  0, 255, 255)
+    YELLOW     = (255, 255,   0)
+    GREY       = (128, 128, 128)
+    PINK       = (255,   0, 255)
+    BROWN      = (153,  76,   0)
 
-	BRIGHT_RED   = (255,  51,  51)
-	BRIGHT_GREEN = (128, 255,   0)
-	BRIGHT_BLUE  = (  0, 128, 255)
-	BRIGHT_CYAN  = (  0, 255, 128)
+    BRIGHT_RED   = (255,  51,  51)
+    BRIGHT_GREEN = (128, 255,   0)
+    BRIGHT_BLUE  = (  0, 128, 255)
+    BRIGHT_CYAN  = (  0, 255, 128)
 
-	DARK_GREY    = ( 96,  96,  96)
-	DARK_CYAN    = (  0, 204, 204)
+    DARK_GREY    = ( 96,  96,  96)
+    DARK_CYAN    = (  0, 204, 204)
 
 
 sayColor       = textColor.GREY

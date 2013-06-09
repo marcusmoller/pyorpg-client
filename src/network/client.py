@@ -16,39 +16,39 @@ import global_vars as g
 dataHandler = None
 
 def startConnection():
-	global dataHandler
-	factory = gameClientFactory()
-	reactor.connectTCP(GAME_IP, GAME_PORT, factory)
-	dataHandler = DataHandler()
+    global dataHandler
+    factory = gameClientFactory()
+    reactor.connectTCP(GAME_IP, GAME_PORT, factory)
+    dataHandler = DataHandler()
 
-	return factory.protocol
+    return factory.protocol
 
 class gameClientProtocol(LineReceiver):
-	MAX_LENGTH = 999999 #todo: find a suitable size (see client: sendMap (in clienttcp.py))
+    MAX_LENGTH = 999999 #todo: find a suitable size (see client: sendMap (in clienttcp.py))
 
-	def __init__(self, factory):
-		self.factory = factory
+    def __init__(self, factory):
+        self.factory = factory
 
-	def connectionMade(self):
-		''' called when connection has been made '''
-		''' used for logging in '''
-		username = g.gameEngine.menuLogin.username
-		password = g.gameEngine.menuLogin.password
+    def connectionMade(self):
+        ''' called when connection has been made '''
+        ''' used for logging in '''
+        username = g.gameEngine.menuLogin.username
+        password = g.gameEngine.menuLogin.password
 
-		g.tcpConn.sendLogin(username, password)
-		g.gameEngine.setState(MENU_CHAR)
-		log("Connection established to server")
+        g.tcpConn.sendLogin(username, password)
+        g.gameEngine.setState(MENU_CHAR)
+        log("Connection established to server")
 
-	def lineReceived(self, data):
-		global dataHandler
+    def lineReceived(self, data):
+        global dataHandler
 
-		log("Received data from server")
-		log(" -> " + data)
+        log("Received data from server")
+        log(" -> " + data)
 
-		dataHandler.handleData(data)
+        dataHandler.handleData(data)
 
-	def sendData(self, data):
-		self.sendLine(data)
+    def sendData(self, data):
+        self.sendLine(data)
 
 class gameClientFactory(ClientFactory):
     def __init__(self):
@@ -58,7 +58,7 @@ class gameClientFactory(ClientFactory):
         log("Connecting to server...")
 
     def buildProtocol(self, addr):
-    	return self.protocol
+        return self.protocol
 
     def clientConnectionFailed(self, connector, reason):
         print reason.getErrorMessage()
@@ -72,126 +72,126 @@ class gameClientFactory(ClientFactory):
             pass
 
 class TCPConnection():
-	def __init__(self, protocol):
-		self.protocol = protocol
+    def __init__(self, protocol):
+        self.protocol = protocol
 
-	def sendData(self, data):
-		self.protocol.sendData(data)
-		
+    def sendData(self, data):
+        self.protocol.sendData(data)
+        
 
-	def sendNewAccount(self, username, password):
-		packet = json.dumps([{"packet": ClientPackets.CNewAccount, "name": username, "password": password}])
-		self.sendData(packet)
+    def sendNewAccount(self, username, password):
+        packet = json.dumps([{"packet": ClientPackets.CNewAccount, "name": username, "password": password}])
+        self.sendData(packet)
 
-	def sendDelAccount(self, username, password):
-		packet = json.dumps([{"packet": ClientPackets.CDelAccount, "name": username, "password": password}])
-		self.sendData(packet)
+    def sendDelAccount(self, username, password):
+        packet = json.dumps([{"packet": ClientPackets.CDelAccount, "name": username, "password": password}])
+        self.sendData(packet)
 
-	def sendLogin(self, username, password):
-		packet = json.dumps([{"packet": ClientPackets.CLogin, "name": username, "password": password}])
-		self.sendData(packet)
+    def sendLogin(self, username, password):
+        packet = json.dumps([{"packet": ClientPackets.CLogin, "name": username, "password": password}])
+        self.sendData(packet)
 
-	def sendAddChar(self, name, sex, classNum, slot):
-		packet = json.dumps([{"packet": ClientPackets.CAddChar, "name": name, "sex": sex, "class": classNum, "slot": slot}])
-		self.sendData(packet)
+    def sendAddChar(self, name, sex, classNum, slot):
+        packet = json.dumps([{"packet": ClientPackets.CAddChar, "name": name, "sex": sex, "class": classNum, "slot": slot}])
+        self.sendData(packet)
 
-	def sendDelChar(self, slot):
-		packet = json.dumps([{"packet": ClientPackets.CDelChar}])
-		self.sendData(packet)
+    def sendDelChar(self, slot):
+        packet = json.dumps([{"packet": ClientPackets.CDelChar}])
+        self.sendData(packet)
 
-	def sendGetClasses(self):
-		packet = json.dumps([{"packet": ClientPackets.CGetClasses}])
-		self.sendData(packet)
+    def sendGetClasses(self):
+        packet = json.dumps([{"packet": ClientPackets.CGetClasses}])
+        self.sendData(packet)
 
-	def sendUseChar(self, charslot):
-		packet = json.dumps([{"packet": ClientPackets.CUseChar, "charslot": charslot}])
-		self.sendData(packet)
+    def sendUseChar(self, charslot):
+        packet = json.dumps([{"packet": ClientPackets.CUseChar, "charslot": charslot}])
+        self.sendData(packet)
 
-	def sayMsg(self, msg):
-		packet = json.dumps([{"packet": ClientPackets.CSayMsg, "msg": msg}])
-		self.sendData(packet)
+    def sayMsg(self, msg):
+        packet = json.dumps([{"packet": ClientPackets.CSayMsg, "msg": msg}])
+        self.sendData(packet)
 
-	def globalMsg(self, msg):
-		packet = json.dumps([{"packet": ClientPackets.CGlobalMsg, "msg": msg}])
-		self.sendData(packet)
+    def globalMsg(self, msg):
+        packet = json.dumps([{"packet": ClientPackets.CGlobalMsg, "msg": msg}])
+        self.sendData(packet)
 
-	def broadcastMsg(self, msg):
-		packet = json.dumps([{"packet": ClientPackets.CSayMsg, "msg": msg}])
-		self.sendData(packet)
+    def broadcastMsg(self, msg):
+        packet = json.dumps([{"packet": ClientPackets.CSayMsg, "msg": msg}])
+        self.sendData(packet)
 
-	def emoteMsg(self, msg):
-		packet = json.dumps([{"packet": ClientPackets.CSayMsg, "msg": msg}])
-		self.sendData(packet)
+    def emoteMsg(self, msg):
+        packet = json.dumps([{"packet": ClientPackets.CSayMsg, "msg": msg}])
+        self.sendData(packet)
 
-	def playerMsg(self, msg):
-		packet = json.dumps([{"packet": ClientPackets.CPlayerMsg, "msg": msg}])
-		self.sendData(packet)
+    def playerMsg(self, msg):
+        packet = json.dumps([{"packet": ClientPackets.CPlayerMsg, "msg": msg}])
+        self.sendData(packet)
 
-	def adminMsg(self, msg):
-		packet = json.dumps([{"packet": ClientPackets.CAdminMsg, "msg": msg}])
-		self.sendData(packet)
+    def adminMsg(self, msg):
+        packet = json.dumps([{"packet": ClientPackets.CAdminMsg, "msg": msg}])
+        self.sendData(packet)
 
-	def sendPlayerMove(self):
-		packet = json.dumps([{"packet": ClientPackets.CPlayerMove, "direction": getPlayerDir(g.myIndex), "moving": Player[g.myIndex].moving}])
-		self.sendData(packet)
+    def sendPlayerMove(self):
+        packet = json.dumps([{"packet": ClientPackets.CPlayerMove, "direction": getPlayerDir(g.myIndex), "moving": Player[g.myIndex].moving}])
+        self.sendData(packet)
 
-	def sendPlayerAttack(self):
-		packet = json.dumps([{"packet": ClientPackets.CAttack}])
-		self.sendData(packet)
+    def sendPlayerAttack(self):
+        packet = json.dumps([{"packet": ClientPackets.CAttack}])
+        self.sendData(packet)
 
-	def sendPlayerDir(self):
-		packet = json.dumps([{"packet": ClientPackets.CPlayerDir, "direction": getPlayerDir(g.myIndex)}])
-		self.sendData(packet)
+    def sendPlayerDir(self):
+        packet = json.dumps([{"packet": ClientPackets.CPlayerDir, "direction": getPlayerDir(g.myIndex)}])
+        self.sendData(packet)
 
-	def sendPlayerRequestNewMap(self):
-		packet = json.dumps([{"packet": ClientPackets.CRequestNewMap, "direction": getPlayerDir(g.myIndex)}])
-		self.sendData(packet)
+    def sendPlayerRequestNewMap(self):
+        packet = json.dumps([{"packet": ClientPackets.CRequestNewMap, "direction": getPlayerDir(g.myIndex)}])
+        self.sendData(packet)
 
-	def sendMap(self):
-		#todo: npc
+    def sendMap(self):
+        #todo: npc
 
-		#canMoveNow = false
+        #canMoveNow = false
 
-		packet = []
-		packet.append({"packet": ClientPackets.CMapData, \
-	                   "mapname": Map.name, \
-	                   "moral": Map.moral, \
-	                   "tileset": Map.tileSet, \
-	                   "up": Map.up, \
-	                   "down": Map.down, \
-	                   "left": Map.left, \
-	                   "right": Map.right, \
-	                   "bootmap": Map.bootMap, \
-	                   "bootx": Map.bootX, \
-	                   "booty": Map.bootY})
+        packet = []
+        packet.append({"packet": ClientPackets.CMapData, \
+                       "mapname": Map.name, \
+                       "moral": Map.moral, \
+                       "tileset": Map.tileSet, \
+                       "up": Map.up, \
+                       "down": Map.down, \
+                       "left": Map.left, \
+                       "right": Map.right, \
+                       "bootmap": Map.bootMap, \
+                       "bootx": Map.bootX, \
+                       "booty": Map.bootY})
 
-		for x in range(MAX_MAPX):
-			for y in range(MAX_MAPY):
-				tempTile = Map.tile[x][y]
-				packet.append([{"ground": tempTile.ground, \
-				                "mask": tempTile.mask, \
-				                "animation": tempTile.anim, \
-				                "fringe": tempTile.fringe, \
-				                "type": tempTile.type, \
-				                "data1": tempTile.data1, \
-				                "data2": tempTile.data2, \
-				                "data3": tempTile.data3}])
-		print packet[5][0]
-		packet = json.dumps(packet)
-		self.sendData(packet)
+        for x in range(MAX_MAPX):
+            for y in range(MAX_MAPY):
+                tempTile = Map.tile[x][y]
+                packet.append([{"ground": tempTile.ground, \
+                                "mask": tempTile.mask, \
+                                "animation": tempTile.anim, \
+                                "fringe": tempTile.fringe, \
+                                "type": tempTile.type, \
+                                "data1": tempTile.data1, \
+                                "data2": tempTile.data2, \
+                                "data3": tempTile.data3}])
+        print packet[5][0]
+        packet = json.dumps(packet)
+        self.sendData(packet)
 
-	def sendNeedMap(self, answer=0):
-		packet = json.dumps([{"packet": ClientPackets.CNeedMap, "answer": answer}])
-		self.sendData(packet)
+    def sendNeedMap(self, answer=0):
+        packet = json.dumps([{"packet": ClientPackets.CNeedMap, "answer": answer}])
+        self.sendData(packet)
 
-	def sendSetSprite(self, spriteNum):
-		packet = json.dumps([{"packet": ClientPackets.CSetSprite, "sprite": spriteNum}])
-		self.sendData(packet)
+    def sendSetSprite(self, spriteNum):
+        packet = json.dumps([{"packet": ClientPackets.CSetSprite, "sprite": spriteNum}])
+        self.sendData(packet)
 
-	def sendRequestEditMap(self):
-		packet = json.dumps([{"packet": ClientPackets.CRequestEditMap}])
-		self.sendData(packet)
+    def sendRequestEditMap(self):
+        packet = json.dumps([{"packet": ClientPackets.CRequestEditMap}])
+        self.sendData(packet)
 
-	def sendQuit(self):
-		packet = json.dumps([{"packet": ClientPackets.CQuit}])
-		self.sendData(packet)
+    def sendQuit(self):
+        packet = json.dumps([{"packet": ClientPackets.CQuit}])
+        self.sendData(packet)

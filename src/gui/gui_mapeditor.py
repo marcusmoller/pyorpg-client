@@ -17,513 +17,513 @@ PLACE_ITEM  = 4
 UI_FONT_COLOR = (251, 230, 204)
 
 class MapSelectorDialog(gui.Dialog):
-	def __init__(self, inputfield, **params):
-		self.inpField = inputfield
+    def __init__(self, inputfield, **params):
+        self.inpField = inputfield
 
-		self._count = 1
+        self._count = 1
 
-		title = gui.Label("Map Selector")
+        title = gui.Label("Map Selector")
 
-		t = gui.Table()
+        t = gui.Table()
 
-		t.tr()
-		t.td(gui.Label('Select a map:'), colspan=2)
+        t.tr()
+        t.td(gui.Label('Select a map:'), colspan=2)
 
-		t.tr()
-		t.td(gui.Spacer(10, 20))
+        t.tr()
+        t.td(gui.Spacer(10, 20))
 
-		t.tr()
-		self.mapList = gui.List(width=200, height=140)
-		t.td(self.mapList, colspan=2)
+        t.tr()
+        self.mapList = gui.List(width=200, height=140)
+        t.td(self.mapList, colspan=2)
 
-		t.tr()
-		t.td(gui.Spacer(10, 20))
+        t.tr()
+        t.td(gui.Spacer(10, 20))
 
-		t.tr()
-		e = gui.Button('Choose map')
-		e.connect(gui.CLICK, self.setInput, None)
-		t.td(e)
+        t.tr()
+        e = gui.Button('Choose map')
+        e.connect(gui.CLICK, self.setInput, None)
+        t.td(e)
 
-		e = gui.Button('Cancel')
-		e.connect(gui.CLICK, self.close, None)
-		t.td(e)
+        e = gui.Button('Cancel')
+        e.connect(gui.CLICK, self.close, None)
+        t.td(e)
 
-		t.tr()
-		t.td(gui.Spacer(10, 10))
+        t.tr()
+        t.td(gui.Spacer(10, 10))
 
-		gui.Dialog.__init__(self, title, t)
+        gui.Dialog.__init__(self, title, t)
 
-	def setInput(self, value):
-		listValue = self.mapList.value
+    def setInput(self, value):
+        listValue = self.mapList.value
 
-		if listValue:
-			self.inpField.value = str(listValue)
-			self.close()
+        if listValue:
+            self.inpField.value = str(listValue)
+            self.close()
 
-	def openDialog(self, value):
-		#self.loadMaps()
-		self.open()
-		self.loadMaps()
+    def openDialog(self, value):
+        #self.loadMaps()
+        self.open()
+        self.loadMaps()
 
-	def loadMaps(self):
-		#self.clearList()
+    def loadMaps(self):
+        #self.clearList()
 
-		for i in range(1, len(g.mapNames)):
-			print g.mapNames
-			self.addItem(str(i) + ' - "' + g.mapNames[i] + '"')
+        for i in range(1, len(g.mapNames)):
+            print g.mapNames
+            self.addItem(str(i) + ' - "' + g.mapNames[i] + '"')
 
-	def addItem(self, item):
-		self.mapList.add(item, value=self._count)
-		self.mapList.resize()
-		self.mapList.repaint()
-		self._count += 1
+    def addItem(self, item):
+        self.mapList.add(item, value=self._count)
+        self.mapList.resize()
+        self.mapList.repaint()
+        self._count += 1
 
-	def clearList(self):
-		self.mapList.clear()
-		self.mapList.resize()
-		self.mapList.repaint()
-		self._count = 1
+    def clearList(self):
+        self.mapList.clear()
+        self.mapList.resize()
+        self.mapList.repaint()
+        self._count = 1
 
 
 class propertiesControl(gui.Table):
-	def __init__(self, **params):
-		gui.Table.__init__(self, **params)
+    def __init__(self, **params):
+        gui.Table.__init__(self, **params)
 
-		self.value = gui.Form()
+        self.value = gui.Form()
 
-		self.tr()
-		self.td(gui.Label("Map Name:", color=UI_FONT_COLOR))
-		self.td(gui.Input("", size=16, name="inpMapName"))
+        self.tr()
+        self.td(gui.Label("Map Name:", color=UI_FONT_COLOR))
+        self.td(gui.Input("", size=16, name="inpMapName"))
 
-		self.tr()
-		self.td(gui.Label("Warp Up:", color=UI_FONT_COLOR))
-		self.td(gui.Input("0", size=4, name="inpMapUp"))
+        self.tr()
+        self.td(gui.Label("Warp Up:", color=UI_FONT_COLOR))
+        self.td(gui.Input("0", size=4, name="inpMapUp"))
 
-		self.tr()
-		self.td(gui.Label("Warp Down:", color=UI_FONT_COLOR))
-		self.td(gui.Input("0", size=4, name="inpMapDown"))
+        self.tr()
+        self.td(gui.Label("Warp Down:", color=UI_FONT_COLOR))
+        self.td(gui.Input("0", size=4, name="inpMapDown"))
 
-		self.tr()
-		self.td(gui.Label("Warp Left:", color=UI_FONT_COLOR))
-		self.td(gui.Input("0", size=4, name="inpMapLeft"))
+        self.tr()
+        self.td(gui.Label("Warp Left:", color=UI_FONT_COLOR))
+        self.td(gui.Input("0", size=4, name="inpMapLeft"))
 
-		self.tr()
-		self.td(gui.Label("Warp Right:", color=UI_FONT_COLOR))
-		self.td(gui.Input("0", size=4, name="inpMapRight"))
+        self.tr()
+        self.td(gui.Label("Warp Right:", color=UI_FONT_COLOR))
+        self.td(gui.Input("0", size=4, name="inpMapRight"))
 
-		self.loadProperties()
+        self.loadProperties()
 
-	def loadProperties(self):
-		self.value["inpMapName"].value = Map.name
-		self.value["inpMapUp"].value = str(Map.up)
-		self.value["inpMapDown"].value = str(Map.down)
-		self.value["inpMapLeft"].value = str(Map.left)
-		self.value["inpMapRight"].value = str(Map.right)
+    def loadProperties(self):
+        self.value["inpMapName"].value = Map.name
+        self.value["inpMapUp"].value = str(Map.up)
+        self.value["inpMapDown"].value = str(Map.down)
+        self.value["inpMapLeft"].value = str(Map.left)
+        self.value["inpMapRight"].value = str(Map.right)
 
 class placeTileControl(gui.Table):
-	def __init__(self, **params):
-		gui.Table.__init__(self, **params)
+    def __init__(self, **params):
+        gui.Table.__init__(self, **params)
 
-		self.value = gui.Form()
+        self.value = gui.Form()
 
-		self.tr()
-		g = gui.Group(name="grpTileType")
+        self.tr()
+        g = gui.Group(name="grpTileType")
 
-		self.td(gui.Label("Ground", color=UI_FONT_COLOR))
-		self.td(gui.Spacer(10, 0))
-		e = gui.Radio(g, value=1)
-		e.click()
-		self.td(e)
+        self.td(gui.Label("Ground", color=UI_FONT_COLOR))
+        self.td(gui.Spacer(10, 0))
+        e = gui.Radio(g, value=1)
+        e.click()
+        self.td(e)
 
-		self.tr()
-		self.td(gui.Label("Fringe", color=UI_FONT_COLOR))
-		self.td(gui.Spacer(10, 0))
-		self.td(gui.Radio(g, value=2))
+        self.tr()
+        self.td(gui.Label("Fringe", color=UI_FONT_COLOR))
+        self.td(gui.Spacer(10, 0))
+        self.td(gui.Radio(g, value=2))
 
 class placeBlockControl(gui.Table):
-	def __init__(self, **params):
-		gui.Table.__init__(self, **params)
+    def __init__(self, **params):
+        gui.Table.__init__(self, **params)
 
-		self.value = gui.Form()
+        self.value = gui.Form()
 
-		self.tr()
-		label = gui.Label("Left click to add block", color=UI_FONT_COLOR)
-		self.td(label)
+        self.tr()
+        label = gui.Label("Left click to add block", color=UI_FONT_COLOR)
+        self.td(label)
 
-		self.tr()
-		label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
-		self.td(label)
+        self.tr()
+        label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
+        self.td(label)
 
 class placeWarpControl(gui.Table):
-	def __init__(self, **params):
-		gui.Table.__init__(self, **params)
+    def __init__(self, **params):
+        gui.Table.__init__(self, **params)
 
-		self.value = gui.Form()
+        self.value = gui.Form()
 
-		self.tr()
-		self.td(gui.Label("Map ID: ", color=UI_FONT_COLOR), colspan=2)
+        self.tr()
+        self.td(gui.Label("Map ID: ", color=UI_FONT_COLOR), colspan=2)
 
-		self.tr()
-		self.inpMapID = gui.Input('', size=8, name='inpWarpMapID')
-		self.td(self.inpMapID, colspan=2)
+        self.tr()
+        self.inpMapID = gui.Input('', size=8, name='inpWarpMapID')
+        self.td(self.inpMapID, colspan=2)
 
-		# used for selecting the map
-		mapDialog = MapSelectorDialog(self.inpMapID)
+        # used for selecting the map
+        mapDialog = MapSelectorDialog(self.inpMapID)
 
-		self.tr()
-		e = gui.Button('Choose map...')
-		e.connect(gui.CLICK, mapDialog.openDialog, None)
-		self.td(e, colspan=2)
+        self.tr()
+        e = gui.Button('Choose map...')
+        e.connect(gui.CLICK, mapDialog.openDialog, None)
+        self.td(e, colspan=2)
 
-		self.tr()
-		self.td(gui.Spacer(10, 20))
+        self.tr()
+        self.td(gui.Spacer(10, 20))
 
-		self.tr()
-		self.td(gui.Label("Warp-To Position", color=UI_FONT_COLOR), colspan=2)
+        self.tr()
+        self.td(gui.Label("Warp-To Position", color=UI_FONT_COLOR), colspan=2)
 
-		self.tr()
-		self.td(gui.Label("X: ", color=UI_FONT_COLOR))
-		self.td(gui.Input("0", size=4, name="inpWarpX"))
+        self.tr()
+        self.td(gui.Label("X: ", color=UI_FONT_COLOR))
+        self.td(gui.Input("0", size=4, name="inpWarpX"))
 
-		self.tr()
-		self.td(gui.Label("Y: ", color=UI_FONT_COLOR))
-		self.td(gui.Input("0", size=4, name="inpWarpY"))
+        self.tr()
+        self.td(gui.Label("Y: ", color=UI_FONT_COLOR))
+        self.td(gui.Input("0", size=4, name="inpWarpY"))
 
 
 class MapEditorContainer(gui.Container):
-	def __init__(self, engine, **params):
-		gui.Container.__init__(self, **params)
+    def __init__(self, engine, **params):
+        gui.Container.__init__(self, **params)
 
-		self.engine = engine
+        self.engine = engine
 
-		# menus
-		self.propertiesCtrl = propertiesControl(name="propertiesCtrl")
-		self.tileCtrl       = placeTileControl(name="tileCtrl")
-		self.blockCtrl      = placeBlockControl(name="blockCtrl")
-		self.warpCtrl       = placeWarpControl(name="warpCtrl")
+        # menus
+        self.propertiesCtrl = propertiesControl(name="propertiesCtrl")
+        self.tileCtrl       = placeTileControl(name="tileCtrl")
+        self.blockCtrl      = placeBlockControl(name="blockCtrl")
+        self.warpCtrl       = placeWarpControl(name="warpCtrl")
 
-		# menu title
-		self.tTitle = gui.Table(width=272, height=32)
+        # menu title
+        self.tTitle = gui.Table(width=272, height=32)
 
-		self.tTitle.tr()
-		self.tTitle.td(gui.Label("Map Editor", name='mapTitle', color=UI_FONT_COLOR))
+        self.tTitle.tr()
+        self.tTitle.td(gui.Label("Map Editor", name='mapTitle', color=UI_FONT_COLOR))
 
-		# buttons
-		self.t = gui.Table(width=272, height=50)
-					
-		self.t.tr()
-		e = gui.Button("Map Properties", width=200)
-		e.connect(gui.CLICK, self.toggleProperties, None)
-		self.t.td(e, colspan=3)
+        # buttons
+        self.t = gui.Table(width=272, height=50)
+                    
+        self.t.tr()
+        e = gui.Button("Map Properties", width=200)
+        e.connect(gui.CLICK, self.toggleProperties, None)
+        self.t.td(e, colspan=3)
 
-		self.t.tr()
-		e = gui.Button("Tile", width=65)
-		e.connect(gui.CLICK, self.toggleTile, None)
-		self.t.td(e)
+        self.t.tr()
+        e = gui.Button("Tile", width=65)
+        e.connect(gui.CLICK, self.toggleTile, None)
+        self.t.td(e)
 
-		e = gui.Button("Block", width=65)
-		e.connect(gui.CLICK, self.toggleBlock, None)
-		self.t.td(e)
+        e = gui.Button("Block", width=65)
+        e.connect(gui.CLICK, self.toggleBlock, None)
+        self.t.td(e)
 
-		e = gui.Button("Warp", width=65)
-		e.connect(gui.CLICK, self.toggleWarp, None)
-		self.t.td(e)
+        e = gui.Button("Warp", width=65)
+        e.connect(gui.CLICK, self.toggleWarp, None)
+        self.t.td(e)
 
-		self.tContent = gui.Table(width=272, height=318)
+        self.tContent = gui.Table(width=272, height=318)
 
-		self.tBottom = gui.Table(width=272, height=200)
+        self.tBottom = gui.Table(width=272, height=200)
 
-		self.tBottom.tr()
-		e = gui.Button("Save", width=100, height=40)
-		e.connect(gui.CLICK, self.saveMap, None)
-		self.tBottom.td(e)
+        self.tBottom.tr()
+        e = gui.Button("Save", width=100, height=40)
+        e.connect(gui.CLICK, self.saveMap, None)
+        self.tBottom.td(e)
 
-		e = gui.Button("Cancel", width=100, height=40)
-		e.connect(gui.CLICK, self.cancelMap, None)
-		self.tBottom.td(e)
+        e = gui.Button("Cancel", width=100, height=40)
+        e.connect(gui.CLICK, self.cancelMap, None)
+        self.tBottom.td(e)
 
-		#self.t.td()
+        #self.t.td()
 
-		self.add(self.tTitle, 0, 0)
-		self.add(self.t, 0, 48)
-		self.add(self.tContent, 0, 110)
-		self.add(self.tBottom, 0, 368)
+        self.add(self.tTitle, 0, 0)
+        self.add(self.t, 0, 48)
+        self.add(self.tContent, 0, 110)
+        self.add(self.tBottom, 0, 368)
 
-	def saveMap(self, value):
-		# save properties
-		Map.name  = self.propertiesCtrl.value["inpMapName"].value
-		Map.up    = int(self.propertiesCtrl.value["inpMapUp"].value)
-		Map.down  = int(self.propertiesCtrl.value["inpMapDown"].value)
-		Map.left  = int(self.propertiesCtrl.value["inpMapLeft"].value)
-		Map.right = int(self.propertiesCtrl.value["inpMapRight"].value)
+    def saveMap(self, value):
+        # save properties
+        Map.name  = self.propertiesCtrl.value["inpMapName"].value
+        Map.up    = int(self.propertiesCtrl.value["inpMapUp"].value)
+        Map.down  = int(self.propertiesCtrl.value["inpMapDown"].value)
+        Map.left  = int(self.propertiesCtrl.value["inpMapLeft"].value)
+        Map.right = int(self.propertiesCtrl.value["inpMapRight"].value)
 
-		# send the map
-		g.tcpConn.sendMap()
+        # send the map
+        g.tcpConn.sendMap()
 
-		# quit editor
-		self.quitEditor()
+        # quit editor
+        self.quitEditor()
 
-	def getTileType(self):
-		print self.tileCtrl.value['grpTileType'].value
-		return self.tileCtrl.value['grpTileType'].value
+    def getTileType(self):
+        print self.tileCtrl.value['grpTileType'].value
+        return self.tileCtrl.value['grpTileType'].value
 
-	def cancelMap(self, value):
-		self.quitEditor()
+    def cancelMap(self, value):
+        self.quitEditor()
 
-	def quitEditor(self):
-		g.gameEngine.graphicsEngine.gameGUI.setState(0)
-		g.gameEngine.graphicsEngine.gameGUI.guiContainer.closeEditor()
-		g.editor = EDITOR_NONE
-		loadMap(getPlayerMap(g.myIndex))
-		initMapData()
+    def quitEditor(self):
+        g.gameEngine.graphicsEngine.gameGUI.setState(0)
+        g.gameEngine.graphicsEngine.gameGUI.guiContainer.closeEditor()
+        g.editor = EDITOR_NONE
+        loadMap(getPlayerMap(g.myIndex))
+        initMapData()
 
-	def hideAll(self):
-		if self.tContent.find("propertiesCtrl"):
-			self.tContent.remove(self.tContent.find("propertiesCtrl"))
+    def hideAll(self):
+        if self.tContent.find("propertiesCtrl"):
+            self.tContent.remove(self.tContent.find("propertiesCtrl"))
 
-		if self.tContent.find("tileCtrl"):
-			self.tContent.remove(self.tContent.find("tileCtrl"))
+        if self.tContent.find("tileCtrl"):
+            self.tContent.remove(self.tContent.find("tileCtrl"))
 
-		if self.tContent.find("blockCtrl"):
-			self.tContent.remove(self.tContent.find("blockCtrl"))
+        if self.tContent.find("blockCtrl"):
+            self.tContent.remove(self.tContent.find("blockCtrl"))
 
-		if self.tContent.find("warpCtrl"):
-			self.tContent.remove(self.tContent.find("warpCtrl"))
+        if self.tContent.find("warpCtrl"):
+            self.tContent.remove(self.tContent.find("warpCtrl"))
 
-	def toggleProperties(self, value):
-		self.engine.setState(None)
-		self.engine.draw()
+    def toggleProperties(self, value):
+        self.engine.setState(None)
+        self.engine.draw()
 
-		self.hideAll()
-		self.tContent.tr()
-		self.tContent.td(self.propertiesCtrl, valign=-1)
-		self.propertiesCtrl.loadProperties()
+        self.hideAll()
+        self.tContent.tr()
+        self.tContent.td(self.propertiesCtrl, valign=-1)
+        self.propertiesCtrl.loadProperties()
 
-	def toggleTile(self, value):
-		self.engine.setState(PLACE_TILE)
-		self.engine.draw()
+    def toggleTile(self, value):
+        self.engine.setState(PLACE_TILE)
+        self.engine.draw()
 
-		self.hideAll()
-		self.tContent.tr()
-		self.tContent.td(self.tileCtrl, valign=-1)
+        self.hideAll()
+        self.tContent.tr()
+        self.tContent.td(self.tileCtrl, valign=-1)
 
-	def toggleBlock(self, value):
-		self.engine.setState(PLACE_BLOCK)
-		self.engine.draw()
+    def toggleBlock(self, value):
+        self.engine.setState(PLACE_BLOCK)
+        self.engine.draw()
 
-		self.hideAll()
-		self.tContent.tr()
-		self.tContent.td(self.blockCtrl, valign=-1)
+        self.hideAll()
+        self.tContent.tr()
+        self.tContent.td(self.blockCtrl, valign=-1)
 
-	def toggleWarp(self, value):
-		self.engine.setState(PLACE_WARP)
-		self.engine.draw()
+    def toggleWarp(self, value):
+        self.engine.setState(PLACE_WARP)
+        self.engine.draw()
 
-		self.hideAll()
-		self.tContent.tr()
-		self.tContent.td(self.warpCtrl, valign=-1)
+        self.hideAll()
+        self.tContent.tr()
+        self.tContent.td(self.warpCtrl, valign=-1)
 
 class MapEditorGUI():
-	''' the map editor gui '''
+    ''' the map editor gui '''
 
-	def __init__(self, surface):
-		self.surface = surface
+    def __init__(self, surface):
+        self.surface = surface
 
-		self.state = PLACE_TILE
+        self.state = PLACE_TILE
 
-		# todo: remove this shit
-		self.gameSurfaceRect = g.gameSurface.get_rect()
-		self.gameSurfaceRect.top = 16
-		self.gameSurfaceRect.left = 16
+        # todo: remove this shit
+        self.gameSurfaceRect = g.gameSurface.get_rect()
+        self.gameSurfaceRect.top = 16
+        self.gameSurfaceRect.left = 16
 
-		##############
-		# PLACE TILE #
-		##############
+        ##############
+        # PLACE TILE #
+        ##############
 
-		# selected tile
-		self.selectedTileX = 0
-		self.selectedTileY = 0
-		self.selectedTileSurface = pygame.Surface((PIC_X, PIC_Y))
-		self.selectedTileRect = pygame.Rect((632, 175, 32, 32))
+        # selected tile
+        self.selectedTileX = 0
+        self.selectedTileY = 0
+        self.selectedTileSurface = pygame.Surface((PIC_X, PIC_Y))
+        self.selectedTileRect = pygame.Rect((632, 175, 32, 32))
 
-		# tileset
-		self.tilesetOffsetX = 0
-		self.tilesetOffsetY = 0
+        # tileset
+        self.tilesetOffsetX = 0
+        self.tilesetOffsetY = 0
 
-		self.tilesetImg = pygame.image.load(g.dataPath + '/tilesets/Tiles1.bmp').convert_alpha()
-		self.tilesetImgRect = self.tilesetImg.get_rect()
+        self.tilesetImg = pygame.image.load(g.dataPath + '/tilesets/Tiles1.bmp').convert_alpha()
+        self.tilesetImgRect = self.tilesetImg.get_rect()
 
-		self.tilesetSurfaceRect = pygame.Rect((540, 212, PIC_X*6, PIC_Y*4))
+        self.tilesetSurfaceRect = pygame.Rect((540, 212, PIC_X*6, PIC_Y*4))
 
-		#buttons
-		# scroll, save, cancel, clear layer
-		# - scroll buttons (place them near self.tileSurfaceRect)
-		btnScrollLeft = pygUI.pygButton((self.tilesetSurfaceRect.x, (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_left_normal.png', down=g.dataPath + '/gui/button_left_down.png', highlight=g.dataPath + '/gui/button_left_highlight.png')
-		btnScrollRight = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width-32), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_right_normal.png', down=g.dataPath + '/gui/button_right_down.png', highlight=g.dataPath + '/gui/button_right_highlight.png')
-		btnScrollUp = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), self.tilesetSurfaceRect.y, 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_up_normal.png', down=g.dataPath + '/gui/button_up_normal.png', highlight=g.dataPath + '/gui/button_up_highlight.png')
-		btnScrollDown = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height-32), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_down_normal.png', down=g.dataPath + '/gui/button_down_normal.png', highlight=g.dataPath + '/gui/button_down_highlight.png')
+        #buttons
+        # scroll, save, cancel, clear layer
+        # - scroll buttons (place them near self.tileSurfaceRect)
+        btnScrollLeft = pygUI.pygButton((self.tilesetSurfaceRect.x, (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_left_normal.png', down=g.dataPath + '/gui/button_left_down.png', highlight=g.dataPath + '/gui/button_left_highlight.png')
+        btnScrollRight = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width-32), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_right_normal.png', down=g.dataPath + '/gui/button_right_down.png', highlight=g.dataPath + '/gui/button_right_highlight.png')
+        btnScrollUp = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), self.tilesetSurfaceRect.y, 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_up_normal.png', down=g.dataPath + '/gui/button_up_normal.png', highlight=g.dataPath + '/gui/button_up_highlight.png')
+        btnScrollDown = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height-32), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_down_normal.png', down=g.dataPath + '/gui/button_down_normal.png', highlight=g.dataPath + '/gui/button_down_highlight.png')
 
-		self.tileButtons = (btnScrollLeft, btnScrollRight, btnScrollUp, btnScrollDown)
+        self.tileButtons = (btnScrollLeft, btnScrollRight, btnScrollUp, btnScrollDown)
 
-		##############
-		# PLACE WARP #
-		##############
+        ##############
+        # PLACE WARP #
+        ##############
 
-		# input
-		self.inpWarpMapID = pygUI.pygInputField((573, 250, 150, 20), "Map ID", 20, (255, 255, 255))
-		self.inpWarpX     = pygUI.pygInputField((573, 300, 150, 20), "X", 20, (255, 255, 255))
-		self.inpWarpY     = pygUI.pygInputField((573, 340, 150, 20), "Y", 20, (255, 255, 255))
+        # input
+        self.inpWarpMapID = pygUI.pygInputField((573, 250, 150, 20), "Map ID", 20, (255, 255, 255))
+        self.inpWarpX     = pygUI.pygInputField((573, 300, 150, 20), "X", 20, (255, 255, 255))
+        self.inpWarpY     = pygUI.pygInputField((573, 340, 150, 20), "Y", 20, (255, 255, 255))
 
-		self.inpWarpMapID.restricted = '1234567890'
-		self.inpWarpX.restricted = '1234567890'
-		self.inpWarpY.restricted = '1234567890'
+        self.inpWarpMapID.restricted = '1234567890'
+        self.inpWarpX.restricted = '1234567890'
+        self.inpWarpY.restricted = '1234567890'
 
-		# labels
-		self.lblWarpLeftClick = pygUI.pygLabel((496, 190, 304, 10), "Left click to add warp", align=pygUI.ALIGN_CENTER)
-		self.lblWarpRightClick = pygUI.pygLabel((496, 210, 304, 10), "Right click to remove warp", align=pygUI.ALIGN_CENTER)
+        # labels
+        self.lblWarpLeftClick = pygUI.pygLabel((496, 190, 304, 10), "Left click to add warp", align=pygUI.ALIGN_CENTER)
+        self.lblWarpRightClick = pygUI.pygLabel((496, 210, 304, 10), "Right click to remove warp", align=pygUI.ALIGN_CENTER)
 
-	def init(self):
-		self.setState(STATE_PROPERTIES)
-		self.draw()
+    def init(self):
+        self.setState(STATE_PROPERTIES)
+        self.draw()
 
-	def draw(self):
-		g.gameEngine.graphicsEngine.gameGUI.reset()
+    def draw(self):
+        g.gameEngine.graphicsEngine.gameGUI.reset()
 
-		if self.state == PLACE_TILE:
-			self.surface.blit(self.selectedTileSurface, self.selectedTileRect)
-			self.surface.blit(self.tilesetImg, self.tilesetSurfaceRect, (self.tilesetOffsetX, self.tilesetOffsetY, self.tilesetSurfaceRect.width, self.tilesetSurfaceRect.height))
+        if self.state == PLACE_TILE:
+            self.surface.blit(self.selectedTileSurface, self.selectedTileRect)
+            self.surface.blit(self.tilesetImg, self.tilesetSurfaceRect, (self.tilesetOffsetX, self.tilesetOffsetY, self.tilesetSurfaceRect.width, self.tilesetSurfaceRect.height))
 
-			for button in self.tileButtons:
-				button.draw(self.surface)
+            for button in self.tileButtons:
+                button.draw(self.surface)
 
-		self.drawElements()
+        self.drawElements()
 
-	def drawElements(self):
-		# todo: this is required to keep performance low (only update elements)
-		if self.state == PLACE_TILE:
-			for button in self.tileButtons:
-				button.draw(self.surface)
-
-
-	def update(self, event):
-		if event.type == pygame.MOUSEBUTTONDOWN:
-			self.handleMouseDown(event)
-
-		if self.state == PLACE_TILE:
-			if 'click' in self.tileButtons[0].handleEvents(event):
-				print "wtf"
-				# scroll to the left
-				if self.tilesetOffsetX > 0:
-					self.tilesetOffsetX -= PIC_X
-
-				self.draw()
-
-			if 'click' in self.tileButtons[1].handleEvents(event):
-				# scroll to the right
-				if self.tilesetOffsetX < (self.tilesetImgRect.width - self.tilesetSurfaceRect.width):
-					self.tilesetOffsetX += PIC_X
-
-				self.draw()
-
-			if 'click' in self.tileButtons[2].handleEvents(event):
-				# scroll up
-				if self.tilesetOffsetY > 0:
-					self.tilesetOffsetY -= PIC_Y
-
-				self.draw()
-
-			if 'click' in self.tileButtons[3].handleEvents(event):
-				# scroll down
-				if self.tilesetOffsetY < (self.tilesetImgRect.height - self.tilesetSurfaceRect.height):
-					self.tilesetOffsetY += PIC_Y
-
-				self.draw()
-
-	def handleMouseDown(self, event):
-		# todo: better mouse rightclick/leftclick
-		if not self.isInBounds(self.tilesetSurfaceRect) and not self.isInBounds(self.gameSurfaceRect):
-			return
-
-		if self.isInBounds(self.tilesetSurfaceRect):
-			self.chooseTile(g.cursorX, g.cursorY)
-			self.draw()
-
-		elif self.isInBounds(self.gameSurfaceRect):
-			if event.button == 1:
-				print "left click (mapEditor)"
-				# TODO: Fix the game screen offset problem (-16)
-				x = (g.cursorX-16) // PIC_X
-				y = (g.cursorY-16) // PIC_Y
-
-				if self.state == PLACE_TILE:
-
-					if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
-						Map.tile[x][y].ground = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
-						print "placed ground"
-
-					elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
-						Map.tile[x][y].fringe = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
-						print "placed fringe"
-
-					calcTilePositions()
-
-				else:
-					# clear data
-					Map.tile[x][y].type = 0
-					Map.tile[x][y].data1 = 0
-					Map.tile[x][y].data2 = 0
-					Map.tile[x][y].data3 = 0
-
-					if self.state == PLACE_BLOCK:
-						Map.tile[x][y].type = TILE_TYPE_BLOCKED
-
-					elif self.state == PLACE_WARP:
-						print "placed warp"
-						Map.tile[x][y].type = TILE_TYPE_WARP
-						Map.tile[x][y].data1 = self.inpWarpMapID.value
-						Map.tile[x][y].data2 = self.inpWarpX.value
-						Map.tile[x][y].data3 = self.inpWarpY.value
-
-			elif event.button == 3:
-				print "right click (mapEditor)"
-				x = (g.cursorX-16) // PIC_X
-				y = (g.cursorY-16) // PIC_Y
-
-				if self.state == PLACE_TILE:
-					# remove tile
-					Map.tile[x][y].ground = 0
-					Map.tile[x][y].mask = 0
-					Map.tile[x][y].anim = 0
-					Map.tile[x][y].fringe = 0
-
-					calcTilePositions()
-
-				else:
-					Map.tile[x][y].type = 0
-					Map.tile[x][y].data1 = 0
-					Map.tile[x][y].data2 = 0
-					Map.tile[x][y].data3 = 0
-
-	def setState(self, state):
-		self.state = state
-		#g.gameEngine.graphicsEngine.gameGUI.reset()
+    def drawElements(self):
+        # todo: this is required to keep performance low (only update elements)
+        if self.state == PLACE_TILE:
+            for button in self.tileButtons:
+                button.draw(self.surface)
 
 
-	def isInBounds(self, surfaceRect):
-		if surfaceRect.collidepoint((g.cursorX, g.cursorY)):
-			return True
+    def update(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            self.handleMouseDown(event)
 
-	def chooseTile(self, x, y):
-		self.selectedTileX = (x - self.tilesetSurfaceRect.x + self.tilesetOffsetX) // PIC_X
-		self.selectedTileY = (y - self.tilesetSurfaceRect.y + self.tilesetOffsetY) // PIC_Y
+        if self.state == PLACE_TILE:
+            if 'click' in self.tileButtons[0].handleEvents(event):
+                print "wtf"
+                # scroll to the left
+                if self.tilesetOffsetX > 0:
+                    self.tilesetOffsetX -= PIC_X
 
-		self.selectedTileSurface.blit(self.tilesetImg, (0, 0), (self.selectedTileX * PIC_X, self.selectedTileY * PIC_Y, 32, 32))
+                self.draw()
 
-	def quit(self):
-		''' quits the map editor '''
-		# todo: dont use g.gameEngine...
-		g.gameEngine.graphicsEngine.gameGUI.setState(0)
+            if 'click' in self.tileButtons[1].handleEvents(event):
+                # scroll to the right
+                if self.tilesetOffsetX < (self.tilesetImgRect.width - self.tilesetSurfaceRect.width):
+                    self.tilesetOffsetX += PIC_X
 
-		g.editor = EDITOR_NONE
-		loadMap(getPlayerMap(g.myIndex))
-		initMapData()
+                self.draw()
+
+            if 'click' in self.tileButtons[2].handleEvents(event):
+                # scroll up
+                if self.tilesetOffsetY > 0:
+                    self.tilesetOffsetY -= PIC_Y
+
+                self.draw()
+
+            if 'click' in self.tileButtons[3].handleEvents(event):
+                # scroll down
+                if self.tilesetOffsetY < (self.tilesetImgRect.height - self.tilesetSurfaceRect.height):
+                    self.tilesetOffsetY += PIC_Y
+
+                self.draw()
+
+    def handleMouseDown(self, event):
+        # todo: better mouse rightclick/leftclick
+        if not self.isInBounds(self.tilesetSurfaceRect) and not self.isInBounds(self.gameSurfaceRect):
+            return
+
+        if self.isInBounds(self.tilesetSurfaceRect):
+            self.chooseTile(g.cursorX, g.cursorY)
+            self.draw()
+
+        elif self.isInBounds(self.gameSurfaceRect):
+            if event.button == 1:
+                print "left click (mapEditor)"
+                # TODO: Fix the game screen offset problem (-16)
+                x = (g.cursorX-16) // PIC_X
+                y = (g.cursorY-16) // PIC_Y
+
+                if self.state == PLACE_TILE:
+
+                    if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+                        Map.tile[x][y].ground = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+                        print "placed ground"
+
+                    elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
+                        Map.tile[x][y].fringe = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+                        print "placed fringe"
+
+                    calcTilePositions()
+
+                else:
+                    # clear data
+                    Map.tile[x][y].type = 0
+                    Map.tile[x][y].data1 = 0
+                    Map.tile[x][y].data2 = 0
+                    Map.tile[x][y].data3 = 0
+
+                    if self.state == PLACE_BLOCK:
+                        Map.tile[x][y].type = TILE_TYPE_BLOCKED
+
+                    elif self.state == PLACE_WARP:
+                        print "placed warp"
+                        Map.tile[x][y].type = TILE_TYPE_WARP
+                        Map.tile[x][y].data1 = self.inpWarpMapID.value
+                        Map.tile[x][y].data2 = self.inpWarpX.value
+                        Map.tile[x][y].data3 = self.inpWarpY.value
+
+            elif event.button == 3:
+                print "right click (mapEditor)"
+                x = (g.cursorX-16) // PIC_X
+                y = (g.cursorY-16) // PIC_Y
+
+                if self.state == PLACE_TILE:
+                    # remove tile
+                    Map.tile[x][y].ground = 0
+                    Map.tile[x][y].mask = 0
+                    Map.tile[x][y].anim = 0
+                    Map.tile[x][y].fringe = 0
+
+                    calcTilePositions()
+
+                else:
+                    Map.tile[x][y].type = 0
+                    Map.tile[x][y].data1 = 0
+                    Map.tile[x][y].data2 = 0
+                    Map.tile[x][y].data3 = 0
+
+    def setState(self, state):
+        self.state = state
+        #g.gameEngine.graphicsEngine.gameGUI.reset()
+
+
+    def isInBounds(self, surfaceRect):
+        if surfaceRect.collidepoint((g.cursorX, g.cursorY)):
+            return True
+
+    def chooseTile(self, x, y):
+        self.selectedTileX = (x - self.tilesetSurfaceRect.x + self.tilesetOffsetX) // PIC_X
+        self.selectedTileY = (y - self.tilesetSurfaceRect.y + self.tilesetOffsetY) // PIC_Y
+
+        self.selectedTileSurface.blit(self.tilesetImg, (0, 0), (self.selectedTileX * PIC_X, self.selectedTileY * PIC_Y, 32, 32))
+
+    def quit(self):
+        ''' quits the map editor '''
+        # todo: dont use g.gameEngine...
+        g.gameEngine.graphicsEngine.gameGUI.setState(0)
+
+        g.editor = EDITOR_NONE
+        loadMap(getPlayerMap(g.myIndex))
+        initMapData()

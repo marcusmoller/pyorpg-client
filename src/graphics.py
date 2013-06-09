@@ -15,253 +15,253 @@ GUI_INVENTORY = 1
 GUI_EQUIPMENT = 2
 
 class GraphicsEngine():
-	''' class for handling the graphics rendering while ingame (both UI and the game itself) ''' 
+    ''' class for handling the graphics rendering while ingame (both UI and the game itself) ''' 
 
-	def __init__(self):
-		self.surface = g.gameSurface
-		self.surfaceRect = g.gameSurface.get_rect()
+    def __init__(self):
+        self.surface = g.gameSurface
+        self.surfaceRect = g.gameSurface.get_rect()
 
-		# game surface offset
-		self.surfaceRect.top = 16
-		self.surfaceRect.left = 16
+        # game surface offset
+        self.surfaceRect.top = 16
+        self.surfaceRect.left = 16
 
-		# surfaces
-		self.tileSurface = pygame.image.load(g.dataPath + "/tilesets/Tiles1.bmp").convert()
-		# todo: transparency
-		#self.tileSurface.set_colorkey((0, 0, 255)) 
-		self.tileOutlineSurface = pygame.image.load(g.dataPath + "/gui/editor_outline.bmp").convert()
-		self.tileOutlineSurface.set_colorkey((255, 0, 204))
+        # surfaces
+        self.tileSurface = pygame.image.load(g.dataPath + "/tilesets/Tiles1.bmp").convert()
+        # todo: transparency
+        #self.tileSurface.set_colorkey((0, 0, 255)) 
+        self.tileOutlineSurface = pygame.image.load(g.dataPath + "/gui/editor_outline.bmp").convert()
+        self.tileOutlineSurface.set_colorkey((255, 0, 204))
 
-		self.fontPlrName = pygame.font.SysFont(None, 18)
-		self.drawMapNameColor = textColor.BRIGHT_RED
+        self.fontPlrName = pygame.font.SysFont(None, 18)
+        self.drawMapNameColor = textColor.BRIGHT_RED
 
-		# fringe tiles
-		self.tileSurfaceTrans = pygame.image.load(g.dataPath + "/tilesets/Tiles1.bmp").convert()
-		self.tileSurfaceTrans.set_colorkey((0, 0, 0))
+        # fringe tiles
+        self.tileSurfaceTrans = pygame.image.load(g.dataPath + "/tilesets/Tiles1.bmp").convert()
+        self.tileSurfaceTrans.set_colorkey((0, 0, 0))
 
-		###############
-		# GAME EDITOR #
-		###############
-		# tile markers
-		# - block
-		self.blockSurface = pygame.Surface((PIC_X, PIC_Y))
-		self.blockSurface.set_alpha(128)
-		self.blockSurface.fill((255, 0, 0))
-		font = pygame.font.SysFont(None, 27)
-		markerText = font.render("B", True, (0, 0, 0))
-		markerTextRect = markerText.get_rect()
-		markerTextRect.centerx = self.blockSurface.get_rect().centerx
-		markerTextRect.centery = self.blockSurface.get_rect().centery
-		self.blockSurface.blit(markerText, markerTextRect)
+        ###############
+        # GAME EDITOR #
+        ###############
+        # tile markers
+        # - block
+        self.blockSurface = pygame.Surface((PIC_X, PIC_Y))
+        self.blockSurface.set_alpha(128)
+        self.blockSurface.fill((255, 0, 0))
+        font = pygame.font.SysFont(None, 27)
+        markerText = font.render("B", True, (0, 0, 0))
+        markerTextRect = markerText.get_rect()
+        markerTextRect.centerx = self.blockSurface.get_rect().centerx
+        markerTextRect.centery = self.blockSurface.get_rect().centery
+        self.blockSurface.blit(markerText, markerTextRect)
 
-		# - warp
-		self.warpSurface = pygame.Surface((PIC_X, PIC_Y))
-		self.warpSurface.set_alpha(128)
-		self.warpSurface.fill((0, 0, 255))
-		font = pygame.font.SysFont(None, 27)
-		markerText = font.render("W", True, (255, 255, 255))
-		markerTextRect = markerText.get_rect()
-		markerTextRect.centerx = self.warpSurface.get_rect().centerx
-		markerTextRect.centery = self.warpSurface.get_rect().centery
-		self.warpSurface.blit(markerText, markerTextRect)
-
-
-		#######
-		# GUI #
-		#######
-		self.gameGUI = GameGUI(self)
-
-		# gui background
-		self.backgroundGUI = pygame.image.load(g.dataPath + '/gui/game_background.png')
-		g.guiSurface.blit(self.backgroundGUI, (0, 0))
-
-		self.guiState = GUI_STATS
-
-	def renderGraphics(self):
-
-		# lower tiles
-		for x in range(MAX_MAPX):
-			for y in range(MAX_MAPY):
-				self.drawMapTile(x, y)
-
-		# players
-		for i in range(0, len(g.playersOnMap)):
-			self.drawPlayer(g.playersOnMap[i])
-
-		# upper tiles
-		for x in range(MAX_MAPX):
-			for y in range(MAX_MAPY):
-				self.drawMapFringeTile(x, y)
-
-		# draw tile outline if in the map editor
-		if g.editor == EDITOR_MAP:
-			self.drawTileOutline()
-
-		##################
-		# TEXT RENDERING #
-		##################
-
-		for i in range(0, len(g.playersOnMap)):
-			self.drawPlayerName(g.playersOnMap[i])
-
-		self.drawMapName(Map.name)
-
-		if g.editor == EDITOR_MAP:
-			self.drawMapAttributes()
+        # - warp
+        self.warpSurface = pygame.Surface((PIC_X, PIC_Y))
+        self.warpSurface.set_alpha(128)
+        self.warpSurface.fill((0, 0, 255))
+        font = pygame.font.SysFont(None, 27)
+        markerText = font.render("W", True, (255, 255, 255))
+        markerTextRect = markerText.get_rect()
+        markerTextRect.centerx = self.warpSurface.get_rect().centerx
+        markerTextRect.centery = self.warpSurface.get_rect().centery
+        self.warpSurface.blit(markerText, markerTextRect)
 
 
-		if DEBUGGING:
-			self.drawDebug()
+        #######
+        # GUI #
+        #######
+        self.gameGUI = GameGUI(self)
 
-		# dirty hack
-		# - the whole thing is rendered in gameGUI so that the GUI is ABOVE the game screen. Stupid stupid hack
-		self.gameGUI.draw(self.surface, self.surfaceRect)
+        # gui background
+        self.backgroundGUI = pygame.image.load(g.dataPath + '/gui/game_background.png')
+        g.guiSurface.blit(self.backgroundGUI, (0, 0))
 
-	#############
-	# FUNCTIONS #
-	#############
+        self.guiState = GUI_STATS
 
-	def initTileSurface(self, tileset):
-		# TODO: THIS IS NOT WORKING ATM
-		#self.tileSurface = pygame.image.load("data/tilesets/Tiles1.bmp").convert_alpha()
-		#self.tileSurface.set_colorkey((255, 0, 0))
-		print "lawl"
+    def renderGraphics(self):
 
-	def drawMapTile(self, x, y):
-		self.surface.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
+        # lower tiles
+        for x in range(MAX_MAPX):
+            for y in range(MAX_MAPY):
+                self.drawMapTile(x, y)
 
-	def drawMapFringeTile(self, x, y):
-		if Map.tile[x][y].fringe > 0:
-			self.surface.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].fringe))
+        # players
+        for i in range(0, len(g.playersOnMap)):
+            self.drawPlayer(g.playersOnMap[i])
+
+        # upper tiles
+        for x in range(MAX_MAPX):
+            for y in range(MAX_MAPY):
+                self.drawMapFringeTile(x, y)
+
+        # draw tile outline if in the map editor
+        if g.editor == EDITOR_MAP:
+            self.drawTileOutline()
+
+        ##################
+        # TEXT RENDERING #
+        ##################
+
+        for i in range(0, len(g.playersOnMap)):
+            self.drawPlayerName(g.playersOnMap[i])
+
+        self.drawMapName(Map.name)
+
+        if g.editor == EDITOR_MAP:
+            self.drawMapAttributes()
 
 
-	def drawSprite(self, sprite, x, y, rect):
-		spriteSurface = pygame.image.load(g.dataPath + "/sprites/" + str(sprite) + ".bmp").convert()
-		spriteSurface.set_colorkey((0, 0, 0))
-		self.surface.blit(spriteSurface, (x, y), rect)
+        if DEBUGGING:
+            self.drawDebug()
 
-	def drawPlayer(self, index):
-		sprite = getPlayerSprite(index)
+        # dirty hack
+        # - the whole thing is rendered in gameGUI so that the GUI is ABOVE the game screen. Stupid stupid hack
+        self.gameGUI.draw(self.surface, self.surfaceRect)
 
-		tickCount = time.time()
+    #############
+    # FUNCTIONS #
+    #############
 
-		# check for animation
-		anim = 0
-		if Player[index].attacking == 0:
-			direction = getPlayerDir(index)
+    def initTileSurface(self, tileset):
+        # TODO: THIS IS NOT WORKING ATM
+        #self.tileSurface = pygame.image.load("data/tilesets/Tiles1.bmp").convert_alpha()
+        #self.tileSurface.set_colorkey((255, 0, 0))
+        print "lawl"
 
-			if direction == DIR_UP:
-				if Player[index].yOffset < (SIZE_Y/2):
-					anim = 1
+    def drawMapTile(self, x, y):
+        self.surface.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
 
-			elif direction == DIR_DOWN:
-				if Player[index].yOffset < (SIZE_Y/2 * -1):
-					anim = 1
+    def drawMapFringeTile(self, x, y):
+        if Map.tile[x][y].fringe > 0:
+            self.surface.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].fringe))
 
-			elif direction == DIR_LEFT:
-				if Player[index].xOffset < (SIZE_X/2):
-					anim = 1
 
-			elif direction == DIR_RIGHT:
-				if Player[index].xOffset < (SIZE_X/2 * -1):
-					anim = 1
+    def drawSprite(self, sprite, x, y, rect):
+        spriteSurface = pygame.image.load(g.dataPath + "/sprites/" + str(sprite) + ".bmp").convert()
+        spriteSurface.set_colorkey((0, 0, 0))
+        self.surface.blit(spriteSurface, (x, y), rect)
 
-		elif (Player[index].attackTimer + 0.5) > tickCount:
-				anim = 2
+    def drawPlayer(self, index):
+        sprite = getPlayerSprite(index)
 
-		# do we want to stop sprite from attacking?
-		if (Player[index].attackTimer + 1) < tickCount:
-			Player[index].attacking = 0
-			Player[index].attackTimer = 0
+        tickCount = time.time()
 
-		# rect(x, y, width, height)
-		rect = pygame.Rect((getPlayerDir(index)*3+anim)*32, 0, 32, 32)
+        # check for animation
+        anim = 0
+        if Player[index].attacking == 0:
+            direction = getPlayerDir(index)
 
-		x = getPlayerX(index) * SIZE_X + Player[index].xOffset
-		y = getPlayerY(index) * SIZE_Y + Player[index].yOffset - 4
+            if direction == DIR_UP:
+                if Player[index].yOffset < (SIZE_Y/2):
+                    anim = 1
 
-		if y < 0:
-			y = 0
+            elif direction == DIR_DOWN:
+                if Player[index].yOffset < (SIZE_Y/2 * -1):
+                    anim = 1
 
-		self.drawSprite(sprite, x, y, rect)
+            elif direction == DIR_LEFT:
+                if Player[index].xOffset < (SIZE_X/2):
+                    anim = 1
 
-	##################
-	# TEXT FUNCTIONS #
-	##################
+            elif direction == DIR_RIGHT:
+                if Player[index].xOffset < (SIZE_X/2 * -1):
+                    anim = 1
 
-	def drawText(self, x, y, text, color):
-		# shadow
-		textSurface = self.fontPlrName.render(text, 1, (0, 0, 0))
-		self.surface.blit(textSurface, (x + 2, y + 2))
+        elif (Player[index].attackTimer + 0.5) > tickCount:
+                anim = 2
 
-		textSurface = self.fontPlrName.render(text, 1, (0, 0, 0))
-		self.surface.blit(textSurface, (x + 1, y + 1))
+        # do we want to stop sprite from attacking?
+        if (Player[index].attackTimer + 1) < tickCount:
+            Player[index].attacking = 0
+            Player[index].attackTimer = 0
 
-		# real
-		textSurface = self.fontPlrName.render(text, 1, color)
-		self.surface.blit(textSurface, (x, y))
+        # rect(x, y, width, height)
+        rect = pygame.Rect((getPlayerDir(index)*3+anim)*32, 0, 32, 32)
 
-	def drawPlayerName(self, index):
-		plrAccess = getPlayerAccess(index)
+        x = getPlayerX(index) * SIZE_X + Player[index].xOffset
+        y = getPlayerY(index) * SIZE_Y + Player[index].yOffset - 4
 
-		if plrAccess == 0:
-			color = textColor.BROWN
-		elif plrAccess == 1:
-			color = textColor.DARK_GREY
-		elif plrAccess == 2:
-			color = textColor.CYAN
-		elif plrAccess == 3:
-			color = textColor.BLUE
-		elif plrAccess == 4:
-			color = textColor.PINK
-		else:
-			color = textColor.BROWN
+        if y < 0:
+            y = 0
 
-		textX = getPlayerX(index) * PIC_X + Player[index].xOffset + (PIC_X//2) - ((len(getPlayerName(index))/2)*8)
-		textY = getPlayerY(index) * PIC_Y + Player[index].yOffset - (PIC_Y//2) - 4
+        self.drawSprite(sprite, x, y, rect)
 
-		self.drawText(textX, textY, getPlayerName(index), color)
+    ##################
+    # TEXT FUNCTIONS #
+    ##################
 
-	def drawMapName(self, mapname):
-		# todo: determine moral
-		textX = (MAX_MAPX + 1) * PIC_X / 2 - ((len(mapname)/2) * 8)
-		textY = 1
+    def drawText(self, x, y, text, color):
+        # shadow
+        textSurface = self.fontPlrName.render(text, 1, (0, 0, 0))
+        self.surface.blit(textSurface, (x + 2, y + 2))
 
-		self.drawText(textX, textY, mapname, textColor.BRIGHT_RED)
+        textSurface = self.fontPlrName.render(text, 1, (0, 0, 0))
+        self.surface.blit(textSurface, (x + 1, y + 1))
 
-	def drawMapAttributes(self):
-		for x in range(MAX_MAPX):
-			for y in range(MAX_MAPY):
-				tempTile = Map.tile[x][y]
+        # real
+        textSurface = self.fontPlrName.render(text, 1, color)
+        self.surface.blit(textSurface, (x, y))
 
-				if tempTile.type == TILE_TYPE_BLOCKED:
-					self.surface.blit(self.blockSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
+    def drawPlayerName(self, index):
+        plrAccess = getPlayerAccess(index)
 
-				elif tempTile.type == TILE_TYPE_WARP:
-					self.surface.blit(self.warpSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
-					
+        if plrAccess == 0:
+            color = textColor.BROWN
+        elif plrAccess == 1:
+            color = textColor.DARK_GREY
+        elif plrAccess == 2:
+            color = textColor.CYAN
+        elif plrAccess == 3:
+            color = textColor.BLUE
+        elif plrAccess == 4:
+            color = textColor.PINK
+        else:
+            color = textColor.BROWN
 
-	def drawDebug(self):
-		self.drawText(10, 10, "(" + str(getPlayerX(g.myIndex)) + "," + str(getPlayerY(g.myIndex)) + ")", (0, 0, 0))
-		self.drawText(10, 25, "HP: " + str(Player[g.myIndex].vitals[0]),(0, 0, 0))
-		self.drawText(10, 40, "HP_max: " + str(Player[g.myIndex].maxHP),(0, 0, 0))
+        textX = getPlayerX(index) * PIC_X + Player[index].xOffset + (PIC_X//2) - ((len(getPlayerName(index))/2)*8)
+        textY = getPlayerY(index) * PIC_Y + Player[index].yOffset - (PIC_Y//2) - 4
 
-	################
-	# GAME EDITORS #
-	################
+        self.drawText(textX, textY, getPlayerName(index), color)
 
-	def isInBounds(self):
-		if self.surfaceRect.collidepoint((g.cursorX, g.cursorY)):
-			return True
+    def drawMapName(self, mapname):
+        # todo: determine moral
+        textX = (MAX_MAPX + 1) * PIC_X / 2 - ((len(mapname)/2) * 8)
+        textY = 1
 
-	def drawTileOutline(self):
-		# TODO: Fix the game screen offset problem (-16)
-		if not self.isInBounds():
-			return
+        self.drawText(textX, textY, mapname, textColor.BRIGHT_RED)
 
-		x = (g.cursorX-16) / PIC_X
-		y = (g.cursorY-16) / PIC_Y
+    def drawMapAttributes(self):
+        for x in range(MAX_MAPX):
+            for y in range(MAX_MAPY):
+                tempTile = Map.tile[x][y]
 
-		if x >= 0 and x < MAX_MAPX:
-			if y >= 0 and y < MAX_MAPY:
-				self.surface.blit(self.tileOutlineSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
+                if tempTile.type == TILE_TYPE_BLOCKED:
+                    self.surface.blit(self.blockSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
+
+                elif tempTile.type == TILE_TYPE_WARP:
+                    self.surface.blit(self.warpSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
+                    
+
+    def drawDebug(self):
+        self.drawText(10, 10, "(" + str(getPlayerX(g.myIndex)) + "," + str(getPlayerY(g.myIndex)) + ")", (0, 0, 0))
+        self.drawText(10, 25, "HP: " + str(Player[g.myIndex].vitals[0]),(0, 0, 0))
+        self.drawText(10, 40, "HP_max: " + str(Player[g.myIndex].maxHP),(0, 0, 0))
+
+    ################
+    # GAME EDITORS #
+    ################
+
+    def isInBounds(self):
+        if self.surfaceRect.collidepoint((g.cursorX, g.cursorY)):
+            return True
+
+    def drawTileOutline(self):
+        # TODO: Fix the game screen offset problem (-16)
+        if not self.isInBounds():
+            return
+
+        x = (g.cursorX-16) / PIC_X
+        y = (g.cursorY-16) / PIC_Y
+
+        if x >= 0 and x < MAX_MAPX:
+            if y >= 0 and y < MAX_MAPY:
+                self.surface.blit(self.tileOutlineSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
