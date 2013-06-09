@@ -17,17 +17,19 @@ class Input(widget.Widget):
 
     _value = None
 
-    def __init__(self,value="",size=20,**params):
+    def __init__(self,value="",size=20,maxlength=999,**params):
         """Create a new Input widget.
 
         Keyword arguments:
             value -- initial text
             size -- size for the text box, in characters
+            maxlength -- maximum amount of characters
 
         """
         params.setdefault('cls','input')
         widget.Widget.__init__(self,**params)
         self.value = value
+        self.maxlength = maxlength
         self.pos = len(str(value))
         self.vpos = 0
         self.font = self.style.font
@@ -97,8 +99,9 @@ class Input(widget.Widget):
 
                 try:
                     if c:
-                        self._setvalue(self.value[:self.pos] + c + self.value[self.pos:])
-                        self.pos += 1
+                        if len(self.value) <= self.maxlength:
+                            self._setvalue(self.value[:self.pos] + c + self.value[self.pos:])
+                            self.pos += 1
                 except: #ignore weird characters
                     pass
             self.repaint()

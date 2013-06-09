@@ -65,13 +65,13 @@ class ChatControl(gui.Table):
         self.focused = False
 
         self.tr()
-        self.chatMsg = gui.Input(size=52, focusable=False)
+        self.chatMsg = gui.Input(maxlength=44, width=468, focusable=False)
         self.chatMsg.connect(gui.KEYDOWN, self.lkey)
         self.td(self.chatMsg)
 
         self.tr()
         self.chatList = gui.Table()
-        self.box = gui.ScrollArea(self.chatList, width=480, height=175)
+        self.box = gui.ScrollArea(self.chatList, width=480, height=172, hscrollbar=False)
         self.td(self.box)
 
         self.tr()
