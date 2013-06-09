@@ -1,5 +1,5 @@
-from sprites import *
 from constants import *
+import pygame
 
 # Public data structures
 # - Initializations are at the bottom of the source code
@@ -12,12 +12,14 @@ class Stats():
 	stat_count \
 	= range(5)
 
+
 class Vitals():
 	hp,         \
 	mp,         \
 	sp,         \
 	vital_count \
 	= range(4)
+
 
 class Equipment():
 	weapon,         \
@@ -26,6 +28,7 @@ class Equipment():
 	shield,         \
 	equipment_count \
 	= range(5)
+
 
 class PlayerClass():
 	def __init__(self):
@@ -66,6 +69,7 @@ class PlayerClass():
 		self.mapGetTimer = 0
 		self.castedSpell = 0
 
+
 class ClassClass():
 	def __init__(self):
 		self.name = ""
@@ -74,6 +78,7 @@ class ClassClass():
 
 		# for client use
 		self.vital = [None for i in range(Vitals.vital_count)]
+
 
 class TileClass():
 	def __init__(self):
@@ -86,6 +91,7 @@ class TileClass():
 		self.data2 = 0
 		self.data3 = 0
 
+
 class TilePosClass():
 	def __init__(self):
 		self.x = 0
@@ -96,9 +102,11 @@ class TilePosClass():
 		self.anim = pygame.Rect(0, 0, 0, 0)
 		self.fringe = pygame.Rect(0, 0, 0, 0)
 
+
 class TempTileClass():
 	def __init__(self):
 		self.doorOpen = 0
+
 
 class MapClass():
 	def __init__(self):
@@ -126,4 +134,5 @@ TempTile = [[TempTileClass() for i in range(MAX_MAPY)] for i in range(MAX_MAPX)]
 
 Player = [PlayerClass() for i in range(MAX_PLAYERS)]
 
-Class = [ClassClass() for i in range(99)] #todo: dont use a fixed size, please
+#todo: dont use a fixed size, please
+Class = [ClassClass() for i in range(99)]

@@ -1,21 +1,22 @@
-import os.path
 import pickle
-
+import global_vars as g
 from objects import *
 
 
 def saveMap(mapNum):
 	pickle.dump(Map, open(g.dataPath + "/maps/" + str(mapNum) + ".pom", 'wb'))
 
+
 def loadMap(mapNum):
 	Map = pickle.load(open(g.dataPath + "/maps/" + str(mapNum) + ".pom", 'rb'))
+
 
 def clearPlayer(index):
 	Player[index] = PlayerClass()
 
 def clearMap():
 	Map = MapClass()
-	
+
 
 ''' Player name '''
 def getPlayerName(index):
