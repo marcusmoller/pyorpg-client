@@ -1,8 +1,6 @@
-import sys
 import pygame
 from pygame.locals import *
 from pgu import gui
-from pgu import html
 
 import pygUI as pygUI
 from gamelogic import *
