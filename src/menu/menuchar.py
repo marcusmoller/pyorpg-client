@@ -1,12 +1,9 @@
-import pygame, sys
+import pygame
 from pygame.locals import *
 from pgu import gui
-from twisted.internet import reactor
 
 import global_vars as g
 from constants import *
-
-import gui.pygUI as pygUI
 
 class characterControl(gui.Table):
     def __init__(self, **params):
@@ -68,6 +65,7 @@ class characterControl(gui.Table):
         self.td(btn)
         self.td(gui.Spacer(0, 0))
 
+
 class menuCharacters():
     def __init__(self, surface):
         self.surface = surface
@@ -115,7 +113,6 @@ class menuCharacters():
 
         if event.type == KEYDOWN and event.key == K_ESCAPE:
             g.gameState = MENU_LOGIN
-            
         elif event.type == KEYDOWN and event.key == K_RETURN:
             self.doUseChar()
 
@@ -148,7 +145,6 @@ class menuCharacters():
         if self.charName != "":
             self.charControl.lblPlayerName.set_text(self.charName)
             self.charControl.lblPlayerExtra.set_text("Level " + str(self.charLevel) + " " + str(self.charClass))
-            
         else:
             # the character doesnt exist (it's empty)
             self.charControl.lblPlayerName.set_text('Create a new character')
