@@ -22,7 +22,7 @@ class characterControl(gui.Table):
             self.engine.charIndex -= 1
             self.engine.updateCharSelection()
 
-        def btnUseChar(btn):
+        def btnUseChar(btn=None):
             if self.lblPlayerName.value != 'Create a new character':
                 g.tcpConn.sendUseChar(self.engine.charIndex-1)
                 g.gameEngine.setState(MENU_INGAME)
@@ -118,6 +118,15 @@ class menuCharacters():
             
         elif event.type == KEYDOWN and event.key == K_RETURN:
             self.doUseChar()
+
+    def doUseChar(self):
+        if self.charControl.lblPlayerName.value != 'Create a new character':
+            g.tcpConn.sendUseChar(self.charIndex-1)
+            g.gameEngine.setState(MENU_INGAME)
+        else:
+            # new char
+            g.tcpConn.sendGetClasses()
+            g.gameEngine.setState(MENU_NEWCHAR)
 
 
     def updateCharacters(self, data):
