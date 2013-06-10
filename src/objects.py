@@ -1,4 +1,4 @@
-from constants import *
+from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY
 import pygame
 
 # Public data structures

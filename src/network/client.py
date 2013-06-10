@@ -184,6 +184,18 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CNeedMap, "answer": answer}])
         self.sendData(packet)
 
+    def warpMeTo(self, name):
+        packet = json.dumps([{'packet': ClientPackets.CWarpMeTo, 'name': name}])
+        self.sendData(packet)
+
+    def warpToMe(self, name):
+        packet = json.dumps([{'packet': ClientPackets.CWarpToMe, 'name': name}])
+        self.sendData(packet)
+
+    def warpTo(self, mapNum):
+        packet = json.dumps([{'packet': ClientPackets.CWarpTo, 'map': mapNum}])
+        self.sendData(packet)
+
     def sendSetSprite(self, spriteNum):
         packet = json.dumps([{"packet": ClientPackets.CSetSprite, "sprite": spriteNum}])
         self.sendData(packet)

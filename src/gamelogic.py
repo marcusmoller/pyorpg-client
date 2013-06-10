@@ -117,7 +117,8 @@ def handleMsg(text):
                     addText("Usage: /warpmeto (name)", alertColor)
                     return
 
-                #warpMeTo
+                playerName = command[1]
+                g.tcpConn.warpMeTo(playerName)
 
             if command[0] == "/warptome":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
@@ -132,7 +133,8 @@ def handleMsg(text):
                     addText("Usage: /warptome (name)", alertColor)
                     return
 
-                # warpToMe
+                playerName = command[1]
+                g.tcpConn.warpToMe(playerName)
 
             if command[0] == "/warpto":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
@@ -140,18 +142,18 @@ def handleMsg(text):
                     return
 
                 if len(command) <= 1:
-                    addText("Usage: /warpto (name)", alertColor)
+                    addText("Usage: /warpto (map #)", alertColor)
                     return
 
-                if command[1].isdigit():
-                    addText("Usage: /warpto (name)", alertColor)
+                if not command[1].isdigit():
+                    addText("Usage: /warpto (map #)", alertColor)
                     return
 
                 n = int(command[1])
 
                 if n > 0 and n <= MAX_MAPS:
                     # warpTo
-                    print "todo"
+                    g.tcpConn.warpTo(n)
                 else:
                     addText("Invalid map number.", textColor.RED)
 
