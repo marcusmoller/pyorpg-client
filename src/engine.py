@@ -43,7 +43,6 @@ class Engine:
         self.walkTimer = 0
         self.clockTick = 0
 
-        
     def init(self):
         g.soundEngine = SoundEngine()
         g.soundEngine.loadSounds()
@@ -77,8 +76,8 @@ class Engine:
         elif state == MENU_INGAME:
             g.gameState = MENU_INGAME
             g.soundEngine.play(SOUND_TOWN, True, True)
-        
-    def gameLoop(self, FPS = 25):
+
+    def gameLoop(self, FPS=25):
         ''' the main loop of the game '''
         # TODO: DIRTY AREAS
         if g.gameState == MENU_LOGIN:

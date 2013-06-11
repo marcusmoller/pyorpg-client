@@ -11,6 +11,7 @@ import global_vars as g
 def addText(text, color):
     g.gameEngine.graphicsEngine.gameGUI.guiContainer.chatCtrl.addText(str(text), color)
 
+
 def handleMsg(text):
         msg = text.lower()
 
@@ -45,7 +46,7 @@ def handleMsg(text):
 
             ''' who's online '''
             if command[0] == "/who":
-                print "todo"
+                g.tcpConn.sendWhosOnline()
 
             ''' show/hide fps '''
             if command[0] == "/fps":
@@ -178,6 +179,21 @@ def handleMsg(text):
                     return
 
                 #sendData mapreport
+
+            if command[0] == '/setaccess':
+                if getPlayerAccess(g.myIndex) < ADMIN_CREATOR:
+                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    return
+
+                if len(command) < 2:
+                    addText('usage: /setaccess <name> <access>', alertColor)
+                    return
+
+                if command[1].isdigit() or not command[2].isdigit():
+                    addText('usage: /setaccess <name> <access>', alertColor)
+                    return
+
+                g.tcpConn.sendSetAccess(command[1], int(command[2]))
 
             return
 

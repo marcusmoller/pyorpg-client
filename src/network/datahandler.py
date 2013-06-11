@@ -9,6 +9,7 @@ from constants import *
 from packettypes import *
 from utils.utils import *
 
+
 class DataHandler():
     ''' class for handling data sent from the server '''
 

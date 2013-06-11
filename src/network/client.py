@@ -196,8 +196,16 @@ class TCPConnection():
         packet = json.dumps([{'packet': ClientPackets.CWarpTo, 'map': mapNum}])
         self.sendData(packet)
 
+    def sendSetAccess(self, name, access):
+        packet = json.dumps([{'packet': ClientPackets.CSetAccess, 'name': name, 'access': access}])
+        self.sendData(packet)
+
     def sendSetSprite(self, spriteNum):
         packet = json.dumps([{"packet": ClientPackets.CSetSprite, "sprite": spriteNum}])
+        self.sendData(packet)
+
+    def sendWhosOnline(self):
+        packet = json.dumps([{'packet': ClientPackets.CWhosOnline}])
         self.sendData(packet)
 
     def sendRequestEditMap(self):
