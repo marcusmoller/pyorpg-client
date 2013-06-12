@@ -94,7 +94,7 @@ class ChatControl(gui.Table):
             if self.chatMsg.value != '':
                 handleMsg(self.chatMsg.value)
                 self.chatMsg.value = ''
-                
+
                 g.canMoveNow = True
 
     def addText(self, text, color=(0, 0, 0)):
@@ -104,6 +104,7 @@ class ChatControl(gui.Table):
 
     def clearChat(self):
         print "todo"
+
 
 class uiContainer(gui.Container):
     def __init__(self, engine, **params):
@@ -151,7 +152,6 @@ class uiContainer(gui.Container):
         plrName = getPlayerName(g.myIndex)
         plrLevel = getPlayerLevel(g.myIndex)
 
-
         if plrLevel == None:
             plrLevel = 1
 
@@ -162,12 +162,15 @@ class uiContainer(gui.Container):
         self.updateTitle('Inventory')
 
     def toggleEquipment(self, value):
+        self.engine.setState(GUI_STATS)
         self.updateTitle('Equipment')
 
     def toggleSpellbook(self, value):
+        self.engine.setState(GUI_STATS)
         self.updateTitle('Spellbook')
 
     def toggleSettings(self, value):
+        self.engine.setState(GUI_STATS)
         self.updateTitle('Settings')
 
     def updateTitle(self, title, titleColor=(251, 230, 204)):
@@ -186,7 +189,7 @@ class GUIContainer(gui.Container):
 
         self.chatCtrl = ChatControl(name="chatCtrl")
         self.uiCtrl = uiContainer(self.engine, name="uiCtrl")
-        self.mapEditorControl = MapEditorContainer(self.engine.mapEditorGUI ,name="mapEditorCtrl")
+        self.mapEditorControl = MapEditorContainer(self.engine.mapEditorGUI, name="mapEditorCtrl")
 
         # default controls
         self.add(self.chatCtrl, 16, 384)
@@ -194,6 +197,7 @@ class GUIContainer(gui.Container):
 
     def openEditor(self, value=0):
         self.add(self.mapEditorControl, 512, 16)
+        g.canMoveNow = False
 
         # close ui
         self.remove(self.find("uiCtrl"))
@@ -207,6 +211,7 @@ class GUIContainer(gui.Container):
     def updateEngines(self):
         # dirty hack
         self.uiCtrl.engine = self.engine
+
 
 class GameGUI():
     def __init__(self, graphicsEngine):
@@ -230,7 +235,6 @@ class GameGUI():
         # TEMPORARY: MAP EDITOR
         self.label1 = pygUI.pygLabel((544, 150, 20, 20), "Selected tile:")
 
-
         # GUI
         self.app = gui.App()
 
@@ -242,6 +246,9 @@ class GameGUI():
         # dialogs
         self.quitDialog = QuitDialog()
 
+        # dirty
+        self.isDirty = True
+
     def setState(self, state):
         self.state = state
         self.reset()
@@ -250,20 +257,12 @@ class GameGUI():
         # surface and surfaceRect is a part of a stupid hack. See graphics.py
 
         # render ui
-        if self.state == GUI_STATS:
-            self.drawHealthBar()
-            self.drawManaBar()
+        if self.isDirty:
+            self.drawUI()
+            # todo: check for isDirty, currently set to True at all times
+            self.isDirty = True
 
-        elif self.state == GUI_EQUIPMENT:
-            self.drawHealthBar()
-            self.drawManaBar()
-
-        elif self.state == GUI_MAPEDITOR:
-            self.mapEditorGUI.drawElements()
-
-        # render background etc
-        # todo: optimize
-        g.screenSurface.blit(g.guiSurface, (0, 0))
+        # part of the hack. game map is blitted so that the gui (app.paint) is ABOVE the game screen
         g.screenSurface.blit(surface, surfaceRect)
 
         # render gui
@@ -297,12 +296,26 @@ class GameGUI():
     def reset(self):
         ''' resets the whole surface '''
         g.guiSurface.blit(self.background, (0, 0))
+        self.drawUI()
+
+    def drawUI(self):
+        if self.state == GUI_STATS:
+            self.drawStats()
+
+        elif self.state == GUI_EQUIPMENT:
+            self.drawHealthBar()
+            self.drawManaBar()
+
+        elif self.state == GUI_MAPEDITOR:
+            self.mapEditorGUI.drawElements()
+
         g.screenSurface.blit(g.guiSurface, (0, 0))
 
     def drawStats(self):
         ''' the stats interface '''
         self.drawHealthBar()
         self.drawManaBar()
+        self.drawStatText()
 
     def drawInventory(self):
         ''' the inventory interface '''
@@ -311,6 +324,34 @@ class GameGUI():
     #############
     # FUNCTIONS #
     #############
+
+    def drawStatText(self):
+        font = pygame.font.SysFont('monospace', 15)
+        fontColor = (251, 230, 204)
+
+        label = font.render('STR - ' + str(getPlayerStat(g.myIndex, Stats.strength)), 0, fontColor)
+        labelRect = label.get_rect()
+        labelRect.centerx = 590
+        labelRect.centery = 150
+        g.guiSurface.blit(label, labelRect)
+
+        label = font.render('DEF - ' + str(getPlayerStat(g.myIndex, Stats.defense)), 0, fontColor)
+        labelRect = label.get_rect()
+        labelRect.centerx = 590
+        labelRect.centery = 170
+        g.guiSurface.blit(label, labelRect)
+
+        label = font.render('SPD - ' + str(getPlayerStat(g.myIndex, Stats.speed)), 0, fontColor)
+        labelRect = label.get_rect()
+        labelRect.centerx = 705
+        labelRect.centery = 150
+        g.guiSurface.blit(label, labelRect)
+
+        label = font.render('MAG - ' + str(getPlayerStat(g.myIndex, Stats.magic)), 0, fontColor)
+        labelRect = label.get_rect()
+        labelRect.centerx = 705
+        labelRect.centery = 170
+        g.guiSurface.blit(label, labelRect)
 
     def drawHealthBar(self):
         emptyBarSurface = pygame.image.load(g.dataPath + '/gui/bar_empty.png').convert_alpha()
@@ -338,4 +379,3 @@ class GameGUI():
         manaBarWidth = 208*Player[g.myIndex].vitals[Vitals.mp]/Player[g.myIndex].maxMP
         g.guiSurface.blit(emptyBarSurface, pos)
         g.guiSurface.blit(blueBarSurface, pos, (0, 0, manaBarWidth, 28))
-

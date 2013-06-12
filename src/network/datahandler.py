@@ -47,6 +47,9 @@ class DataHandler():
         elif packetType == ServerPackets.SPlayerSP:
             self.handlePlayerSP(jsonData)
 
+        elif packetType == ServerPackets.SPlayerStats:
+            self.handlePlayerStats(jsonData)
+
         elif packetType == ServerPackets.SPlayerData:
             self.handlePlayerData(jsonData)
 

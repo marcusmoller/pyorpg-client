@@ -120,6 +120,7 @@ class propertiesControl(gui.Table):
         self.value["inpMapLeft"].value = str(Map.left)
         self.value["inpMapRight"].value = str(Map.right)
 
+
 class placeTileControl(gui.Table):
     def __init__(self, **params):
         gui.Table.__init__(self, **params)
@@ -140,6 +141,7 @@ class placeTileControl(gui.Table):
         self.td(gui.Spacer(10, 0))
         self.td(gui.Radio(g, value=2))
 
+
 class placeBlockControl(gui.Table):
     def __init__(self, **params):
         gui.Table.__init__(self, **params)
@@ -153,6 +155,7 @@ class placeBlockControl(gui.Table):
         self.tr()
         label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
         self.td(label)
+
 
 class placeWarpControl(gui.Table):
     def __init__(self, **params):
@@ -210,7 +213,7 @@ class MapEditorContainer(gui.Container):
 
         # buttons
         self.t = gui.Table(width=272, height=50)
-                    
+
         self.t.tr()
         e = gui.Button("Map Properties", width=200)
         e.connect(gui.CLICK, self.toggleProperties, None)
@@ -276,6 +279,7 @@ class MapEditorContainer(gui.Container):
         g.editor = EDITOR_NONE
         loadMap(getPlayerMap(g.myIndex))
         initMapData()
+        g.canMoveNow = True
 
     def hideAll(self):
         if self.tContent.find("propertiesCtrl"):
@@ -355,13 +359,12 @@ class MapEditorGUI():
 
         self.tilesetSurfaceRect = pygame.Rect((540, 212, PIC_X*6, PIC_Y*4))
 
-        #buttons
-        # scroll, save, cancel, clear layer
+        # scroll buttons
         # - scroll buttons (place them near self.tileSurfaceRect)
-        btnScrollLeft = pygUI.pygButton((self.tilesetSurfaceRect.x, (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_left_normal.png', down=g.dataPath + '/gui/button_left_down.png', highlight=g.dataPath + '/gui/button_left_highlight.png')
-        btnScrollRight = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width-32), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_right_normal.png', down=g.dataPath + '/gui/button_right_down.png', highlight=g.dataPath + '/gui/button_right_highlight.png')
-        btnScrollUp = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), self.tilesetSurfaceRect.y, 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_up_normal.png', down=g.dataPath + '/gui/button_up_normal.png', highlight=g.dataPath + '/gui/button_up_highlight.png')
-        btnScrollDown = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height-32), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/gui/button_down_normal.png', down=g.dataPath + '/gui/button_down_normal.png', highlight=g.dataPath + '/gui/button_down_highlight.png')
+        btnScrollLeft = pygUI.pygButton((self.tilesetSurfaceRect.x, (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/hslider.left.tga')
+        btnScrollRight = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width-16), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/hslider.right.tga')
+        btnScrollUp = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), self.tilesetSurfaceRect.y, 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/vslider.up.tga')
+        btnScrollDown = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height-16), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/vslider.down.tga')
 
         self.tileButtons = (btnScrollLeft, btnScrollRight, btnScrollUp, btnScrollDown)
 
