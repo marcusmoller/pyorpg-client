@@ -1,14 +1,12 @@
-import pygame, sys
+import pygame
 from pygame.locals import *
 from pgu import gui
-from twisted.internet import reactor, error
 
-from network.CClientTCP import *
+from network.client import *
 from network.database import *
 import global_vars as g
 from constants import *
 
-import gui.pygUI as pygUI
 
 class loginControl(gui.Table):
     def __init__(self, **params):
@@ -30,7 +28,6 @@ class loginControl(gui.Table):
 
         self.tr()
         self.td(gui.Spacer(0, 30))
-
 
         self.tr()
         btn = gui.Button("Login", width=120)
