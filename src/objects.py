@@ -35,7 +35,7 @@ class PlayerClass():
         # General
         self.Name = ""
         self.Class = None
-        self.Sprite = 4
+        self.Sprite = 0
         self.level = None
         self.exp = None
         self.access = None
