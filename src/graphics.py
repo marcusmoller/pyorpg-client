@@ -15,7 +15,7 @@ GUI_INVENTORY = 1
 GUI_EQUIPMENT = 2
 
 class GraphicsEngine():
-    ''' class for handling the graphics rendering while ingame (both UI and the game itself) ''' 
+    ''' class for handling the graphics rendering while ingame (both UI and the game itself) '''
 
     def __init__(self):
         self.surface = g.gameSurface
@@ -25,10 +25,13 @@ class GraphicsEngine():
         self.surfaceRect.top = 16
         self.surfaceRect.left = 16
 
+        # sprites
+        self.sprites = []
+
         # surfaces
         self.tileSurface = pygame.image.load(g.dataPath + "/tilesets/Tiles1.bmp").convert()
         # todo: transparency
-        #self.tileSurface.set_colorkey((0, 0, 255)) 
+        #self.tileSurface.set_colorkey((0, 0, 255))
         self.tileOutlineSurface = pygame.image.load(g.dataPath + "/gui/editor_outline.bmp").convert()
         self.tileOutlineSurface.set_colorkey((255, 0, 204))
 
@@ -65,7 +68,6 @@ class GraphicsEngine():
         markerTextRect.centery = self.warpSurface.get_rect().centery
         self.warpSurface.blit(markerText, markerTextRect)
 
-
         #######
         # GUI #
         #######
@@ -77,8 +79,10 @@ class GraphicsEngine():
 
         self.guiState = GUI_STATS
 
-    def renderGraphics(self):
+        # initial calls
+        self.loadSprites()
 
+    def renderGraphics(self):
         # lower tiles
         for x in range(MAX_MAPX):
             for y in range(MAX_MAPY):
@@ -127,6 +131,14 @@ class GraphicsEngine():
         #self.tileSurface.set_colorkey((255, 0, 0))
         print "lawl"
 
+    def loadSprites(self):
+        for i in range(0, 16):
+            # todo: custom amount of sprites
+            tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(i) + ".bmp").convert()
+            tempImage.set_colorkey((0, 0, 0))
+            self.sprites.append(tempImage)
+
+
     def drawMapTile(self, x, y):
         self.surface.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
 
@@ -136,9 +148,7 @@ class GraphicsEngine():
 
 
     def drawSprite(self, sprite, x, y, rect):
-        spriteSurface = pygame.image.load(g.dataPath + "/sprites/" + str(sprite) + ".bmp").convert()
-        spriteSurface.set_colorkey((0, 0, 0))
-        self.surface.blit(spriteSurface, (x, y), rect)
+        self.surface.blit(self.sprites[sprite], (x, y), rect)
 
     def drawPlayer(self, index):
         sprite = getPlayerSprite(index)
@@ -239,12 +249,11 @@ class GraphicsEngine():
 
                 elif tempTile.type == TILE_TYPE_WARP:
                     self.surface.blit(self.warpSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
-                    
 
     def drawDebug(self):
         self.drawText(10, 10, "(" + str(getPlayerX(g.myIndex)) + "," + str(getPlayerY(g.myIndex)) + ")", (0, 0, 0))
-        self.drawText(10, 25, "HP: " + str(Player[g.myIndex].vitals[0]),(0, 0, 0))
-        self.drawText(10, 40, "HP_max: " + str(Player[g.myIndex].maxHP),(0, 0, 0))
+        self.drawText(10, 25, "HP: " + str(Player[g.myIndex].vitals[0]), (0, 0, 0))
+        self.drawText(10, 40, "HP_max: " + str(Player[g.myIndex].maxHP), (0, 0, 0))
 
     ################
     # GAME EDITORS #

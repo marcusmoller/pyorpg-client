@@ -158,7 +158,7 @@ class menuCharacters():
         self.updateCharSprite(self.charSprite)
 
     def updateCharSprite(self, sprite):
-        tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(sprite) + ".bmp").convert()
+        tempImage = g.gameEngine.graphicsEngine.sprites[sprite]
         tempSprite = pygame.Surface((32, 32))
 
         tempSprite.blit(tempImage, (0, 0), (128, 0, 32, 32))
