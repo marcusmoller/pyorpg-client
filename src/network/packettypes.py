@@ -76,3 +76,9 @@ class ServerPackets:
     SLeft,       \
     SHighIndex   \
     = range(28)
+
+
+class MessagePackets:
+    MAccountCreated, \
+    MHacker \
+    = range(2)

@@ -18,7 +18,7 @@ dataHandler = None
 def startConnection():
     global dataHandler
     factory = gameClientFactory()
-    reactor.connectTCP(GAME_IP, GAME_PORT, factory)
+    g.connector = reactor.connectTCP(GAME_IP, GAME_PORT, factory)
     dataHandler = DataHandler()
 
     return factory.protocol
@@ -31,12 +31,15 @@ class gameClientProtocol(LineReceiver):
 
     def connectionMade(self):
         ''' called when connection has been made '''
-        ''' used for logging in '''
-        username = g.gameEngine.menuLogin.username
-        password = g.gameEngine.menuLogin.password
+        ''' used for logging in and new account '''
 
-        g.tcpConn.sendLogin(username, password)
-        g.gameEngine.setState(MENU_CHAR)
+        if g.gameState == MENU_LOGIN:
+            # logging in, so send login after connection has been established
+            username = g.gameEngine.menuLogin.username
+            password = g.gameEngine.menuLogin.password
+
+            g.tcpConn.sendLogin(username, password)
+
         log("Connection established to server")
 
     def lineReceived(self, data):
@@ -45,10 +48,12 @@ class gameClientProtocol(LineReceiver):
         log("Received data from server")
         log(" -> " + data)
 
+        print data
         dataHandler.handleData(data)
 
     def sendData(self, data):
         self.sendLine(data)
+
 
 class gameClientFactory(ClientFactory):
     def __init__(self):
@@ -67,9 +72,11 @@ class gameClientFactory(ClientFactory):
     def clientConnectionLost(self, connector, reason):
         print reason.getErrorMessage()
         try:
-            reactor.stop()
+            #reactor.stop()
+            log("Disconnecting from server")
         except error.ReactorNotRunning:
             pass
+
 
 class TCPConnection():
     def __init__(self, protocol):
@@ -77,7 +84,6 @@ class TCPConnection():
 
     def sendData(self, data):
         self.protocol.sendData(data)
-        
 
     def sendNewAccount(self, username, password):
         packet = json.dumps([{"packet": ClientPackets.CNewAccount, "name": username, "password": password}])

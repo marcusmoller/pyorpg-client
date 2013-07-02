@@ -10,7 +10,9 @@ pygame.init()
 # connection
 gameEngine = None
 soundEngine = None
+
 tcpConn = None
+connector = None
 
 # player variables
 myIndex = None

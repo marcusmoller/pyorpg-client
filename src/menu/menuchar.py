@@ -113,6 +113,10 @@ class menuCharacters():
 
         if event.type == KEYDOWN and event.key == K_ESCAPE:
             g.gameState = MENU_LOGIN
+
+            #if g.tcpConn is not None:
+            #    g.connectionProtocol.transport.loseConnection()
+
         elif event.type == KEYDOWN and event.key == K_RETURN:
             self.doUseChar()
 

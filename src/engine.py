@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 
-import os
-import sys
-import getopt
 import time
 import pygame
 from pygame.locals import *
 
-from pgu import gui
-
-from twisted.internet import reactor, error
+from twisted.internet import reactor
 
 import global_vars as g
 
@@ -26,9 +21,10 @@ from objects import *
 from network.client import *
 from network.database import *
 
+
 class Engine:
     def __init__(self):
-        self.FRAMES_PER_SECOND = 20 
+        self.FRAMES_PER_SECOND = 20
 
         # menus
         self.menuLogin = menuLogin(g.screenSurface)
@@ -143,7 +139,7 @@ class Engine:
             if event.type == pygame.QUIT:
                 reactor.stop()
                 pygame.quit()
-                
+
             elif event.type == pygame.MOUSEMOTION:
                 self.handleMouse(event)
 

@@ -20,6 +20,9 @@ class loginControl(gui.Table):
         def btnRegister(btn):
             g.gameState = MENU_REGISTER
 
+            if g.tcpConn is None:
+                g.gameEngine.initConnection()
+
         self.tr()
         self.td(gui.Input(name="username", value="Username"))
 
@@ -41,6 +44,7 @@ class loginControl(gui.Table):
         btn = gui.Button("Register", width=120)
         btn.connect(gui.CLICK, btnRegister, None)
         self.td(btn)
+
 
 class menuLogin():
     def __init__(self, surface):
@@ -86,4 +90,5 @@ class menuLogin():
         self.password = self.loginCtrl.value.items()[1][1]
 
         if len(self.username) >= 3 and len(self.password) >= 3:
-            g.gameEngine.initConnection()
+            if g.tcpConn is None or (g.tcpConn is not None and len(g.gameEngine.menuChar.characters) == 0):
+                g.gameEngine.initConnection()

@@ -119,6 +119,6 @@ class menuRegister():
 
     def _handleEvents(self, event):
         self.app.event(event)
-        
+
         if event.type == KEYDOWN and event.key == K_ESCAPE:
             g.gameState = MENU_LOGIN
