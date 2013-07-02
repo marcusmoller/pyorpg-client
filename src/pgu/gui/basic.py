@@ -96,18 +96,19 @@ class Color(widget.Widget):
 class Label(widget.Widget):
     """A text label widget."""
 
-    def __init__(self, value="", **params):
+    def __init__(self, value="", antialias=1, **params):
         params.setdefault('focusable', False)
         params.setdefault('cls', 'label')
         widget.Widget.__init__(self, **params)
         self.style.check("font")
         self.value = value
+        self.antialias = antialias
         self.font = self.style.font
         self.style.width, self.style.height = self.font.size(self.value)
     
     def paint(self,s):
         """Renders the label onto the given surface in the upper-left corner."""
-        s.blit(self.font.render(self.value, 1, self.style.color),(0,0))
+        s.blit(self.font.render(self.value, self.antialias, self.style.color),(0,0))
 
     def set_text(self, txt):
         """Set the text of this label."""
