@@ -29,7 +29,7 @@ class characterControl(gui.Table):
                 g.gameEngine.setState(MENU_NEWCHAR)
 
         def btnDelChar(btn):
-            print "lawl"
+            print "not yet implemented"
 
         self.tr()
         self.lblPlayerName = gui.Label('PLAYER NAME', color=(255, 0, 0))
@@ -112,10 +112,8 @@ class menuCharacters():
         self.app.event(event)
 
         if event.type == KEYDOWN and event.key == K_ESCAPE:
-            g.gameState = MENU_LOGIN
-
-            #if g.tcpConn is not None:
-            #    g.connectionProtocol.transport.loseConnection()
+            g.gameEngine.quitGame()
+            #g.gameState = MENU_LOGIN
 
         elif event.type == KEYDOWN and event.key == K_RETURN:
             self.doUseChar()

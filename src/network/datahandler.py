@@ -108,7 +108,7 @@ class DataHandler():
         if msg == 'Your account has been created!':
             # show msg and disconnect until log in
             # todo: this is a stupid way of checking for account created
-            g.connector.disconnect()
+            g.gameEngine.disconnect()
 
         # todo: show dialog
 

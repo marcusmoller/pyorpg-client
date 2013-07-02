@@ -54,6 +54,9 @@ class Engine:
         connectionProtocol = startConnection()
         g.tcpConn = TCPConnection(connectionProtocol)
 
+    def disconnect(self):
+        g.connector.disconnect()
+
     def setState(self, state):
         ''' sets the game state '''
         if state == MENU_LOGIN:
