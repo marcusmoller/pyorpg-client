@@ -32,11 +32,11 @@ class characterControl(gui.Table):
             print "not yet implemented"
 
         self.tr()
-        self.lblPlayerName = gui.Label('PLAYER NAME', color=(255, 0, 0))
+        self.lblPlayerName = gui.Label('PLAYER NAME', antialias=0, color=(255, 0, 0), font=g.charSelFont)
         self.td(self.lblPlayerName, colspan=3, valign=1)
 
         self.tr()
-        self.lblPlayerExtra = gui.Label('PLAYER LEVEL/CLASS', color=(255, 0, 0))
+        self.lblPlayerExtra = gui.Label('PLAYER LEVEL/CLASS', antialias=0, color=(255, 0, 0), font=g.charSelFont)
         self.td(self.lblPlayerExtra, colspan=3)
 
         self.tr()

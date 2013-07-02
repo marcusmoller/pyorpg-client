@@ -201,14 +201,14 @@ class GraphicsEngine():
 
     def drawText(self, x, y, text, color):
         # shadow
-        textSurface = self.fontPlrName.render(text, 1, (0, 0, 0))
+        textSurface = g.nameFont.render(text, 0, (0, 0, 0))
         self.surface.blit(textSurface, (x + 2, y + 2))
 
-        textSurface = self.fontPlrName.render(text, 1, (0, 0, 0))
+        textSurface = g.nameFont.render(text, 0, (0, 0, 0))
         self.surface.blit(textSurface, (x + 1, y + 1))
 
         # real
-        textSurface = self.fontPlrName.render(text, 1, color)
+        textSurface = g.nameFont.render(text, 0, color)
         self.surface.blit(textSurface, (x, y))
 
     def drawPlayerName(self, index):

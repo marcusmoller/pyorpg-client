@@ -81,7 +81,9 @@ guiSurfaceYOffset = 0
 clock = pygame.time.Clock()
 
 # fonts
-textFont = pygame.font.Font(dataPath + '/fonts/Minecraftia.ttf', 12)
+nameFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
+chatFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
+charSelFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 23)
 
 # tiles
 tileDimension = 32

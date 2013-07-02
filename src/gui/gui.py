@@ -100,10 +100,8 @@ class ChatControl(gui.Table):
                 g.canMoveNow = True
 
     def addText(self, text, color=(0, 0, 0)):
-        textFont = pygame.font.Font(g.dataPath + '/fonts/Romulus.ttf', 16)
-
         self.chatList.tr()
-        self.chatList.td(gui.Label(str(text), antialias=0, color=color, font=textFont), align=-1)
+        self.chatList.td(gui.Label(str(text), antialias=0, color=color, font=g.chatFont), align=-1)
         self.box.resize()
 
     def clearChat(self):
