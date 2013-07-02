@@ -53,6 +53,7 @@ class QuitDialog(gui.Dialog):
 
         gui.Dialog.__init__(self, title, t)
 
+
 class ChatControl(gui.Table):
     def __init__(self, **params):
         gui.Table.__init__(self, **params)
@@ -75,6 +76,7 @@ class ChatControl(gui.Table):
         self.td(self.box)
 
         self.tr()
+
         class Hack(gui.Spacer):
             def __init__(self, box):
                 super(gui.Spacer, self).__init__()

@@ -237,8 +237,8 @@ menu.options padding_bottom 1
 menu arrow select.arrow.tga
 
 
-scrollarea.content background #ffffff
-scrollarea.content padding_left 1
+scrollarea.content background #000000
+scrollarea.content padding_left 2
 scrollarea.content padding_right 1
 scrollarea.content padding_top 1
 scrollarea.content padding_bottom 1
