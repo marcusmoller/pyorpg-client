@@ -114,7 +114,6 @@ class uiContainer(gui.Container):
 
         self.engine = engine
 
-
         # menu title
         self.tTitle = gui.Table(width=272, height=32)
 
@@ -229,14 +228,6 @@ class GameGUI():
         # game GUIs
         self.mapEditorGUI = MapEditorGUI(g.guiSurface)
 
-        # input fields (TODO: dont hardcode placement)
-        self.inpChat = pygUI.pygInputField((16, 384, 480, 20), "", 40, (255, 255, 255))
-        self.inpChat.restricted = '\'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#$%&\\\'()*+,-./:;<=>?@[\]^_`{|}~\''
-        self.listLog = pygUI.pygList((16, 420, 480, 164), (255, 255, 255))
-
-        # TEMPORARY: MAP EDITOR
-        self.label1 = pygUI.pygLabel((544, 150, 20, 20), "Selected tile:")
-
         # GUI
         self.app = gui.App()
 
@@ -285,8 +276,9 @@ class GameGUI():
                     g.canMoveNow = True
 
             elif event.key == pygame.K_q or event.key == pygame.K_ESCAPE:
-                if not self.quitDialog.is_open():
-                    self.quitDialog.open()
+                if self.guiContainer.chatCtrl.focused == False:
+                    if not self.quitDialog.is_open():
+                        self.quitDialog.open()
 
         if self.state == GUI_MAPEDITOR:
             self.mapEditorGUI.update(event)

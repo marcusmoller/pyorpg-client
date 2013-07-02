@@ -52,7 +52,7 @@ cursorX = 0
 cursorY = 0
 
 # maximum classes
-maxClasses = 0
+maxClasses = 3
 
 # path for data files
 dataPath = os.path.join('..', 'data')
@@ -81,6 +81,7 @@ guiSurfaceYOffset = 0
 clock = pygame.time.Clock()
 
 # fonts
+''' change these to customize the in-game fonts '''
 nameFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 chatFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 charSelFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 23)
