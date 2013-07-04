@@ -350,10 +350,12 @@ class DataHandler():
         g.gameEngine.graphicsEngine.gameGUI.mapEditorGUI.init()
 
     def handleMapList(self, jsonData):
-        ''' called when receiving list of map names from server '''
+        ''' called when receiving list of map names from server which is used for map editing '''
         g.mapNames = jsonData[1]['mapnames']
+        print g.mapNames
 
     def handleLeft(self, jsonData):
+        ''' called when a player has left the game '''
         index = jsonData[0]["index"]
         clearPlayer(index)
         getPlayersOnMap()

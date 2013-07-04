@@ -47,9 +47,11 @@ sOffestY = 0
 # freeze controls when getting map
 gettingMap = False
 
-# mouse tile location
+# mouse position (and tile position)
 cursorX = 0
 cursorY = 0
+cursorXTile = 0
+cursorYTile = 0
 
 # maximum classes
 maxClasses = 3
@@ -85,6 +87,10 @@ clock = pygame.time.Clock()
 nameFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 chatFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 charSelFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 23)
+
+# check if text is to be drawn
+boolFPS = False
+boolLoc = False
 
 # tiles
 tileDimension = 32

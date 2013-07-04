@@ -50,7 +50,7 @@ def handleMsg(text):
 
             ''' show/hide fps '''
             if command[0] == "/fps":
-                print "todo"
+                g.boolFPS = not g.boolFPS
 
             ''' show inventory '''
             if command[0] == "/inv":
@@ -61,6 +61,7 @@ def handleMsg(text):
             # MONITOR ADMIN #
             #################
 
+            ''' shows a list of admin commands '''
             if command[0] == "/admin":
                 if getPlayerAccess(g.myIndex) < ADMIN_MONITOR:
                     addText("You need to be a high enough staff member to do this!", alertColor)
@@ -91,18 +92,22 @@ def handleMsg(text):
             # MAPPER ADMIN #
             ################
 
+            ''' displays the current location (x, y, map id) '''
             if command[0] == "/loc":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
                     addText("You need to be a high enough staff member to do this!", alertColor)
                     return
 
+                g.boolLoc = not g.boolLoc
+
                 # draw location tile
 
+            ''' enables the map editor '''
             if command[0] == "/mapeditor":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
                     addText("You need to be a high enough staff member to do this!", alertColor)
                     return
-                    
+
                 g.tcpConn.sendRequestEditMap()
 
             if command[0] == "/warpmeto":

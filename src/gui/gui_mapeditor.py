@@ -63,7 +63,7 @@ class MapSelectorDialog(gui.Dialog):
     def openDialog(self, value):
         #self.loadMaps()
         self.open()
-        self.loadMaps()
+        #self.loadMaps()
 
     def loadMaps(self):
         #self.clearList()

@@ -110,9 +110,16 @@ class GraphicsEngine():
 
         self.drawMapName(Map.name)
 
+        # draw fps (todo - probably not necessary)
+        #if g.boolFPS:
+        #    self.drawFPS()
+
+        # draw cursor and player location
+        if g.boolLoc:
+            self.drawLocation()
+
         if g.editor == EDITOR_MAP:
             self.drawMapAttributes()
-
 
         if DEBUGGING:
             self.drawDebug()
@@ -249,6 +256,12 @@ class GraphicsEngine():
 
                 elif tempTile.type == TILE_TYPE_WARP:
                     self.surface.blit(self.warpSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
+
+    def drawLocation(self):
+        # render text
+        self.drawText(10, 10, 'cur x: ' + str(g.cursorXTile) + ' y: ' + str(g.cursorYTile), textColor.YELLOW)
+        self.drawText(10, 25, 'loc x: ' + str(getPlayerX(g.myIndex)) + ' y: ' + str(getPlayerY(g.myIndex)), textColor.YELLOW)
+        self.drawText(10, 40, ' (map #' + str(getPlayerMap(g.myIndex)) + ')', textColor.YELLOW)
 
     def drawDebug(self):
         self.drawText(10, 10, "(" + str(getPlayerX(g.myIndex)) + "," + str(getPlayerY(g.myIndex)) + ")", (0, 0, 0))

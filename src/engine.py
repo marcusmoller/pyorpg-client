@@ -225,3 +225,10 @@ class Engine:
     def handleMouse(self, event):
         g.cursorX = event.pos[0]
         g.cursorY = event.pos[1]
+
+        # only set mouse tile position within game screen boundaries
+        if g.cursorX > 16 and g.cursorX < (16 + 15*PIC_X):
+            g.cursorXTile = (g.cursorX - 16) // PIC_X
+
+        if g.cursorY > 16 and g.cursorY < (16 + 11*PIC_Y):
+            g.cursorYTile = (g.cursorY - 16) // PIC_Y
