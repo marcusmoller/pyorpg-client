@@ -3,6 +3,12 @@ pyorpg-client
 
 The client for the PyORPG project (http://www.powrtoch.org/pyorpg/)
 
+## Quick start guide
+
+Check out the GitHub wiki for a quick start guide of how to use PyORPG:
+
+https://github.com/marcusmoller/pyorpg-client/wiki
+
 ## License
 
 PyORPG carries the MIT license, which can be found both below and in the
