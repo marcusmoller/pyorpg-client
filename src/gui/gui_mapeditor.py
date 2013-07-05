@@ -213,6 +213,17 @@ class placeWarpControl(gui.Table):
         self.td(gui.Label("Y: ", color=UI_FONT_COLOR))
         self.td(gui.Input("0", size=4, name="inpWarpY"))
 
+        self.tr()
+        self.td(gui.Spacer(10, 20))
+
+        self.tr()
+        label = gui.Label("Left click to add warp", color=UI_FONT_COLOR)
+        self.td(label, colspan=2)
+
+        self.tr()
+        label = gui.Label("Right click to remove warp", color=UI_FONT_COLOR)
+        self.td(label, colspan=2)
+
         # initialize the alert dialog
         self.alertDialog = EmptyFieldAlertDialog()
 
@@ -288,6 +299,7 @@ class MapEditorContainer(gui.Container):
         g.tcpConn.sendMap()
 
         # quit editor
+        self.toggleProperties(None)
         self.quitEditor()
 
     def getTileType(self):
@@ -295,6 +307,7 @@ class MapEditorContainer(gui.Container):
         return self.tileCtrl.value['grpTileType'].value
 
     def cancelMap(self, value):
+        self.toggleProperties(None)
         self.quitEditor()
 
     def quitEditor(self):
