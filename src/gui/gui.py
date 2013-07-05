@@ -400,17 +400,24 @@ class GameGUI():
     def drawEmptyInventory(self):
         emptySlotSurface = pygame.image.load(g.dataPath + '/gui/empty_slot.png').convert_alpha()
 
-        for x in range(0, 3):
-            for y in range(0, 3):
+        for y in range(0, 3):
+            for x in range(0, 3):
                 tempPos = (524 + x*(66+24), 120 + y*(66+24))
                 g.guiSurface.blit(emptySlotSurface, tempPos)
 
     def drawFullInventory(self):
         curItemSlot = 0
 
-        for x in range(0, 3):
-            for y in range(0, 3):
+        for y in range(0, 3):
+            for x in range(0, 3):
                 if getPlayerInvItemNum(g.myIndex, curItemSlot) != None:
-                    print str(getPlayerInvItemNum(g.myIndex, curItemSlot))
+                    itemNum = getPlayerInvItemNum(g.myIndex, curItemSlot)
+                    itemPic = Item[itemNum].pic
+
+                    tempSurface = pygame.image.load(g.dataPath + '/items/' + str(itemPic) + '.bmp').convert()
+                    tempSurface = pygame.transform.scale2x(tempSurface)
+
+                    tempPos = (524 + x*(66+24) + 1, 120 + y*(66+24) + 1)
+                    g.guiSurface.blit(tempSurface, tempPos)
 
                 curItemSlot += 1
