@@ -159,7 +159,7 @@ class uiContainer(gui.Container):
         self.updateTitle(plrName + ', level ' + str(plrLevel))
 
     def toggleInventory(self, value):
-        self.engine.setState(GUI_EQUIPMENT)
+        self.engine.setState(GUI_INVENTORY)
         self.updateTitle('Inventory')
 
     def toggleEquipment(self, value):
@@ -300,6 +300,9 @@ class GameGUI():
             self.drawHealthBar()
             self.drawManaBar()
 
+        elif self.state == GUI_INVENTORY:
+            self.drawInventory()
+
         elif self.state == GUI_MAPEDITOR:
             self.mapEditorGUI.drawElements()
 
@@ -313,7 +316,8 @@ class GameGUI():
 
     def drawInventory(self):
         ''' the inventory interface '''
-        self.drawManaBar()
+        self.drawGold()
+        self.drawEmptyInventory()
 
     #############
     # FUNCTIONS #
@@ -370,6 +374,43 @@ class GameGUI():
         blueBarSurface = pygame.image.load(g.dataPath + '/gui/bar_blue.png').convert_alpha()
 
         pos = (544, 150)
+        manaBarWidth = 208*Player[g.myIndex].vitals[Vitals.mp]/Player[g.myIndex].maxMP
+        g.guiSurface.blit(emptyBarSurface, pos)
+        g.guiSurface.blit(blueBarSurface, pos, (0, 0, manaBarWidth, 28))
+
+    def drawGold(self):
+        # icon
+        goldSurface = pygame.image.load(g.dataPath + '/items/3.bmp').convert()
+        goldSurface.set_colorkey((0, 0, 0))
+        goldSurfaceRect = goldSurface.get_rect()
+        goldSurfaceRect.centerx = 665
+        goldSurfaceRect.centery = 90
+
+        g.guiSurface.blit(goldSurface, goldSurfaceRect)
+
+        # text
+        textSurface = g.nameFont.render("203", 0, textColor.YELLOW)
+        textSurfaceRect = textSurface.get_rect()
+        textSurfaceRect.centerx = 630
+        textSurfaceRect.centery = 90
+
+        g.guiSurface.blit(textSurface, textSurfaceRect)
+
+    def drawEmptyInventory(self):
+        emptySlotSurface = pygame.image.load(g.dataPath + '/gui/empty_slot.png').convert_alpha()
+
+        for x in range(0, 3):
+            for y in range(0, 3):
+                tempPos = (524 + x*(66+24), 120 + y*(66+24))
+                g.guiSurface.blit(emptySlotSurface, tempPos)
+
+    def drawFullInventory(self):
+        # draw inventory items on top of emtpy inventory
+        goldSurface = pygame.image.load(g.dataPath + '/gui/bar_empty.png').convert_alpha()
+
+        # start ved 512
+
+        pos = (536, 150)
         manaBarWidth = 208*Player[g.myIndex].vitals[Vitals.mp]/Player[g.myIndex].maxMP
         g.guiSurface.blit(emptyBarSurface, pos)
         g.guiSurface.blit(blueBarSurface, pos, (0, 0, manaBarWidth, 28))
