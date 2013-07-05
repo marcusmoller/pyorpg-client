@@ -167,16 +167,18 @@ class placeWarpControl(gui.Table):
         self.td(gui.Label("Map ID: ", color=UI_FONT_COLOR), colspan=2)
 
         self.tr()
-        self.inpMapID = gui.Input('', size=8, name='inpWarpMapID')
+        self.inpMapID = gui.Input('0', size=8, name='inpWarpMapID')
         self.td(self.inpMapID, colspan=2)
 
         # used for selecting the map
+        '''
         mapDialog = MapSelectorDialog(self.inpMapID)
 
         self.tr()
         e = gui.Button('Choose map...')
         e.connect(gui.CLICK, mapDialog.openDialog, None)
         self.td(e, colspan=2)
+        '''
 
         self.tr()
         self.td(gui.Spacer(10, 20))
@@ -327,6 +329,7 @@ class MapEditorContainer(gui.Container):
         self.tContent.tr()
         self.tContent.td(self.warpCtrl, valign=-1)
 
+
 class MapEditorGUI():
     ''' the map editor gui '''
 
@@ -368,23 +371,6 @@ class MapEditorGUI():
 
         self.tileButtons = (btnScrollLeft, btnScrollRight, btnScrollUp, btnScrollDown)
 
-        ##############
-        # PLACE WARP #
-        ##############
-
-        # input
-        self.inpWarpMapID = pygUI.pygInputField((573, 250, 150, 20), "Map ID", 20, (255, 255, 255))
-        self.inpWarpX     = pygUI.pygInputField((573, 300, 150, 20), "X", 20, (255, 255, 255))
-        self.inpWarpY     = pygUI.pygInputField((573, 340, 150, 20), "Y", 20, (255, 255, 255))
-
-        self.inpWarpMapID.restricted = '1234567890'
-        self.inpWarpX.restricted = '1234567890'
-        self.inpWarpY.restricted = '1234567890'
-
-        # labels
-        self.lblWarpLeftClick = pygUI.pygLabel((496, 190, 304, 10), "Left click to add warp", align=pygUI.ALIGN_CENTER)
-        self.lblWarpRightClick = pygUI.pygLabel((496, 210, 304, 10), "Right click to remove warp", align=pygUI.ALIGN_CENTER)
-
     def init(self):
         self.setState(STATE_PROPERTIES)
         self.draw()
@@ -407,14 +393,12 @@ class MapEditorGUI():
             for button in self.tileButtons:
                 button.draw(self.surface)
 
-
     def update(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             self.handleMouseDown(event)
 
         if self.state == PLACE_TILE:
             if 'click' in self.tileButtons[0].handleEvents(event):
-                print "wtf"
                 # scroll to the left
                 if self.tilesetOffsetX > 0:
                     self.tilesetOffsetX -= PIC_X
@@ -444,6 +428,7 @@ class MapEditorGUI():
 
     def handleMouseDown(self, event):
         # todo: better mouse rightclick/leftclick
+        # todo: the linking to g.gameEngine.graphicsEngine.gameGUI blabhalbha is WAY too stupid
         if not self.isInBounds(self.tilesetSurfaceRect) and not self.isInBounds(self.gameSurfaceRect):
             return
 
@@ -453,7 +438,6 @@ class MapEditorGUI():
 
         elif self.isInBounds(self.gameSurfaceRect):
             if event.button == 1:
-                print "left click (mapEditor)"
                 # TODO: Fix the game screen offset problem (-16)
                 x = (g.cursorX-16) // PIC_X
                 y = (g.cursorY-16) // PIC_Y
@@ -462,11 +446,9 @@ class MapEditorGUI():
 
                     if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
                         Map.tile[x][y].ground = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
-                        print "placed ground"
 
                     elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
                         Map.tile[x][y].fringe = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
-                        print "placed fringe"
 
                     calcTilePositions()
 
@@ -481,14 +463,12 @@ class MapEditorGUI():
                         Map.tile[x][y].type = TILE_TYPE_BLOCKED
 
                     elif self.state == PLACE_WARP:
-                        print "placed warp"
                         Map.tile[x][y].type = TILE_TYPE_WARP
-                        Map.tile[x][y].data1 = self.inpWarpMapID.value
-                        Map.tile[x][y].data2 = self.inpWarpX.value
-                        Map.tile[x][y].data3 = self.inpWarpY.value
+                        Map.tile[x][y].data1 = int(g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.warpCtrl.value["inpWarpMapID"].value)
+                        Map.tile[x][y].data2 = int(g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.warpCtrl.value["inpWarpX"].value)
+                        Map.tile[x][y].data3 = int(g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.warpCtrl.value["inpWarpY"].value)
 
             elif event.button == 3:
-                print "right click (mapEditor)"
                 x = (g.cursorX-16) // PIC_X
                 y = (g.cursorY-16) // PIC_Y
 
@@ -510,7 +490,6 @@ class MapEditorGUI():
     def setState(self, state):
         self.state = state
         #g.gameEngine.graphicsEngine.gameGUI.reset()
-
 
     def isInBounds(self, surfaceRect):
         if surfaceRect.collidepoint((g.cursorX, g.cursorY)):
