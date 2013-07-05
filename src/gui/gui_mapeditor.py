@@ -16,6 +16,25 @@ PLACE_ITEM  = 4
 
 UI_FONT_COLOR = (251, 230, 204)
 
+class EmptyFieldAlertDialog(gui.Dialog):
+    def __init__(self, **params):
+        title = gui.Label("Error")
+
+        t = gui.Table()
+
+        t.tr()
+        e = gui.Button('Choose map')
+        t.td(e)
+
+        e = gui.Button('Cancel')
+        e.connect(gui.CLICK, self.close, None)
+        t.td(e)
+
+        t.tr()
+        t.td(gui.Spacer(10, 10))
+
+        gui.Dialog.__init__(self, title, t)
+
 class MapSelectorDialog(gui.Dialog):
     def __init__(self, inputfield, **params):
         self.inpField = inputfield
@@ -170,7 +189,7 @@ class placeWarpControl(gui.Table):
         self.inpMapID = gui.Input('0', size=8, name='inpWarpMapID')
         self.td(self.inpMapID, colspan=2)
 
-        # used for selecting the map
+        # used for selecting the map - todo
         '''
         mapDialog = MapSelectorDialog(self.inpMapID)
 
@@ -193,6 +212,9 @@ class placeWarpControl(gui.Table):
         self.tr()
         self.td(gui.Label("Y: ", color=UI_FONT_COLOR))
         self.td(gui.Input("0", size=4, name="inpWarpY"))
+
+        # initialize the alert dialog
+        self.alertDialog = EmptyFieldAlertDialog()
 
 
 class MapEditorContainer(gui.Container):
