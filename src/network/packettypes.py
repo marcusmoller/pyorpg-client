@@ -40,10 +40,11 @@ class ClientPackets:
     CSaveItem, \
     CDelete, \
     CSetAccess, \
+    CGiveItem,  \
     CWhosOnline, \
     CSetMotd, \
     CQuit        \
-    = range(40)
+    = range(41)
 
 
 class ServerPackets:
@@ -53,6 +54,8 @@ class ServerPackets:
     SNewCharClasses, \
     SClassesData, \
     SInGame,     \
+    SPlayerInv,  \
+    SPlayerInvUpdate, \
     SPlayerHP,   \
     SPlayerMP,   \
     SPlayerSP,   \
@@ -70,13 +73,13 @@ class ServerPackets:
     SAdminMsg,   \
     SPlayerMsg,  \
     SMapMsg,     \
+    SUpdateItem, \
     SMapKey, \
     SEditMap, \
     SMapList, \
     SLeft,       \
     SHighIndex   \
-    = range(28)
-
+    = range(31)
 
 class MessagePackets:
     MAccountCreated, \

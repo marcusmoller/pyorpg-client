@@ -1,4 +1,4 @@
-from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY
+from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS
 import pygame
 
 # Public data structures
@@ -29,6 +29,11 @@ class Equipment():
     equipment_count \
     = range(5)
 
+class PlayerInvClass():
+    def __init__(self):
+        self.num = None
+        self.value = 0
+        self.dur = 0
 
 class PlayerClass():
     def __init__(self):
@@ -126,6 +131,15 @@ class MapClass():
 
         self.tile = [[TileClass() for i in range(MAX_MAPY)] for i in range(MAX_MAPX)]
 
+class ItemClass():
+    def __init__(self):
+        self.name = ""
+        self.pic = 0
+        self.type = 0
+        self.data1 = 0
+        self.data2 = 0
+        self.data3 = 0
+
 
 # Data initializations
 Map = MapClass()
@@ -133,6 +147,8 @@ MapTilePosition = [[TilePosClass() for i in range(MAX_MAPY)] for i in range(MAX_
 TempTile = [[TempTileClass() for i in range(MAX_MAPY)] for i in range(MAX_MAPX)]
 
 Player = [PlayerClass() for i in range(MAX_PLAYERS)]
+PlayerInv = [PlayerInvClass() for i in range(MAX_INV)]
 
 #todo: dont use a fixed size, please
 Class = [ClassClass() for i in range(99)]
+Item = [ItemClass() for i in range(MAX_ITEMS)]

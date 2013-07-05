@@ -73,7 +73,7 @@ class gameClientFactory(ClientFactory):
         print reason.getErrorMessage()
         try:
             #reactor.stop()
-            log("Disconnecting from server")
+            log("Disconnection from server")
         except error.ReactorNotRunning:
             pass
 
@@ -204,6 +204,10 @@ class TCPConnection():
 
     def sendSetAccess(self, name, access):
         packet = json.dumps([{'packet': ClientPackets.CSetAccess, 'name': name, 'access': access}])
+        self.sendData(packet)
+
+    def sendGiveItem(self, name, itemnum):
+        packet = json.dumps([{'packet': ClientPackets.CGiveItem, 'name': name, 'itemnum': itemnum}])
         self.sendData(packet)
 
     def sendSetSprite(self, spriteNum):

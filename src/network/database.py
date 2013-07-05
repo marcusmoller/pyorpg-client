@@ -111,6 +111,22 @@ def setPlayerDir(index, direction):
     Player[index].Dir = direction
 
 
+''' player inventory '''
+def getPlayerInvItemNum(index, invSlot):
+    return PlayerInv[invSlot].num
+def setPlayerInvItemNum(index, invSlot, itemNum):
+    PlayerInv[invSlot].num = itemNum
+
+def getPlayerInvItemValue(index, invSlot):
+    return PlayerInv[invSlot].value
+def setPlayerInvItemValue(index, invSlot, itemValue):
+    PlayerInv[invSlot].value = itemValue
+
+def getPlayerInvItemDur(index, invSlot):
+    return PlayerInv[invSlot].dur
+def setPlayerInvItemDur(index, invSlot, itemDur):
+    PlayerInv[invSlot].dum = itemDur
+
 ''' player map '''
 def getPlayerMap(index):
     return Player[index].Map

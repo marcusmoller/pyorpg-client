@@ -71,7 +71,7 @@ def handleMsg(text):
                 addText('  ""msghere = Global Admin Message', helpColor)
                 addText("  =msghere  = Private Admin Message", helpColor)
                 addText("  !namehere msghere = Player Message", helpColor)
-                addText("Available Commands: /admin, /loc, /mapeditor, /warpmeto, /warptome, /warpto, /setsprite, /mapreport, /kick, /ban, /edititem, /respawn, /editnpc, /motd, /editshop, /editspell, /debug", helpColor)
+                addText("Available Commands: /admin, /loc, /mapeditor, /warpmeto, /warptome, /warpto, /setsprite, /giveitem, /mapreport, /kick, /ban, /edititem, /respawn, /editnpc, /motd, /editshop, /editspell, /debug", helpColor)
 
             if command[0] == "/kick":
                 if getPlayerAccess(g.myIndex) < ADMIN_MONITOR:
@@ -200,9 +200,24 @@ def handleMsg(text):
 
                 g.tcpConn.sendSetAccess(command[1], int(command[2]))
 
+            # testing
+            if command[0] == '/giveitem':
+                if getPlayerAccess(g.myIndex) < ADMIN_DEVELOPER:
+                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    return
+
+                if len(command) < 2:
+                    addText('usage: /giveitem <name> <itemnum>', alertColor)
+                    return
+
+                if command[1].isdigit() or not command[2].isdigit():
+                    addText('usage: /giveitem <name> <itemnum>', alertColor)
+                    return
+
+                g.tcpConn.sendGiveItem(command[1], int(command[2]))
+
             return
 
-                
 
         ''' say message '''
         if len(text) > 0:
@@ -397,6 +412,11 @@ def checkMovement():
     if Map.tile[getPlayerX(g.myIndex)][getPlayerY(g.myIndex)].type == TILE_TYPE_WARP:
         #print "cannot move (todo)"
         g.canMoveNow = False
+
+
+def updateInventory():
+    # redraw the inventory interface
+    print "todo"
 
 def getPlayersOnMap():
     g.playersOnMap = []

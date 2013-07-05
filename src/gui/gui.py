@@ -318,6 +318,7 @@ class GameGUI():
         ''' the inventory interface '''
         self.drawGold()
         self.drawEmptyInventory()
+        self.drawFullInventory()
 
     #############
     # FUNCTIONS #
@@ -405,12 +406,11 @@ class GameGUI():
                 g.guiSurface.blit(emptySlotSurface, tempPos)
 
     def drawFullInventory(self):
-        # draw inventory items on top of emtpy inventory
-        goldSurface = pygame.image.load(g.dataPath + '/gui/bar_empty.png').convert_alpha()
+        curItemSlot = 0
 
-        # start ved 512
+        for x in range(0, 3):
+            for y in range(0, 3):
+                if getPlayerInvItemNum(g.myIndex, curItemSlot) != None:
+                    print str(getPlayerInvItemNum(g.myIndex, curItemSlot))
 
-        pos = (536, 150)
-        manaBarWidth = 208*Player[g.myIndex].vitals[Vitals.mp]/Player[g.myIndex].maxMP
-        g.guiSurface.blit(emptyBarSurface, pos)
-        g.guiSurface.blit(blueBarSurface, pos, (0, 0, manaBarWidth, 28))
+                curItemSlot += 1

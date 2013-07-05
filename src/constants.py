@@ -37,17 +37,30 @@ DEBUGGING = False
 # VALUES BELOW MUST MATCH THE SERVER'S VALUES #
 ###############################################
 
-# General constants
-GAME_NAME   = "PyORPG"
-GAME_PORT   = 2727
-MAX_PLAYERS = 5
+# general constants
+GAME_NAME = "PyORPG"
+GAME_PORT = 2727
+MAX_PLAYERS = 70
+MAX_ITEMS = 255
+MAX_INV = 9  # 50
+MAX_LEVELS = 100
 
-# Website
-GAME_WEBSITE = "https://github.com/marcusmoller/pyorpg-client"
+# website
+GAME_WEBSITE = "https://powrtoch.org/pyorpg/"
+
+# account constants
+NAME_LENGTH = 20
+MAX_CHARS = 3
+
+# map constants
+MAX_MAPS = 100
+MAX_MAPX = 15
+MAX_MAPY = 11
 
 # text colors
 class textColor():
     BLACK      = (  0,   0,   0)
+    WHITE      = (255, 255, 255)
     BLUE       = (  0,   0, 255)
     GREEN      = (  0, 255,   0)
     RED        = (255,   0,   0)
@@ -70,7 +83,7 @@ sayColor       = textColor.GREY
 globalColor    = textColor.BRIGHT_BLUE
 broadcastColor = textColor.PINK
 tellColor      = textColor.BRIGHT_GREEN
-emoteColor     = textColor.BRIGHT_CYAN 
+emoteColor     = textColor.BRIGHT_CYAN
 adminColor     = textColor.BRIGHT_CYAN
 helpColor      = textColor.PINK
 whoColor       = textColor.PINK
@@ -78,11 +91,6 @@ joinLeftColor  = textColor.DARK_GREY
 npcColor       = textColor.BROWN
 alertColor     = textColor.RED
 newMapColor    = textColor.PINK
-
-# Map constants
-MAX_MAPS = 100
-MAX_MAPX = 15
-MAX_MAPY = 11
 
 # tile constants
 TILE_TYPE_WALKABLE = 0
@@ -93,17 +101,29 @@ TILE_TYPE_NPCAVOID = 4
 TILE_TYPE_KEY      = 5
 TILE_TYPE_KEYOPEN  = 6
 
-# account constants
-NAME_LENGTH = 20
-MAX_CHARS = 3
+# item constants
+ITEM_TYPE_NONE        = 0
+ITEM_TYPE_WEAPON      = 1
+ITEM_TYPE_ARMOR       = 2
+ITEM_TYPE_HELMET      = 3
+ITEM_TYPE_SHIELD      = 4
+ITEM_TYPE_POTIONADDHP = 5
+ITEM_TYPE_POTIONADDMP = 6
+ITEM_TYPE_POTIONADDSP = 7
+ITEM_TYPE_POTIONSUBHP = 8
+ITEM_TYPE_POTIONSUBMP = 9
+ITEM_TYPE_POTIONSUBSP = 10
+ITEM_TYPE_KEY         = 11
+ITEM_TYPE_CURRENCY    = 12
+ITEM_TYPE_SPELL       = 13
 
-# Direction constants
-DIR_UP    = 0
-DIR_DOWN  = 1
-DIR_LEFT  = 2
+# direction constants
+DIR_UP = 0
+DIR_DOWN = 1
+DIR_LEFT = 2
 DIR_RIGHT = 3
 
-# Player movement constants
+# player movement
 MOVING_WALKING = 1
 MOVING_RUNNING = 2
 
