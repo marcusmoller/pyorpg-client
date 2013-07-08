@@ -2,7 +2,6 @@ import pygame
 from pygame.locals import *
 from pgu import gui
 
-import pygUI as pygUI
 from gamelogic import *
 from network.database import *
 from objects import *
@@ -23,6 +22,7 @@ GUI_SPELLEDITOR = 6
 GUI_SHOPEDITOR = 7
 
 #TODO: get rid of g.canMoveNow...
+
 
 class QuitDialog(gui.Dialog):
     def __init__(self, **params):
@@ -225,6 +225,17 @@ class GameGUI():
         # events
         self.pressedKeys = []
 
+        # inventory boxes
+        self.inventoryBoxes = []
+        for y in range(0, 3):
+            for x in range(0, 3):
+                self.inventoryBoxes.append(pygame.Rect((524 + x*(66+24) + 1, 120 + y*(66+24) + 1, 64, 64)))
+
+        self.emptySlotSurface = pygame.image.load(g.dataPath + '/gui/empty_slot.png').convert_alpha()
+
+        # inventory tooltip
+        self.tooltipRect = pygame.Rect((0, 0, 128, 64))
+
         # game GUIs
         self.mapEditorGUI = MapEditorGUI(g.guiSurface)
 
@@ -242,9 +253,25 @@ class GameGUI():
         # dirty
         self.isDirty = True
 
+        # init
+        self.itemSprites = []
+        self.loadItemSprites()
+
+    def loadItemSprites(self):
+        for i in range(18):
+            tempImage = pygame.image.load(g.dataPath + '/items/' + str(i) + '.bmp').convert()
+            self.itemSprites.append(tempImage)
+
     def setState(self, state):
+        ''' sets UI engine state '''
         self.state = state
         self.reset()
+
+    def setUIState(self, state):
+        ''' sets UI rendering state '''
+        if state == GUI_INVENTORY:
+            self.guiContainer.uiCtrl.toggleInventory(0)
+
 
     def draw(self, surface, surfaceRect):
         # surface and surfaceRect is a part of a stupid hack. See graphics.py
@@ -280,7 +307,15 @@ class GameGUI():
                     if not self.quitDialog.is_open():
                         self.quitDialog.open()
 
-        if self.state == GUI_MAPEDITOR:
+        if self.state == GUI_INVENTORY:
+            # show item information
+            for i in range(len(self.inventoryBoxes)):
+                if self.inventoryBoxes[i].collidepoint(g.cursorX, g.cursorY):
+                    self.hoveredInventorySlot = i
+                else:
+                    self.hoveredInventorySlot = None
+
+        elif self.state == GUI_MAPEDITOR:
             self.mapEditorGUI.update(event)
 
     ##############
@@ -301,7 +336,7 @@ class GameGUI():
             self.drawManaBar()
 
         elif self.state == GUI_INVENTORY:
-            self.drawInventory()
+            self.drawInventoryUI()
 
         elif self.state == GUI_MAPEDITOR:
             self.mapEditorGUI.drawElements()
@@ -314,11 +349,14 @@ class GameGUI():
         self.drawManaBar()
         self.drawStatText()
 
-    def drawInventory(self):
+    def drawInventoryUI(self):
         ''' the inventory interface '''
         self.drawGold()
-        self.drawEmptyInventory()
-        self.drawFullInventory()
+        self.drawInventory()
+
+        for i in range(len(self.inventoryBoxes)):
+            if self.inventoryBoxes[i].collidepoint(g.cursorX, g.cursorY):
+                self.drawInventoryTooltip(i)
 
     #############
     # FUNCTIONS #
@@ -381,7 +419,7 @@ class GameGUI():
 
     def drawGold(self):
         # icon
-        goldSurface = pygame.image.load(g.dataPath + '/items/3.bmp').convert()
+        goldSurface = pygame.image.load(g.dataPath + '/items/2.bmp').convert()
         goldSurface.set_colorkey((0, 0, 0))
         goldSurfaceRect = goldSurface.get_rect()
         goldSurfaceRect.centerx = 665
@@ -397,15 +435,7 @@ class GameGUI():
 
         g.guiSurface.blit(textSurface, textSurfaceRect)
 
-    def drawEmptyInventory(self):
-        emptySlotSurface = pygame.image.load(g.dataPath + '/gui/empty_slot.png').convert_alpha()
-
-        for y in range(0, 3):
-            for x in range(0, 3):
-                tempPos = (524 + x*(66+24), 120 + y*(66+24))
-                g.guiSurface.blit(emptySlotSurface, tempPos)
-
-    def drawFullInventory(self):
+    def drawInventory(self):
         curItemSlot = 0
 
         for y in range(0, 3):
@@ -414,10 +444,46 @@ class GameGUI():
                     itemNum = getPlayerInvItemNum(g.myIndex, curItemSlot)
                     itemPic = Item[itemNum].pic
 
-                    tempSurface = pygame.image.load(g.dataPath + '/items/' + str(itemPic) + '.bmp').convert()
+                    tempSurface = self.itemSprites[itemPic]
                     tempSurface = pygame.transform.scale2x(tempSurface)
 
                     tempPos = (524 + x*(66+24) + 1, 120 + y*(66+24) + 1)
                     g.guiSurface.blit(tempSurface, tempPos)
+                else:
+                    tempPos = (524 + x*(66+24), 120 + y*(66+24))
+                    g.guiSurface.blit(self.emptySlotSurface, tempPos)
 
                 curItemSlot += 1
+
+    def drawInventoryTooltip(self, itemSlot):
+
+        def generateTooltip(itemNum):
+            # determine rect size
+            itemName = Item[itemNum].name
+
+            textSize = g.tooltipFont.size(itemName)
+
+            # draw surface
+            tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + 10))
+            tempSurface.fill((0, 0, 0))
+
+            # draw border
+            pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
+
+            # render information
+            img = g.tooltipFont.render(itemName, 0, (255, 255, 255))
+            tempSurface.blit(img, (0, 0))
+
+            return tempSurface
+
+        if getPlayerInvItemNum(g.myIndex, itemSlot) != None:
+            # generate tooltip
+            itemNum = getPlayerInvItemNum(g.myIndex, itemSlot)
+            tooltipSurface = generateTooltip(itemNum)
+
+            # position the tooltip at the mouse
+            self.tooltipRect.x = g.cursorX
+            self.tooltipRect.y = g.cursorY - tooltipSurface.get_rect().h
+
+            # render tooltip on surface
+            g.guiSurface.blit(tooltipSurface, self.tooltipRect)

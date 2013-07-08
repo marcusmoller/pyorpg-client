@@ -12,7 +12,8 @@ class SoundEngine():
         pygame.mixer.init()
 
         self.playingSound = False
-        self.muted = False
+        self.sfxMuted = False
+        self.musicMuted = False
 
         self.soundList = []
         self.musicList = []
@@ -32,12 +33,12 @@ class SoundEngine():
         return sound
 
     def play(self, sound, loops=False, fade_in=False):
-        if fade_in == True:
-            fade_ms = 1000
-        else:
-            fade_ms = 0
+        if not self.musicMuted:
+            if fade_in == True:
+                fade_ms = 1000
+            else:
+                fade_ms = 0
 
-        if not self.muted:
             pygame.mixer.fadeout(1000)
             self.soundList[sound].play(loops, fade_ms=fade_ms)
 
@@ -51,6 +52,6 @@ class SoundEngine():
 
     def playAttack(self):
         ''' plays (random) attack sound '''
-        rand = random.randint(0, 2)
-        self.attackSounds[rand].play()
-
+        if not self.sfxMuted:
+            rand = random.randint(0, 2)
+            self.attackSounds[rand].play()

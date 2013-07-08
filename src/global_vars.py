@@ -73,6 +73,8 @@ bgSurface = None
 
 guiSurface = pygame.Surface((800, 600))
 
+dirtyRects = []
+
 # surfaces
 gameSurfaceXOffset = 0
 gameSurfaceYOffset = 0
@@ -87,6 +89,7 @@ clock = pygame.time.Clock()
 nameFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 chatFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 charSelFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 23)
+tooltipFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 
 # check if text is to be drawn
 boolFPS = False

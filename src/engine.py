@@ -4,6 +4,7 @@
 import time
 import pygame
 from pygame.locals import *
+import ConfigParser
 
 from twisted.internet import reactor
 
@@ -43,6 +44,8 @@ class Engine:
         g.soundEngine = SoundEngine()
         g.soundEngine.loadSounds()
 
+        self.initConfig(g.dataPath + '/config.cfg')
+
         self.setState(MENU_LOGIN)
 
         pygame.display.flip()
@@ -53,6 +56,25 @@ class Engine:
         ''' starts the connection to the server '''
         connectionProtocol = startConnection()
         g.tcpConn = TCPConnection(connectionProtocol)
+
+    def initConfig(self, configFile):
+        ''' reads the configuration file '''
+
+        if not os.path.isfile(configFile):
+            print 'No configuration file was found'
+            return
+
+        config = ConfigParser.RawConfigParser()
+        config.read(configFile)
+
+        try:
+            if config.getboolean('sound', 'sfx') is False:
+                g.soundEngine.sfxMuted = True
+
+            if config.getboolean('sound', 'music') is False:
+                g.soundEngine.musicMuted = True
+        except:
+            print 'An error occured while reading the configuration file'
 
     def disconnect(self):
         g.connector.disconnect()

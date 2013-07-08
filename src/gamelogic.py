@@ -54,7 +54,7 @@ def handleMsg(text):
 
             ''' show inventory '''
             if command[0] == "/inv":
-                g.gameEngine.graphicsEngine.gameGUI.setState(2)
+                g.gameEngine.graphicsEngine.gameGUI.setUIState(1)  # GUI_INVENTORY = 1
 
 
             #################
