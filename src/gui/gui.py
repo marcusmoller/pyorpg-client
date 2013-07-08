@@ -277,10 +277,8 @@ class GameGUI():
         # surface and surfaceRect is a part of a stupid hack. See graphics.py
 
         # render ui
-        if self.isDirty:
-            self.drawUI()
-            # todo: check for isDirty, currently set to True at all times
-            self.isDirty = True
+        g.guiSurface.blit(self.background, (0, 0))
+        self.drawUI()
 
         # part of the hack. game map is blitted so that the gui (app.paint) is ABOVE the game screen
         g.screenSurface.blit(surface, surfaceRect)
@@ -460,7 +458,6 @@ class GameGUI():
         def generateTooltip(itemNum):
             # determine rect size
             itemName = Item[itemNum].name
-
             textSize = g.tooltipFont.size(itemName)
 
             # draw surface
@@ -470,9 +467,24 @@ class GameGUI():
             # draw border
             pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
 
+            # determine name color
+            itemType = Item[itemNum].type
+            if itemType == ITEM_TYPE_WEAPON or itemType == ITEM_TYPE_ARMOR or itemType == ITEM_TYPE_HELMET or itemType == ITEM_TYPE_SHIELD:
+                nameColor = (33, 96, 167)  # textColor.BLUE
+
+            elif itemType == ITEM_TYPE_CURRENCY:
+                nameColor = textColor.YELLOW
+
+            else:
+                nameColor = textColor.GREY
+
             # render information
-            img = g.tooltipFont.render(itemName, 0, (255, 255, 255))
-            tempSurface.blit(img, (0, 0))
+            img = g.tooltipFont.render(itemName, 0, nameColor)
+            imgRect = img.get_rect()
+            imgRect.centerx = tempSurface.get_rect().w / 2
+            imgRect.centery = tempSurface.get_rect().h / 2
+
+            tempSurface.blit(img, imgRect)
 
             return tempSurface
 
