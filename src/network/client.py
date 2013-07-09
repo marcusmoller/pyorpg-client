@@ -222,6 +222,10 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CRequestEditMap}])
         self.sendData(packet)
 
+    def sendRequestEditItem(self):
+        packet = json.dumps([{"packet": ClientPackets.CRequestEditItem}])
+        self.sendData(packet)
+
     def sendQuit(self):
         packet = json.dumps([{"packet": ClientPackets.CQuit}])
         self.sendData(packet)

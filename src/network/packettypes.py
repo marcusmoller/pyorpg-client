@@ -73,13 +73,15 @@ class ServerPackets:
     SAdminMsg,   \
     SPlayerMsg,  \
     SMapMsg,     \
+    SItemEditor, \
     SUpdateItem, \
     SMapKey, \
     SEditMap, \
+    SEditItem, \
     SMapList, \
     SLeft,       \
     SHighIndex   \
-    = range(31)
+    = range(33)
 
 class MessagePackets:
     MAccountCreated, \

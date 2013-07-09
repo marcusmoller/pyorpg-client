@@ -373,7 +373,7 @@ class MapEditorGUI():
 
         self.state = PLACE_TILE
 
-        # todo: remove this shit
+        # todo: remove this
         self.gameSurfaceRect = g.gameSurface.get_rect()
         self.gameSurfaceRect.top = 16
         self.gameSurfaceRect.left = 16
@@ -417,10 +417,7 @@ class MapEditorGUI():
             self.surface.blit(self.selectedTileSurface, self.selectedTileRect)
             self.surface.blit(self.tilesetImg, self.tilesetSurfaceRect, (self.tilesetOffsetX, self.tilesetOffsetY, self.tilesetSurfaceRect.width, self.tilesetSurfaceRect.height))
 
-            for button in self.tileButtons:
-                button.draw(self.surface)
-
-        self.drawElements()
+            self.drawElements()
 
     def drawElements(self):
         # todo: this is required to keep performance low (only update elements)
@@ -440,6 +437,7 @@ class MapEditorGUI():
             if self.tilesetOffsetY > 0:
                 self.tilesetOffsetY -= PIC_Y
             self.draw()
+
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # mouse click
             self.handleMouseDown(event)

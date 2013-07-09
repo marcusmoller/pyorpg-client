@@ -92,6 +92,8 @@ npcColor       = textColor.BROWN
 alertColor     = textColor.RED
 newMapColor    = textColor.PINK
 
+UI_FONT_COLOR = (251, 230, 204)
+
 # tile constants
 TILE_TYPE_WALKABLE = 0
 TILE_TYPE_BLOCKED  = 1

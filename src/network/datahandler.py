@@ -89,6 +89,9 @@ class DataHandler():
         elif packetType == ServerPackets.SMapMsg:
             self.handleMapMsg(jsonData)
 
+        elif packetType == ServerPackets.SItemEditor:
+            self.handleItemEditor()
+
         elif packetType == ServerPackets.SUpdateItem:
             self.handleUpdateItem(jsonData)
 
@@ -358,6 +361,14 @@ class DataHandler():
         msg = jsonData[0]["msg"]
         color = jsonData[0]["color"]
         addText(msg, color)
+
+    def handleItemEditor(self):
+        ''' called when server allows player to edit items '''
+        g.editor = EDITOR_ITEM
+
+        g.gameEngine.graphicsEngine.gameGUI.guiContainer.openItemEditor()
+        g.gameEngine.graphicsEngine.gameGUI.setState(4)
+        g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.init()
 
     def handleUpdateItem(self, jsonData):
         itemNum = jsonData[0]['itemnum']

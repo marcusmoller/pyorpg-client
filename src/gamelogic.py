@@ -163,6 +163,7 @@ def handleMsg(text):
                 else:
                     addText("Invalid map number.", textColor.RED)
 
+            ''' sets the admin sprite '''
             if command[0] == "/setsprite":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
                     addText("You need to be a high enough staff member to do this!", alertColor)
@@ -185,22 +186,19 @@ def handleMsg(text):
 
                 #sendData mapreport
 
-            if command[0] == '/setaccess':
-                if getPlayerAccess(g.myIndex) < ADMIN_CREATOR:
+            ###################
+            # DEVELOPER ADMIN #
+            ###################
+
+            ''' enables the map editor '''
+            if command[0] == "/itemeditor":
+                if getPlayerAccess(g.myIndex) < ADMIN_DEVELOPER:
                     addText("You need to be a high enough staff member to do this!", alertColor)
                     return
 
-                if len(command) < 2:
-                    addText('usage: /setaccess <name> <access>', alertColor)
-                    return
+                g.tcpConn.sendRequestEditItem()
 
-                if command[1].isdigit() or not command[2].isdigit():
-                    addText('usage: /setaccess <name> <access>', alertColor)
-                    return
-
-                g.tcpConn.sendSetAccess(command[1], int(command[2]))
-
-            # testing
+            ''' gives an item to a player '''
             if command[0] == '/giveitem':
                 if getPlayerAccess(g.myIndex) < ADMIN_DEVELOPER:
                     addText("You need to be a high enough staff member to do this!", alertColor)
@@ -215,6 +213,25 @@ def handleMsg(text):
                     return
 
                 g.tcpConn.sendGiveItem(command[1], int(command[2]))
+
+            #################
+            # CREATOR ADMIN #
+            #################
+
+            if command[0] == '/setaccess':
+                if getPlayerAccess(g.myIndex) < ADMIN_CREATOR:
+                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    return
+
+                if len(command) < 2:
+                    addText('usage: /setaccess <name> <access>', alertColor)
+                    return
+
+                if command[1].isdigit() or not command[2].isdigit():
+                    addText('usage: /setaccess <name> <access>', alertColor)
+                    return
+
+                g.tcpConn.sendSetAccess(command[1], int(command[2]))
 
             return
 

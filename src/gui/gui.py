@@ -334,6 +334,9 @@ class GameGUI():
         elif self.state == GUI_MAPEDITOR:
             self.mapEditorGUI.update(event)
 
+        elif self.state == GUI_ITEMEDITOR:
+            self.itemEditorGUI.update(event)
+
     ##############
     # INTERFACES #
     ##############
@@ -357,6 +360,9 @@ class GameGUI():
 
         elif self.state == GUI_MAPEDITOR:
             self.mapEditorGUI.drawElements()
+
+        elif self.state == GUI_ITEMEDITOR:
+            self.itemEditorGUI.drawElements()
 
         g.screenSurface.blit(g.guiSurface, (0, 0))
 
