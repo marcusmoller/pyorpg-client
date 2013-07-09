@@ -9,6 +9,7 @@ from constants import *
 import global_vars as g
 
 from gui_mapeditor import MapEditorContainer, MapEditorGUI
+from gui_itemeditor import ItemEditorContainer, ItemEditorGUI
 
 # gui states
 GUI_STATS = 0
@@ -191,11 +192,13 @@ class GUIContainer(gui.Container):
         self.chatCtrl = ChatControl(name="chatCtrl")
         self.uiCtrl = uiContainer(self.engine, name="uiCtrl")
         self.mapEditorControl = MapEditorContainer(self.engine.mapEditorGUI, name="mapEditorCtrl")
+        self.itemEditorControl = ItemEditorContainer(self.engine.itemEditorGUI, name='itemEditorCtrl')
 
         # default controls
         self.add(self.chatCtrl, 16, 384)
         self.add(self.uiCtrl, 512, 16)
 
+    # map editor
     def openEditor(self, value=0):
         self.add(self.mapEditorControl, 512, 16)
         g.canMoveNow = False
@@ -205,6 +208,20 @@ class GUIContainer(gui.Container):
 
     def closeEditor(self, value=0):
         self.remove(self.find("mapEditorCtrl"))
+
+        # add ui
+        self.add(self.uiCtrl, 512, 16)
+
+    # item editor
+    def openItemEditor(self, value=0):
+        self.add(self.itemEditorControl, 512, 16)
+        g.canMoveNow = False
+
+        # close ui
+        self.remove(self.find('uiCtrl'))
+
+    def closeItemEditor(self, value=0):
+        self.remove(self.find('itemEditorCtrl'))
 
         # add ui
         self.add(self.uiCtrl, 512, 16)
@@ -238,6 +255,7 @@ class GameGUI():
 
         # game GUIs
         self.mapEditorGUI = MapEditorGUI(g.guiSurface)
+        self.itemEditorGUI = ItemEditorGUI(g.guiSurface)
 
         # GUI
         self.app = gui.App()
@@ -277,7 +295,7 @@ class GameGUI():
         # surface and surfaceRect is a part of a stupid hack. See graphics.py
 
         # render ui
-        g.guiSurface.blit(self.background, (0, 0))
+        #g.guiSurface.blit(self.background, (0, 0))
         self.drawUI()
 
         # part of the hack. game map is blitted so that the gui (app.paint) is ABOVE the game screen
@@ -334,6 +352,7 @@ class GameGUI():
             self.drawManaBar()
 
         elif self.state == GUI_INVENTORY:
+            g.guiSurface.blit(self.background, (0, 0))
             self.drawInventoryUI()
 
         elif self.state == GUI_MAPEDITOR:

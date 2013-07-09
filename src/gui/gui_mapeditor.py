@@ -429,7 +429,19 @@ class MapEditorGUI():
                 button.draw(self.surface)
 
     def update(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 5:
+            # mouse scroll down
+            if self.tilesetOffsetY < (self.tilesetImgRect.height - self.tilesetSurfaceRect.height):
+                self.tilesetOffsetY += PIC_Y
+            self.draw()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 4:
+            # mouse scroll up
+            if self.tilesetOffsetY > 0:
+                self.tilesetOffsetY -= PIC_Y
+            self.draw()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            # mouse click
             self.handleMouseDown(event)
 
         if self.state == PLACE_TILE:

@@ -234,7 +234,11 @@ class GraphicsEngine():
         else:
             color = textColor.BROWN
 
-        textX = getPlayerX(index) * PIC_X + Player[index].xOffset + (PIC_X//2) - ((len(getPlayerName(index))/2)*8)
+        # text length
+        textSize = g.nameFont.size(getPlayerName(index))
+
+        # center text
+        textX = getPlayerX(index) * PIC_X + Player[index].xOffset + (PIC_X//2) - (textSize[0]/2)
         textY = getPlayerY(index) * PIC_Y + Player[index].yOffset - (PIC_Y//2) - 4
 
         self.drawText(textX, textY, getPlayerName(index), color)
