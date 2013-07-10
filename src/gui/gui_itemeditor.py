@@ -10,6 +10,7 @@ import global_vars as g
 
 UI_FONT_COLOR = (251, 230, 204)
 
+
 class OpenItemDialog(gui.Dialog):
     def __init__(self, engine, **params):
         self.engine = engine
@@ -35,7 +36,7 @@ class OpenItemDialog(gui.Dialog):
 
         t.tr()
         e = gui.Button('Open item')
-        e.connect(gui.CLICK, self.setInput, None)
+        e.connect(gui.CLICK, self.openItem, None)
         t.td(e)
 
         e = gui.Button('Cancel')
@@ -47,11 +48,11 @@ class OpenItemDialog(gui.Dialog):
 
         gui.Dialog.__init__(self, title, t)
 
-    def setInput(self, value):
+    def openItem(self, value):
         listValue = self.itemList.value
 
-        if listValue:
-            self.inpField.value = str(listValue)
+        if listValue != None:
+            self.engine.openItem(itemNum=listValue)
             self.close()
 
     def openDialog(self, value):
@@ -155,13 +156,19 @@ class ItemEditorContainer(gui.Container):
         self.add(self.tContent, 0, 100)
         self.add(self.tBottom, 0, 368)
 
-    def openItem(self, value):
-        print "hehe"
+    def openItem(self, itemNum):
+        # redraw selected sprite
+        g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum = Item[itemNum].pic
+        g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.draw()
+
+        if self.tContent.find('inpItemName'):
+            self.value['inpItemName'].value = Item[itemNum].name
 
     def updateType(self, value):
         typeValue = self.value['selItemType'].value
 
         # create new rows if they don't exist
+        # todo: this is stupid - it would be better with show/hide
         if not self.tContent.find('lblItemData1'):
             self.tContent.tr()
             self.tContent.td(gui.Label('Item Data1:', color=UI_FONT_COLOR, name='lblItemData1'))
@@ -248,8 +255,8 @@ class ItemEditorGUI():
 
         # scroll buttons
         # - scroll buttons (place them near self.selectedSpriteRect)
-        btnScrollLeft = pygUI.pygButton((700, 175, 32, 32), normal=g.dataPath + '/themes/default/hslider.left.tga')
-        btnScrollRight = pygUI.pygButton((748, 175, 32, 32), normal=g.dataPath + '/themes/default/hslider.right.tga')
+        btnScrollLeft = pygUI.pygButton((600, 88, 32, 32), normal=g.dataPath + '/themes/default/hslider.left.tga')
+        btnScrollRight = pygUI.pygButton((680, 88, 32, 32), normal=g.dataPath + '/themes/default/hslider.right.tga')
 
         self.scrollButtons = (btnScrollLeft, btnScrollRight)
 
