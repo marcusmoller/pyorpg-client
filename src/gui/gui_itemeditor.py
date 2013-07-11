@@ -84,38 +84,67 @@ class DataEquipment(gui.Table):
         gui.Table.__init__(self, **params)
 
         self.tr()
-        label = gui.Label("Left click to add gear", color=UI_FONT_COLOR)
-        self.td(label)
+        self.lblStr = gui.Label('Strength: 0', color=UI_FONT_COLOR)
+        self.td(self.lblStr)
 
         self.tr()
-        label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
-        self.td(label)
+        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataStr')
+        e.connect(gui.CHANGE, self.updateLabelStr, e)
+        self.td(e)
+
+        self.tr()
+        self.td(gui.Spacer(10, 20))
+
+        self.tr()
+        self.lblDur = gui.Label('Durability: 0', color=UI_FONT_COLOR)
+        self.td(self.lblDur)
+
+        self.tr()
+        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataDur')
+        e.connect(gui.CHANGE, self.updateLabelDur, e)
+        self.td(e)
+
+    def updateLabelStr(self, value):
+        self.lblStr.set_text('Strength: ' + str(value.value))
+
+    def updateLabelDur(self, value):
+        self.lblDur.set_text('Durability: ' + str(value.value))
 
 
 class DataPotion(gui.Table):
     def __init__(self, **params):
+        # todo, set slider maximum = vital mod amount
         gui.Table.__init__(self, **params)
 
         self.tr()
-        label = gui.Label("Left click to add potion", color=UI_FONT_COLOR)
-        self.td(label)
+        self.lblVital = gui.Label('Vital Mod: Use the slider', color=UI_FONT_COLOR)
+        self.td(self.lblVital)
 
         self.tr()
-        label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
-        self.td(label)
+        e = gui.HSlider(value=0, min=0, max=10, size=10, width=120, name='selDataVit')
+        e.connect(gui.CHANGE, self.updateVitalName, e)
+        self.td(e)
+
+    def updateVitalName(self, value):
+        self.lblVital.set_text('Vital Mod: ' + str(value.value))
 
 
 class DataSpell(gui.Table):
     def __init__(self, **params):
+        # todo, set slider maximum = spell amount
         gui.Table.__init__(self, **params)
 
         self.tr()
-        label = gui.Label("Left click to add spell", color=UI_FONT_COLOR)
-        self.td(label)
+        self.lblSpell = gui.Label('Spell: Use the slider', color=UI_FONT_COLOR)
+        self.td(self.lblSpell)
 
         self.tr()
-        label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
-        self.td(label)
+        e = gui.HSlider(value=0, min=0, max=10, size=10, width=120, name='selDataSpell')
+        e.connect(gui.CHANGE, self.updateSpellName, e)
+        self.td(e)
+
+    def updateSpellName(self, value):
+        self.lblSpell.set_text('Spell: ' + str(value.value))
 
 
 class ItemEditorContainer(gui.Container):
@@ -124,6 +153,9 @@ class ItemEditorContainer(gui.Container):
 
         self.engine = engine
         self.value = gui.Form()
+
+        # item editor state
+        self.itemNum = None
 
         # dialogs
         openItemDialog = OpenItemDialog(self)
@@ -140,7 +172,7 @@ class ItemEditorContainer(gui.Container):
         self.tTitle.td(gui.Label("Item Editor", name='itemTitle', color=UI_FONT_COLOR))
 
         # content
-        self.tContent = gui.Table(width=272, height=125)
+        self.tContent = gui.Table(width=272, height=123)
 
         self.tContent.tr()
         e = gui.Button("Open item...", width=100)
@@ -190,7 +222,7 @@ class ItemEditorContainer(gui.Container):
 
         self.add(self.tTitle, 0, 0)
         self.add(self.tContent, 0, 100)
-        self.add(self.tData, 0, 275)
+        self.add(self.tData, 0, 255)
         self.add(self.tBottom, 0, 368)
 
     def openItem(self, itemNum):
@@ -203,6 +235,9 @@ class ItemEditorContainer(gui.Container):
 
         # rename save button
         self.saveButton.value = 'Save Item'
+
+        # update item num
+        self.itemNum = itemNum
 
 
     def hideAll(self):
@@ -239,15 +274,32 @@ class ItemEditorContainer(gui.Container):
 
 
     def saveItem(self, value):
-        # save properties
-        Map.name  = self.propertiesCtrl.value["inpMapName"].value
-        Map.up    = int(self.propertiesCtrl.value["inpMapUp"].value)
-        Map.down  = int(self.propertiesCtrl.value["inpMapDown"].value)
-        Map.left  = int(self.propertiesCtrl.value["inpMapLeft"].value)
-        Map.right = int(self.propertiesCtrl.value["inpMapRight"].value)
+        typeValue = self.value['selItemType'].value
 
-        # send the map
-        g.tcpConn.sendMap()
+        if self.itemNum == None:
+            # if it's a new item then find a new item id to use
+            for i in range(len(Item)):
+                if Item[i].name == '':
+                    self.itemNum = i
+                    break
+
+        # save item properties
+        Item[self.itemNum].name = self.value['inpItemName'].value
+        Item[self.itemNum].pic = g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum
+        Item[self.itemNum].type = typeValue
+
+        # save item data
+        if typeValue >= ITEM_TYPE_WEAPON and typeValue <= ITEM_TYPE_SHIELD:
+            Item[self.itemNum].data1 = self.value['selDataStr'].value
+            Item[self.itemNum].data2 = self.value['selDataDur'].value
+
+        elif typeValue >= ITEM_TYPE_POTIONADDHP and typeValue <= ITEM_TYPE_POTIONSUBSP:
+            Item[self.itemNum].data1 = self.value['selDataVit'].value
+
+        elif typeValue == ITEM_TYPE_SPELL:
+            Item[self.itemNum].data1 = self.value['selDataSpell'].value
+
+        g.tcpConn.sendSaveItem(self.itemNum)
 
         # quit editor
         self.quitEditor()
@@ -256,6 +308,7 @@ class ItemEditorContainer(gui.Container):
         self.quitEditor()
 
     def quitEditor(self):
+        # todo: reset everything
         g.gameEngine.graphicsEngine.gameGUI.setState(0)
         g.gameEngine.graphicsEngine.gameGUI.guiContainer.closeItemEditor()
         g.editor = EDITOR_NONE

@@ -226,6 +226,10 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CRequestEditItem}])
         self.sendData(packet)
 
+    def sendSaveItem(self, itemNum):
+        packet = json.dumps([{"packet": ClientPackets.CSaveItem, 'itemnum': itemNum, 'itemname': Item[itemNum].name, 'itempic': Item[itemNum].pic, 'itemtype': Item[itemNum].type, 'itemdata1': Item[itemNum].data1, 'itemdata2': Item[itemNum].data2, 'itemdata3': Item[itemNum].data3}])
+        self.sendData(packet)
+
     def sendQuit(self):
         packet = json.dumps([{"packet": ClientPackets.CQuit}])
         self.sendData(packet)
