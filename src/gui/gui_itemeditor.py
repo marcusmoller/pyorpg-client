@@ -79,6 +79,45 @@ class OpenItemDialog(gui.Dialog):
         self._count = 0
 
 
+class DataEquipment(gui.Table):
+    def __init__(self, **params):
+        gui.Table.__init__(self, **params)
+
+        self.tr()
+        label = gui.Label("Left click to add gear", color=UI_FONT_COLOR)
+        self.td(label)
+
+        self.tr()
+        label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
+        self.td(label)
+
+
+class DataPotion(gui.Table):
+    def __init__(self, **params):
+        gui.Table.__init__(self, **params)
+
+        self.tr()
+        label = gui.Label("Left click to add potion", color=UI_FONT_COLOR)
+        self.td(label)
+
+        self.tr()
+        label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
+        self.td(label)
+
+
+class DataSpell(gui.Table):
+    def __init__(self, **params):
+        gui.Table.__init__(self, **params)
+
+        self.tr()
+        label = gui.Label("Left click to add spell", color=UI_FONT_COLOR)
+        self.td(label)
+
+        self.tr()
+        label = gui.Label("Right click to remove block", color=UI_FONT_COLOR)
+        self.td(label)
+
+
 class ItemEditorContainer(gui.Container):
     def __init__(self, engine, **params):
         gui.Container.__init__(self, **params)
@@ -89,6 +128,11 @@ class ItemEditorContainer(gui.Container):
         # dialogs
         openItemDialog = OpenItemDialog(self)
 
+        # data types
+        self.dataEquipment = DataEquipment(name="dataEquipment")
+        self.dataPotion    = DataPotion(name="dataPotion")
+        self.dataSpell     = DataSpell(name="dataSpell")
+
         # menu title
         self.tTitle = gui.Table(width=272, height=32)
 
@@ -96,7 +140,7 @@ class ItemEditorContainer(gui.Container):
         self.tTitle.td(gui.Label("Item Editor", name='itemTitle', color=UI_FONT_COLOR))
 
         # content
-        self.tContent = gui.Table(width=272, height=200)
+        self.tContent = gui.Table(width=272, height=125)
 
         self.tContent.tr()
         e = gui.Button("Open item...", width=100)
@@ -104,8 +148,9 @@ class ItemEditorContainer(gui.Container):
         self.tContent.td(e, colspan=2)
 
         self.tContent.tr()
-        self.tContent.td(gui.Label('Item Name:', color=UI_FONT_COLOR))
-        self.tContent.td(gui.Input('', size=16, name='inpItemName'))
+        self.tContent.td(gui.Label('Item Name:', color=UI_FONT_COLOR), colspan=2)
+        self.tContent.tr()
+        self.tContent.td(gui.Input('', size=26, name='inpItemName'), colspan=2)
 
         self.tContent.tr()
         self.tContent.td(gui.Label('Item Type:', color=UI_FONT_COLOR))
@@ -127,18 +172,9 @@ class ItemEditorContainer(gui.Container):
         e.value = 0
         e.connect(gui.CHANGE, self.updateType, None)
         self.tContent.td(e)
-        '''
-        self.tContent.tr()
-        self.tContent.td(gui.Label('Item Data1:', color=UI_FONT_COLOR, name='lblItemData1'))
-        self.tContent.td(gui.Input('', size=16, name='inpItemData1'))
 
-        self.tContent.tr()
-        self.tContent.td(gui.Label('Item Data2:', color=UI_FONT_COLOR, name='lblItemData2'))
-        self.tContent.td(gui.Input('', size=16, name='inpItemData2'))
-
-        self.tContent.tr()
-        self.tContent.td(gui.Label('Item Data3:', color=UI_FONT_COLOR, name='lblItemData3'))
-        self.tContent.td(gui.Input('', size=16, name='inpItemData3'))'''
+        # data input
+        self.tData = gui.Table(width=272, height=75)
 
         # bottom buttons
         self.tBottom = gui.Table(width=272, height=200)
@@ -154,6 +190,7 @@ class ItemEditorContainer(gui.Container):
 
         self.add(self.tTitle, 0, 0)
         self.add(self.tContent, 0, 100)
+        self.add(self.tData, 0, 175)
         self.add(self.tBottom, 0, 368)
 
     def openItem(self, itemNum):
@@ -161,63 +198,43 @@ class ItemEditorContainer(gui.Container):
         g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum = Item[itemNum].pic
         g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.draw()
 
+        print self.value
+
         if self.tContent.find('inpItemName'):
             self.value['inpItemName'].value = Item[itemNum].name
 
+    def hideAll(self):
+        if self.tData.find("dataEquipment"):
+            self.tData.remove(self.tData.find("dataEquipment"))
+
+        if self.tData.find("dataPotion"):
+            self.tContent.remove(self.tData.find("dataPotion"))
+
+        if self.tData.find("dataSpell"):
+            self.tData.remove(self.tData.find("dataSpell"))
+
     def updateType(self, value):
+        print self.value
         typeValue = self.value['selItemType'].value
-
-        # create new rows if they don't exist
-        # todo: this is stupid - it would be better with show/hide
-        if not self.tContent.find('lblItemData1'):
-            self.tContent.tr()
-            self.tContent.td(gui.Label('Item Data1:', color=UI_FONT_COLOR, name='lblItemData1'))
-            self.tContent.td(gui.Input('', size=16, name='inpItemData1'))
-
-        if not self.tContent.find('lblItemData2'):
-            self.tContent.tr()
-            self.tContent.td(gui.Label('Item Data2:', color=UI_FONT_COLOR, name='lblItemData2'))
-            self.tContent.td(gui.Input('', size=16, name='inpItemData2'))
-
-        if not self.tContent.find('lblItemData3'):
-            self.tContent.tr()
-            self.tContent.td(gui.Label('Item Data3:', color=UI_FONT_COLOR, name='lblItemData3'))
-            self.tContent.td(gui.Input('', size=16, name='inpItemData3'))
 
         # update labels
         if typeValue >= ITEM_TYPE_WEAPON and typeValue <= ITEM_TYPE_SHIELD:
-            self.value['lblItemData1'].set_text('Durability:')
-            self.value['lblItemData2'].set_text('Strength:')
-
-            # remove data3
-            self.tContent.remove(self.tContent.find('lblItemData3'))
-            self.tContent.remove(self.tContent.find('inpItemData3'))
+            self.hideAll()
+            self.tData.tr()
+            self.tData.td(self.dataEquipment, valign=-1)
 
         elif typeValue >= ITEM_TYPE_POTIONADDHP and typeValue <= ITEM_TYPE_POTIONSUBSP:
-            self.value['lblItemData1'].set_text('Vital Impact:')
-
-            # remove data2 and data3
-            self.tContent.remove(self.tContent.find('lblItemData2'))
-            self.tContent.remove(self.tContent.find('inpItemData2'))
-            self.tContent.remove(self.tContent.find('lblItemData3'))
-            self.tContent.remove(self.tContent.find('inpItemData3'))
+            self.hideAll()
+            self.tData.tr()
+            self.tData.td(self.dataPotion, valign=-1)
 
         elif typeValue == ITEM_TYPE_SPELL:
-            self.value['lblItemData1'].set_text('Spell:')
+            self.hideAll()
+            self.tData.tr()
+            self.tData.td(self.dataSpell, valign=-1)
 
-            # remove data2 and data3
-            self.tContent.remove(self.tContent.find('lblItemData2'))
-            self.tContent.remove(self.tContent.find('inpItemData2'))
-            self.tContent.remove(self.tContent.find('lblItemData3'))
-            self.tContent.remove(self.tContent.find('inpItemData3'))
         else:
-            # remove all data
-            self.tContent.remove(self.tContent.find('lblItemData1'))
-            self.tContent.remove(self.tContent.find('inpItemData1'))
-            self.tContent.remove(self.tContent.find('lblItemData2'))
-            self.tContent.remove(self.tContent.find('inpItemData2'))
-            self.tContent.remove(self.tContent.find('lblItemData3'))
-            self.tContent.remove(self.tContent.find('inpItemData3'))
+            self.hideAll()
 
 
     def saveItem(self, value):

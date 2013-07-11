@@ -8,6 +8,7 @@ from network.database import *
 from objects import *
 from constants import *
 import global_vars as g
+from utils.utils import countFiles
 
 # gui states
 GUI_STATS = 0
@@ -139,8 +140,11 @@ class GraphicsEngine():
         print "lawl"
 
     def loadSprites(self):
-        for i in range(0, 16):
-            # todo: custom amount of sprites
+        # count how many sprites there are
+        spriteAmount = countFiles(g.dataPath + '/sprites/')
+
+        # load them all
+        for i in range(0, spriteAmount):
             tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(i) + ".bmp").convert()
             tempImage.set_colorkey((0, 0, 0))
             self.sprites.append(tempImage)

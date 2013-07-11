@@ -7,6 +7,7 @@ from network.database import *
 from objects import *
 from constants import *
 import global_vars as g
+from utils.utils import countFiles
 
 from gui_mapeditor import MapEditorContainer, MapEditorGUI
 from gui_itemeditor import ItemEditorContainer, ItemEditorGUI
@@ -276,7 +277,9 @@ class GameGUI():
         self.loadItemSprites()
 
     def loadItemSprites(self):
-        for i in range(18):
+        spritesAmount = countFiles(g.dataPath + '/items/')
+
+        for i in range(spritesAmount):
             tempImage = pygame.image.load(g.dataPath + '/items/' + str(i) + '.bmp').convert()
             self.itemSprites.append(tempImage)
 
