@@ -150,7 +150,7 @@ class ItemEditorContainer(gui.Container):
         self.tContent.tr()
         self.tContent.td(gui.Label('Item Name:', color=UI_FONT_COLOR), colspan=2)
         self.tContent.tr()
-        self.tContent.td(gui.Input('', size=26, name='inpItemName'), colspan=2)
+        self.tContent.td(gui.Input('', size=26, name='inpItemName'), colspan=2, valign=-1)
 
         self.tContent.tr()
         self.tContent.td(gui.Label('Item Type:', color=UI_FONT_COLOR))
@@ -180,9 +180,9 @@ class ItemEditorContainer(gui.Container):
         self.tBottom = gui.Table(width=272, height=200)
 
         self.tBottom.tr()
-        e = gui.Button("Save", width=100, height=40)
-        e.connect(gui.CLICK, self.saveItem, None)
-        self.tBottom.td(e)
+        self.saveButton = gui.Button("Add Item", width=100, height=40)
+        self.saveButton .connect(gui.CLICK, self.saveItem, None)
+        self.tBottom.td(self.saveButton)
 
         e = gui.Button("Cancel", width=100, height=40)
         e.connect(gui.CLICK, self.cancel, None)
@@ -190,7 +190,7 @@ class ItemEditorContainer(gui.Container):
 
         self.add(self.tTitle, 0, 0)
         self.add(self.tContent, 0, 100)
-        self.add(self.tData, 0, 175)
+        self.add(self.tData, 0, 275)
         self.add(self.tBottom, 0, 368)
 
     def openItem(self, itemNum):
@@ -198,23 +198,24 @@ class ItemEditorContainer(gui.Container):
         g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum = Item[itemNum].pic
         g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.draw()
 
-        print self.value
-
         if self.tContent.find('inpItemName'):
             self.value['inpItemName'].value = Item[itemNum].name
+
+        # rename save button
+        self.saveButton.value = 'Save Item'
+
 
     def hideAll(self):
         if self.tData.find("dataEquipment"):
             self.tData.remove(self.tData.find("dataEquipment"))
 
         if self.tData.find("dataPotion"):
-            self.tContent.remove(self.tData.find("dataPotion"))
+            self.tData.remove(self.tData.find("dataPotion"))
 
         if self.tData.find("dataSpell"):
             self.tData.remove(self.tData.find("dataSpell"))
 
     def updateType(self, value):
-        print self.value
         typeValue = self.value['selItemType'].value
 
         # update labels
