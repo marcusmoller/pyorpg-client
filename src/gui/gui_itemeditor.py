@@ -308,11 +308,36 @@ class ItemEditorContainer(gui.Container):
         self.quitEditor()
 
     def quitEditor(self):
-        # todo: reset everything
+        # reset everything
+        self.resetEditor()
+
+        # quit
         g.gameEngine.graphicsEngine.gameGUI.setState(0)
         g.gameEngine.graphicsEngine.gameGUI.guiContainer.closeItemEditor()
         g.editor = EDITOR_NONE
         g.canMoveNow = True
+
+    def resetEditor(self):
+        self.itemNum = None
+
+        # selected sprite
+        g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum = 0
+
+        # reset everything on quit
+        self.value['inpItemName'].value = ''
+        self.value['selItemType'].value = 0
+        self.saveButton.value = 'Add item'
+
+        # equipment
+        self.value['selDataStr'].value = 0
+        self.value['selDataDur'].value = 0
+
+        # vit
+        self.value['selDataVit'].value = 0
+
+        # spell
+        self.value['selDataSpell'].value = 0
+
 
 
 class ItemEditorGUI():
