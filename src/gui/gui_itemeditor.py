@@ -233,12 +233,26 @@ class ItemEditorContainer(gui.Container):
         if self.tContent.find('inpItemName'):
             self.value['inpItemName'].value = Item[itemNum].name
 
+        # set type and data
+        typeValue = Item[itemNum].type
+        self.value['selItemType'].value = typeValue
+
+        if typeValue >= ITEM_TYPE_WEAPON and typeValue <= ITEM_TYPE_SHIELD:
+            self.value['selDataStr'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
+            print Item[itemNum].data1
+            self.value['selDataDur'].value = int(0 if Item[itemNum].data2 is None else Item[itemNum].data2)
+
+        elif typeValue >= ITEM_TYPE_POTIONADDHP and typeValue <= ITEM_TYPE_POTIONSUBSP:
+            self.value['selDataVit'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
+
+        elif typeValue == ITEM_TYPE_SPELL:
+            self.value['selDataSpell'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
+
         # rename save button
         self.saveButton.value = 'Save Item'
 
         # update item num
         self.itemNum = itemNum
-
 
     def hideAll(self):
         if self.tData.find("dataEquipment"):
@@ -271,7 +285,6 @@ class ItemEditorContainer(gui.Container):
 
         else:
             self.hideAll()
-
 
     def saveItem(self, value):
         typeValue = self.value['selItemType'].value
@@ -337,7 +350,6 @@ class ItemEditorContainer(gui.Container):
 
         # spell
         self.value['selDataSpell'].value = 0
-
 
 
 class ItemEditorGUI():

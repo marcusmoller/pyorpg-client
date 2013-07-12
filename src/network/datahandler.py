@@ -38,6 +38,9 @@ class DataHandler():
         elif packetType == ServerPackets.SInGame:
             self.handleInGame()
 
+        elif packetType == ServerPackets.SPlayerInv:
+            self.handlePlayerInv(jsonData)
+
         elif packetType == ServerPackets.SPlayerInvUpdate:
             self.handlePlayerInvUpdate(jsonData)
 
@@ -178,6 +181,14 @@ class DataHandler():
         # TODO: fix this
         initMapData()
 
+    def handlePlayerInv(self, jsonData):
+        for i in range(len(jsonData[0])):
+            if jsonData[i+1]['itemnum'] != None:
+                setPlayerInvItemNum(g.myIndex, i, jsonData[i+1]['itemnum'])
+                setPlayerInvItemValue(g.myIndex, i, jsonData[i+1]['itemvalue'])
+                setPlayerInvItemDur(g.myIndex, i, jsonData[i+1]['itemdur'])
+
+
     def handlePlayerInvUpdate(self, jsonData):
         invSlot = jsonData[0]['invslot']
         itemNum = jsonData[0]['itemnum']
@@ -187,8 +198,6 @@ class DataHandler():
         setPlayerInvItemNum(g.myIndex, invSlot, itemNum)
         setPlayerInvItemValue(g.myIndex, invSlot, itemValue)
         setPlayerInvItemDur(g.myIndex, invSlot, itemDur)
-
-        print jsonData
 
     def handlePlayerHP(self, jsonData):
         Player[g.myIndex].maxHP = jsonData[0]["hp_max"]
@@ -377,9 +386,9 @@ class DataHandler():
         Item[itemNum].name = jsonData[0]['itemname']
         Item[itemNum].pic = int(jsonData[0]['itempic'])
         Item[itemNum].type = (jsonData[0]['itemtype'])
-        Item[itemNum].data1 = 0
-        Item[itemNum].data2 = 0
-        Item[itemNum].data3 = 0
+        Item[itemNum].data1 = jsonData[0]['itemdata1']
+        Item[itemNum].data2 = jsonData[0]['itemdata2']
+        Item[itemNum].data3 = jsonData[0]['itemdata3']
 
     def handleEditMap(self):
         ''' called when server allows player to edit the map '''
