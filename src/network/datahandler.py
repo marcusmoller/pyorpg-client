@@ -182,12 +182,11 @@ class DataHandler():
         initMapData()
 
     def handlePlayerInv(self, jsonData):
-        for i in range(len(jsonData[0])):
+        for i in range(len(jsonData)-1):
             if jsonData[i+1]['itemnum'] != None:
                 setPlayerInvItemNum(g.myIndex, i, jsonData[i+1]['itemnum'])
                 setPlayerInvItemValue(g.myIndex, i, jsonData[i+1]['itemvalue'])
                 setPlayerInvItemDur(g.myIndex, i, jsonData[i+1]['itemdur'])
-
 
     def handlePlayerInvUpdate(self, jsonData):
         invSlot = jsonData[0]['invslot']
