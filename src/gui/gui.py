@@ -488,31 +488,99 @@ class GameGUI():
             itemName = Item[itemNum].name
             textSize = g.tooltipFont.size(itemName)
 
-            # draw surface
-            tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + 10))
-            tempSurface.fill((0, 0, 0))
-
-            # draw border
-            pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
-
             # determine name color
             itemType = Item[itemNum].type
             if itemType == ITEM_TYPE_WEAPON or itemType == ITEM_TYPE_ARMOR or itemType == ITEM_TYPE_HELMET or itemType == ITEM_TYPE_SHIELD:
                 nameColor = (33, 96, 167)  # textColor.BLUE
 
+                # calculate stats string length
+                strString = '+' + str(Item[itemNum].data1) + ' strength'
+                strDurability = '+' + str(Item[itemNum].data2) + ' durability'
+
+                statStrSize = g.tooltipFont.size(strString)
+                statDurSize = g.tooltipFont.size(strDurability)
+
+                # calculate the biggest width/height
+                if statStrSize[0] > statDurSize[0]:
+                    statTextSize = statStrSize
+                else:
+                    statTextSize = statDurSize
+
+                if textSize[0] > statTextSize[0]:
+                    tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + statStrSize[1] + statDurSize[1] + 10))
+                else:
+                    tempSurface = pygame.Surface((statTextSize[0] + 10, textSize[1] + statStrSize[1] + statDurSize[1] + 10))
+
+                tempSurface.fill((0, 0, 0))
+
+                # draw border
+                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
+
+
+                # render information
+                # - name
+                img = g.tooltipFont.render(itemName, 0, nameColor)
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = tempSurface.get_rect().h / 4
+
+                tempSurface.blit(img, imgRect)
+
+                # - strength
+                img = g.tooltipFont.render(strString, 0, (255, 255, 255))
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = (tempSurface.get_rect().h / 4) * 2
+
+                tempSurface.blit(img, imgRect)
+
+                # - durability
+                img = g.tooltipFont.render(strDurability, 0, (255, 255, 255))
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = (tempSurface.get_rect().h / 4) * 3
+
+                tempSurface.blit(img, imgRect)
+
             elif itemType == ITEM_TYPE_CURRENCY:
                 nameColor = textColor.YELLOW
+
+                # draw surface
+                tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + 10))
+                tempSurface.fill((0, 0, 0))
+
+                # draw border
+                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
+
+
+                # render information
+                # - name
+                img = g.tooltipFont.render(itemName, 0, nameColor)
+                imgRect = img.get_rect()
+                imgRect.centerx = tempSurface.get_rect().w / 2
+                imgRect.centery = tempSurface.get_rect().h / 2
+
+                tempSurface.blit(img, imgRect)
 
             else:
                 nameColor = textColor.GREY
 
-            # render information
-            img = g.tooltipFont.render(itemName, 0, nameColor)
-            imgRect = img.get_rect()
-            imgRect.centerx = tempSurface.get_rect().w / 2
-            imgRect.centery = tempSurface.get_rect().h / 2
+                # draw surface
+                tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + 10))
+                tempSurface.fill((0, 0, 0))
 
-            tempSurface.blit(img, imgRect)
+                # draw border
+                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
+
+
+                # render information
+                # - name
+                img = g.tooltipFont.render(itemName, 0, nameColor)
+                imgRect = img.get_rect()
+                imgRect.centerx = tempSurface.get_rect().w / 2
+                imgRect.centery = tempSurface.get_rect().h / 2
+
+                tempSurface.blit(img, imgRect)
 
             return tempSurface
 
