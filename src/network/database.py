@@ -127,6 +127,12 @@ def getPlayerInvItemDur(index, invSlot):
 def setPlayerInvItemDur(index, invSlot, itemDur):
     PlayerInv[invSlot].dum = itemDur
 
+''' player equipment '''
+def getPlayerEquipmentSlot(index, equipmentSlot):
+    return Player[index].equipment[equipmentSlot]
+def setPlayerEquipmentSlot(index, invNum, equipmentSlot):
+    Player[index].equipment[equipmentSlot] = invNum
+
 ''' player map '''
 def getPlayerMap(index):
     return Player[index].Map

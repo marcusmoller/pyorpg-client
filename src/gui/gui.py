@@ -331,6 +331,10 @@ class GameGUI():
             for i in range(len(self.inventoryBoxes)):
                 if self.inventoryBoxes[i].collidepoint(g.cursorX, g.cursorY):
                     self.hoveredInventorySlot = i
+
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        # mouse click
+                        self.handleMouseClick(event.button, i)
                 else:
                     self.hoveredInventorySlot = None
 
@@ -339,6 +343,12 @@ class GameGUI():
 
         elif self.state == GUI_ITEMEDITOR:
             self.itemEditorGUI.update(event)
+
+    def handleMouseClick(self, button, invNum):
+        # right click
+        if button == 3:
+            g.tcpConn.sendUseItem(invNum)
+            return
 
     ##############
     # INTERFACES #
@@ -465,6 +475,60 @@ class GameGUI():
         g.guiSurface.blit(slotArmor, slotArmorRect)
         g.guiSurface.blit(slotWeapon, slotWeaponRect)
         g.guiSurface.blit(slotShield, slotShieldRect)
+
+        for i in range(Equipment.equipment_count):
+            if getPlayerEquipmentSlot(g.myIndex, i) != None:
+                invNum = getPlayerEquipmentSlot(g.myIndex, i)
+                itemNum = getPlayerInvItemNum(g.myIndex, invNum)
+
+                # render the item
+                if Item[itemNum].type == ITEM_TYPE_HELMET:
+                    itemPic = Item[itemNum].pic
+
+                    tempSurface = self.itemSprites[itemPic]
+                    tempSurface = pygame.transform.scale2x(tempSurface)
+
+                    tempRect = tempSurface.get_rect()
+                    tempRect.centerx = 648
+                    tempRect.centery = 240
+
+                    g.guiSurface.blit(tempSurface, tempRect)
+
+                elif Item[itemNum].type == ITEM_TYPE_ARMOR:
+                    itemPic = Item[itemNum].pic
+
+                    tempSurface = self.itemSprites[itemPic]
+                    tempSurface = pygame.transform.scale2x(tempSurface)
+
+                    tempRect = tempSurface.get_rect()
+                    tempRect.centerx = 648
+                    tempRect.centery = 324
+
+                    g.guiSurface.blit(tempSurface, tempRect)
+
+                elif Item[itemNum].type == ITEM_TYPE_WEAPON:
+                    itemPic = Item[itemNum].pic
+
+                    tempSurface = self.itemSprites[itemPic]
+                    tempSurface = pygame.transform.scale2x(tempSurface)
+
+                    tempRect = tempSurface.get_rect()
+                    tempRect.centerx = 574
+                    tempRect.centery = 324
+
+                    g.guiSurface.blit(tempSurface, tempRect)
+
+                elif Item[itemNum].type == ITEM_TYPE_SHIELD:
+                    itemPic = Item[itemNum].pic
+
+                    tempSurface = self.itemSprites[itemPic]
+                    tempSurface = pygame.transform.scale2x(tempSurface)
+
+                    tempRect = tempSurface.get_rect()
+                    tempRect.centerx = 722
+                    tempRect.centery = 324
+
+                    g.guiSurface.blit(tempSurface, tempRect)
 
     def drawGold(self):
         # icon

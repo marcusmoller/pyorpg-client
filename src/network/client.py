@@ -214,6 +214,10 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CSetSprite, "sprite": spriteNum}])
         self.sendData(packet)
 
+    def sendUseItem(self, invNum):
+        packet = json.dumps([{"packet": ClientPackets.CUseItem, "invnum": invNum}])
+        self.sendData(packet)
+
     def sendWhosOnline(self):
         packet = json.dumps([{'packet': ClientPackets.CWhosOnline}])
         self.sendData(packet)

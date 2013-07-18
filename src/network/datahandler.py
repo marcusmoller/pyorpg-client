@@ -44,6 +44,9 @@ class DataHandler():
         elif packetType == ServerPackets.SPlayerInvUpdate:
             self.handlePlayerInvUpdate(jsonData)
 
+        elif packetType == ServerPackets.SPlayerWornEq:
+            self.handlePlayerWornEq(jsonData)
+
         elif packetType == ServerPackets.SPlayerHP:
             self.handlePlayerHP(jsonData)
 
@@ -197,6 +200,14 @@ class DataHandler():
         setPlayerInvItemNum(g.myIndex, invSlot, itemNum)
         setPlayerInvItemValue(g.myIndex, invSlot, itemValue)
         setPlayerInvItemDur(g.myIndex, invSlot, itemDur)
+
+    def handlePlayerWornEq(self, jsonData):
+        setPlayerEquipmentSlot(g.myIndex, jsonData[0]['helmet'], Equipment.helmet)
+        setPlayerEquipmentSlot(g.myIndex, jsonData[0]['armor'], Equipment.armor)
+        setPlayerEquipmentSlot(g.myIndex, jsonData[0]['weapon'], Equipment.weapon)
+        setPlayerEquipmentSlot(g.myIndex, jsonData[0]['shield'], Equipment.shield)
+
+        #update inv
 
     def handlePlayerHP(self, jsonData):
         Player[g.myIndex].maxHP = jsonData[0]["hp_max"]
