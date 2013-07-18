@@ -352,6 +352,7 @@ class GameGUI():
     def drawUI(self):
         if self.state == GUI_STATS:
             self.drawStats()
+            self.drawEquipment()
 
         elif self.state == GUI_EQUIPMENT:
             self.drawHealthBar()
@@ -435,13 +436,35 @@ class GameGUI():
         g.guiSurface.blit(blueBarSurface, pos, (0, 0, manaBarWidth, 28))
 
     def drawEquipment(self):
-        emptyBarSurface = pygame.image.load(g.dataPath + '/gui/bar_empty.png').convert_alpha()
-        blueBarSurface = pygame.image.load(g.dataPath + '/gui/bar_blue.png').convert_alpha()
+        # load resources
+        # todo: only load data files on initialization
+        slotHelmet = pygame.image.load(g.dataPath + '/gui/equipment_helmet.png').convert()
+        slotHelmetRect = slotHelmet.get_rect()
+        slotArmor = pygame.image.load(g.dataPath + '/gui/equipment_armor.png').convert()
+        slotArmorRect = slotArmor.get_rect()
+        slotWeapon = pygame.image.load(g.dataPath + '/gui/equipment_weapon.png').convert()
+        slotWeaponRect = slotWeapon.get_rect()
+        slotShield = pygame.image.load(g.dataPath + '/gui/equipment_shield.png').convert()
+        slotShieldRect = slotShield.get_rect()
 
-        pos = (544, 150)
-        manaBarWidth = 208*Player[g.myIndex].vitals[Vitals.mp]/Player[g.myIndex].maxMP
-        g.guiSurface.blit(emptyBarSurface, pos)
-        g.guiSurface.blit(blueBarSurface, pos, (0, 0, manaBarWidth, 28))
+        # positions
+        slotHelmetRect.centerx = 648
+        slotHelmetRect.centery = 240
+
+        slotArmorRect.centerx = 648
+        slotArmorRect.centery = 324
+
+        slotWeaponRect.centerx = 574
+        slotWeaponRect.centery = 324
+
+        slotShieldRect.centerx = 722
+        slotShieldRect.centery = 324
+
+        # render everything
+        g.guiSurface.blit(slotHelmet, slotHelmetRect)
+        g.guiSurface.blit(slotArmor, slotArmorRect)
+        g.guiSurface.blit(slotWeapon, slotWeaponRect)
+        g.guiSurface.blit(slotShield, slotShieldRect)
 
     def drawGold(self):
         # icon
@@ -500,7 +523,7 @@ class GameGUI():
                 statStrSize = g.tooltipFont.size(strString)
                 statDurSize = g.tooltipFont.size(strDurability)
 
-                # calculate the biggest width/height
+                # calculate the largest width/height
                 if statStrSize[0] > statDurSize[0]:
                     statTextSize = statStrSize
                 else:
@@ -515,7 +538,6 @@ class GameGUI():
 
                 # draw border
                 pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
-
 
                 # render information
                 # - name
