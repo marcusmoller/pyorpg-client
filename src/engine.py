@@ -235,10 +235,6 @@ class Engine:
             g.inpSHIFT = False
             g.inpCTRL = True
 
-        elif pressed(pygame.K_c):
-            Player[g.myIndex].vitals[Vitals.hp] = 1
-            Player[g.myIndex].vitals[Vitals.mp] = 4
-
         else:
             g.inpDIR_UP = False
             g.inpDIR_DOWN = False
@@ -246,7 +242,6 @@ class Engine:
             g.inpDIR_RIGHT = False
             g.inpSHIFT = False
             g.inpCTRL = False
-
 
     def handleMouse(self, event):
         g.cursorX = event.pos[0]
