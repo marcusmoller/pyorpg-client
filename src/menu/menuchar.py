@@ -147,6 +147,7 @@ class menuCharacters():
         if self.charName != "":
             self.charControl.lblPlayerName.set_text(self.charName)
             self.charControl.lblPlayerExtra.set_text("Level " + str(self.charLevel) + " " + str(self.charClass))
+
         else:
             # the character doesnt exist (it's empty)
             self.charControl.lblPlayerName.set_text('Create a new character')

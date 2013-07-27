@@ -385,10 +385,11 @@ class GameGUI():
         self.drawHealthBar()
         self.drawManaBar()
         self.drawStatText()
+        self.drawStatIcons()
 
     def drawInventoryUI(self):
         ''' the inventory interface '''
-        self.drawGold()
+        #self.drawGold()
         self.drawInventory()
 
         for i in range(len(self.inventoryBoxes)):
@@ -400,7 +401,7 @@ class GameGUI():
     #############
 
     def drawStatText(self):
-        font = pygame.font.SysFont('monospace', 15)
+        font = g.nameFont
         fontColor = (251, 230, 204)
 
         label = font.render('STR - ' + str(getPlayerStat(g.myIndex, Stats.strength)), 0, fontColor)
@@ -427,14 +428,41 @@ class GameGUI():
         labelRect.centery = 170
         g.guiSurface.blit(label, labelRect)
 
+    def drawStatIcons(self):
+        attributeStrength = pygame.image.load(g.dataPath + '/gui/attribute_strength.png').convert_alpha()
+        attributeDefense = pygame.image.load(g.dataPath + '/gui/attribute_defense.png').convert_alpha()
+
+        # calculate positions
+        strRect = attributeStrength.get_rect()
+        strRect.centerx = 590 - 50
+        strRect.centery = 150
+
+        defRect = attributeDefense.get_rect()
+        defRect.centerx = 590 - 50
+        defRect.centery = 170
+
+        # render it all
+        g.guiSurface.blit(attributeStrength, strRect)
+        g.guiSurface.blit(attributeDefense, defRect)
+
     def drawHealthBar(self):
         emptyBarSurface = pygame.image.load(g.dataPath + '/gui/bar_empty.png').convert_alpha()
         redBarSurface = pygame.image.load(g.dataPath + '/gui/bar_red.png').convert_alpha()
 
         pos = (544, 75)
         healthBarWidth = 208*Player[g.myIndex].vitals[Vitals.hp]/Player[g.myIndex].maxHP
+
+        # render text
+        hpText = str(Player[g.myIndex].vitals[Vitals.hp]) + '/' + str(Player[g.myIndex].maxHP)
+        img = g.tooltipFont.render(hpText, 0, (255, 255, 255))
+        imgRect = img.get_rect()
+        imgRect.centerx = pos[0] + emptyBarSurface.get_rect().w / 2
+        imgRect.centery = pos[1] + emptyBarSurface.get_rect().h / 2
+
+        # blit onto gui
         g.guiSurface.blit(emptyBarSurface, pos)
         g.guiSurface.blit(redBarSurface, pos, (0, 0, healthBarWidth, 28))
+        g.guiSurface.blit(img, imgRect)
 
     def drawManaBar(self):
         emptyBarSurface = pygame.image.load(g.dataPath + '/gui/bar_empty.png').convert_alpha()
@@ -442,8 +470,18 @@ class GameGUI():
 
         pos = (544, 100)
         manaBarWidth = 208*Player[g.myIndex].vitals[Vitals.mp]/Player[g.myIndex].maxMP
+
+        # render text
+        mpText = str(Player[g.myIndex].vitals[Vitals.mp]) + '/' + str(Player[g.myIndex].maxMP)
+        img = g.tooltipFont.render(mpText, 0, (255, 255, 255))
+        imgRect = img.get_rect()
+        imgRect.centerx = pos[0] + emptyBarSurface.get_rect().w / 2
+        imgRect.centery = pos[1] + emptyBarSurface.get_rect().h / 2
+
+        # blit onto gui
         g.guiSurface.blit(emptyBarSurface, pos)
         g.guiSurface.blit(blueBarSurface, pos, (0, 0, manaBarWidth, 28))
+        g.guiSurface.blit(img, imgRect)
 
     def drawEquipment(self):
         # load resources
@@ -560,10 +598,10 @@ class GameGUI():
                     tempSurface = self.itemSprites[itemPic]
                     tempSurface = pygame.transform.scale2x(tempSurface)
 
-                    tempPos = (524 + x*(66+24) + 1, 120 + y*(66+24) + 1)
+                    tempPos = (524 + x*(66+24) + 1, 90 + y*(66+24) + 1)
                     g.guiSurface.blit(tempSurface, tempPos)
                 else:
-                    tempPos = (524 + x*(66+24), 120 + y*(66+24))
+                    tempPos = (524 + x*(66+24), 90 + y*(66+24))
                     g.guiSurface.blit(self.emptySlotSurface, tempPos)
 
                 curItemSlot += 1
@@ -637,7 +675,6 @@ class GameGUI():
 
                 # draw border
                 pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
-
 
                 # render information
                 # - name
