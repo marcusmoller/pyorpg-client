@@ -84,24 +84,24 @@ class DataEquipment(gui.Table):
         gui.Table.__init__(self, **params)
 
         self.tr()
-        self.lblStr = gui.Label('Strength: 0', color=UI_FONT_COLOR)
-        self.td(self.lblStr)
-
-        self.tr()
-        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataStr')
-        e.connect(gui.CHANGE, self.updateLabelStr, e)
-        self.td(e)
-
-        self.tr()
-        self.td(gui.Spacer(10, 20))
-
-        self.tr()
         self.lblDur = gui.Label('Durability: 0', color=UI_FONT_COLOR)
         self.td(self.lblDur)
 
         self.tr()
         e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataDur')
         e.connect(gui.CHANGE, self.updateLabelDur, e)
+        self.td(e)
+
+        self.tr()
+        self.td(gui.Spacer(10, 20))
+
+        self.tr()
+        self.lblStr = gui.Label('Strength: 0', color=UI_FONT_COLOR)
+        self.td(self.lblStr)
+
+        self.tr()
+        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataStr')
+        e.connect(gui.CHANGE, self.updateLabelStr, e)
         self.td(e)
 
     def updateLabelStr(self, value):
@@ -238,9 +238,8 @@ class ItemEditorContainer(gui.Container):
         self.value['selItemType'].value = typeValue
 
         if typeValue >= ITEM_TYPE_WEAPON and typeValue <= ITEM_TYPE_SHIELD:
-            self.value['selDataStr'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
-            print Item[itemNum].data1
-            self.value['selDataDur'].value = int(0 if Item[itemNum].data2 is None else Item[itemNum].data2)
+            self.value['selDataDur'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
+            self.value['selDataStr'].value = int(0 if Item[itemNum].data2 is None else Item[itemNum].data2)
 
         elif typeValue >= ITEM_TYPE_POTIONADDHP and typeValue <= ITEM_TYPE_POTIONSUBSP:
             self.value['selDataVit'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
@@ -303,8 +302,8 @@ class ItemEditorContainer(gui.Container):
 
         # save item data
         if typeValue >= ITEM_TYPE_WEAPON and typeValue <= ITEM_TYPE_SHIELD:
-            Item[self.itemNum].data1 = self.value['selDataStr'].value
-            Item[self.itemNum].data2 = self.value['selDataDur'].value
+            Item[self.itemNum].data1 = self.value['selDataDur'].value
+            Item[self.itemNum].data2 = self.value['selDataStr'].value
 
         elif typeValue >= ITEM_TYPE_POTIONADDHP and typeValue <= ITEM_TYPE_POTIONSUBSP:
             Item[self.itemNum].data1 = self.value['selDataVit'].value
@@ -342,8 +341,8 @@ class ItemEditorContainer(gui.Container):
         self.saveButton.value = 'Add item'
 
         # equipment
-        self.value['selDataStr'].value = 0
         self.value['selDataDur'].value = 0
+        self.value['selDataStr'].value = 0
 
         # vit
         self.value['selDataVit'].value = 0

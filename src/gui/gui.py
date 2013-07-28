@@ -619,8 +619,8 @@ class GameGUI():
                 nameColor = (33, 96, 167)  # textColor.BLUE
 
                 # calculate stats string length
-                strString = '+' + str(Item[itemNum].data1) + ' strength'
-                strDurability = '+' + str(Item[itemNum].data2) + ' durability'
+                strString = str(Item[itemNum].data1) + ' durability'
+                strDurability = '+' + str(Item[itemNum].data2) + ' strength'
 
                 statStrSize = g.tooltipFont.size(strString)
                 statDurSize = g.tooltipFont.size(strDurability)
