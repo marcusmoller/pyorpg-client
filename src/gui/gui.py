@@ -247,7 +247,7 @@ class GameGUI():
         self.inventoryBoxes = []
         for y in range(0, 3):
             for x in range(0, 3):
-                self.inventoryBoxes.append(pygame.Rect((524 + x*(66+24) + 1, 120 + y*(66+24) + 1, 64, 64)))
+                self.inventoryBoxes.append(pygame.Rect((524 + x*(66+24) + 1, 90 + y*(66+24) + 1, 64, 64)))
 
         self.emptySlotSurface = pygame.image.load(g.dataPath + '/gui/empty_slot.png').convert_alpha()
 
