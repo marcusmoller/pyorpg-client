@@ -125,7 +125,7 @@ def setPlayerInvItemValue(index, invSlot, itemValue):
 def getPlayerInvItemDur(index, invSlot):
     return PlayerInv[invSlot].dur
 def setPlayerInvItemDur(index, invSlot, itemDur):
-    PlayerInv[invSlot].dum = itemDur
+    PlayerInv[invSlot].dur = itemDur
 
 ''' player equipment '''
 def getPlayerEquipmentSlot(index, equipmentSlot):

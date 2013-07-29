@@ -131,12 +131,9 @@ class uiContainer(gui.Container):
         self.tBottom.td(e)
 
         self.tBottom.tr()
-        e = gui.Button('Equipment', width=100, height=40)
-        e.connect(gui.CLICK, self.toggleEquipment, None)
-        self.tBottom.td(e)
         e = gui.Button('Spellbook', width=100, height=40)
         e.connect(gui.CLICK, self.toggleSpellbook, None)
-        self.tBottom.td(e)
+        self.tBottom.td(e, colspan=2)
 
         self.tBottom.tr()
         e = gui.Button('Settings', width=100, height=40)
@@ -163,10 +160,6 @@ class uiContainer(gui.Container):
     def toggleInventory(self, value):
         self.engine.setState(GUI_INVENTORY)
         self.updateTitle('Inventory')
-
-    def toggleEquipment(self, value):
-        self.engine.setState(GUI_STATS)
-        self.updateTitle('Equipment')
 
     def toggleSpellbook(self, value):
         self.engine.setState(GUI_STATS)
@@ -363,10 +356,6 @@ class GameGUI():
         if self.state == GUI_STATS:
             self.drawStats()
             self.drawEquipment()
-
-        elif self.state == GUI_EQUIPMENT:
-            self.drawHealthBar()
-            self.drawManaBar()
 
         elif self.state == GUI_INVENTORY:
             g.guiSurface.blit(self.background, (0, 0))
@@ -608,19 +597,20 @@ class GameGUI():
 
     def drawInventoryTooltip(self, itemSlot):
 
-        def generateTooltip(itemNum):
+        def generateTooltip(itemNum, itemSlot):
             # determine rect size
             itemName = Item[itemNum].name
             textSize = g.tooltipFont.size(itemName)
 
             # determine name color
             itemType = Item[itemNum].type
+
             if itemType == ITEM_TYPE_WEAPON or itemType == ITEM_TYPE_ARMOR or itemType == ITEM_TYPE_HELMET or itemType == ITEM_TYPE_SHIELD:
                 nameColor = (33, 96, 167)  # textColor.BLUE
 
                 # calculate stats string length
-                strString = str(Item[itemNum].data1) + ' durability'
-                strDurability = '+' + str(Item[itemNum].data2) + ' strength'
+                strString = '+' + str(Item[itemNum].data2) + ' strength'
+                strDurability = str(getPlayerInvItemDur(g.myIndex, itemSlot)) + '/' + str(Item[itemNum].data1) + ' durability'
 
                 statStrSize = g.tooltipFont.size(strString)
                 statDurSize = g.tooltipFont.size(strDurability)
@@ -710,7 +700,7 @@ class GameGUI():
         if getPlayerInvItemNum(g.myIndex, itemSlot) != None:
             # generate tooltip
             itemNum = getPlayerInvItemNum(g.myIndex, itemSlot)
-            tooltipSurface = generateTooltip(itemNum)
+            tooltipSurface = generateTooltip(itemNum, itemSlot)
 
             # position the tooltip at the mouse
             self.tooltipRect.x = g.cursorX

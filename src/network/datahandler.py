@@ -186,7 +186,7 @@ class DataHandler():
 
     def handlePlayerInv(self, jsonData):
         for i in range(len(jsonData)-1):
-            if jsonData[i+1]['itemnum'] != None:
+            if jsonData[i+1]['itemnum'] is not None:
                 setPlayerInvItemNum(g.myIndex, i, jsonData[i+1]['itemnum'])
                 setPlayerInvItemValue(g.myIndex, i, jsonData[i+1]['itemvalue'])
                 setPlayerInvItemDur(g.myIndex, i, jsonData[i+1]['itemdur'])
@@ -206,8 +206,6 @@ class DataHandler():
         setPlayerEquipmentSlot(g.myIndex, jsonData[0]['armor'], Equipment.armor)
         setPlayerEquipmentSlot(g.myIndex, jsonData[0]['weapon'], Equipment.weapon)
         setPlayerEquipmentSlot(g.myIndex, jsonData[0]['shield'], Equipment.shield)
-
-        #update inv
 
     def handlePlayerHP(self, jsonData):
         Player[g.myIndex].maxHP = jsonData[0]["hp_max"]
