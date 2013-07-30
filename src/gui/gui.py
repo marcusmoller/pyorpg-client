@@ -68,7 +68,7 @@ class ChatControl(gui.Table):
         self.focused = False
 
         self.tr()
-        self.chatMsg = gui.Input(maxlength=44, width=468, focusable=False)
+        self.chatMsg = gui.Input(maxlength=128, width=468, focusable=False)
         self.chatMsg.connect(gui.KEYDOWN, self.lkey)
         self.td(self.chatMsg)
 

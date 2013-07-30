@@ -64,7 +64,6 @@ def getPlayerAccess(index):
 
 def setPlayerAccess(index, access):
     Player[index].access = access
-    print access
 
 
 ''' player vital '''
