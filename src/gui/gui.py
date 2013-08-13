@@ -358,7 +358,11 @@ class GameGUI():
             self.drawEquipment()
 
         elif self.state == GUI_INVENTORY:
-            g.guiSurface.blit(self.background, (0, 0))
+            g.guiSurface.blit(self.background, (513, 17), (513, 17, 274, 365))
+
+            # todo: render the empty slots once
+            self.drawInventorySlots()
+
             self.drawInventoryUI()
 
         elif self.state == GUI_MAPEDITOR:
@@ -575,7 +579,15 @@ class GameGUI():
 
         g.guiSurface.blit(textSurface, textSurfaceRect)
 
+    def drawInventorySlots(self):
+        ''' render the empty inventory slots before the items '''
+        for y in range(0, 3):
+            for x in range(0, 3):
+                tempPos = (524 + x*(66+24), 90 + y*(66+24))
+                g.guiSurface.blit(self.emptySlotSurface, tempPos)
+
     def drawInventory(self):
+        ''' render the items within the emtpy inventory slots '''
         curItemSlot = 0
 
         for y in range(0, 3):
@@ -589,9 +601,6 @@ class GameGUI():
 
                     tempPos = (524 + x*(66+24) + 1, 90 + y*(66+24) + 1)
                     g.guiSurface.blit(tempSurface, tempPos)
-                else:
-                    tempPos = (524 + x*(66+24), 90 + y*(66+24))
-                    g.guiSurface.blit(self.emptySlotSurface, tempPos)
 
                 curItemSlot += 1
 

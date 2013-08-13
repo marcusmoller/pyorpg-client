@@ -117,7 +117,7 @@ class Engine:
             # todo: dirty areas
 
             if g.inGame:
-                self.clockTick = time.time() * 1000 # conver to ms
+                self.clockTick = time.time() * 1000 # convert to ms
 
                 if self.tmr25 < self.clockTick:
                     self.checkInputKeys()

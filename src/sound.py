@@ -42,6 +42,8 @@ class SoundEngine():
             pygame.mixer.fadeout(1000)
             self.soundList[sound].play(loops, fade_ms=fade_ms)
 
+            print 'PLAYING SOUND: ' + str(sound)
+
     def mute(self):
         pygame.mixer.stop()
 

@@ -133,7 +133,6 @@ class DataHandler():
         # this is a rather dirty hack
         # this is to tell the client, that the server has actually allowed the log in - should probably be done elsewhere
         g.gameEngine.setState(MENU_CHAR)
-
         g.gameEngine.menuChar.updateCharacters(jsonData)
 
     def handleLoginOK(self, jsonData):

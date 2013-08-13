@@ -32,12 +32,12 @@ class characterControl(gui.Table):
             print "not yet implemented"
 
         self.tr()
-        self.lblPlayerName = gui.Label('PLAYER NAME', antialias=0, color=(255, 0, 0), font=g.charSelFont)
-        self.td(self.lblPlayerName, colspan=3, valign=1)
+        self.lblPlayerName = gui.Label('#PLAYER_NAME', antialias=0, color=(255, 0, 0), font=g.charSelFont)
+        self.td(self.lblPlayerName, colspan=3, valign=1, align=0)
 
         self.tr()
-        self.lblPlayerExtra = gui.Label('PLAYER LEVEL/CLASS', antialias=0, color=(255, 0, 0), font=g.charSelFont)
-        self.td(self.lblPlayerExtra, colspan=3)
+        self.lblPlayerExtra = gui.Label('#PLAYER_LEVEL_CLASS', antialias=0, color=(255, 0, 0), font=g.charSelFont, name='lblExtra')
+        self.td(self.lblPlayerExtra, colspan=3, align=0)
 
         self.tr()
         btn = gui.Button("Previous", width=160, height=40)
@@ -150,8 +150,8 @@ class menuCharacters():
 
         else:
             # the character doesnt exist (it's empty)
-            self.charControl.lblPlayerName.set_text('Create a new character')
-            self.charControl.lblPlayerExtra.set_text('')
+            self.charControl.lblPlayerName.set_text('Empty')
+            self.charControl.lblPlayerExtra.set_text('Create a new character!')
 
             # todo: change btn text
             #self.charControl.btnSelChar.value = 'New Character'
