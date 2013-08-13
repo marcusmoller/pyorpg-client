@@ -590,6 +590,9 @@ class GameGUI():
         ''' render the items within the emtpy inventory slots '''
         curItemSlot = 0
 
+        # get all equipped items
+        equippedItems = getPlayerEquipmentSlot(g.myIndex, Equipment.weapon), getPlayerEquipmentSlot(g.myIndex, Equipment.armor), getPlayerEquipmentSlot(g.myIndex, Equipment.helmet), getPlayerEquipmentSlot(g.myIndex, Equipment.shield)
+
         for y in range(0, 3):
             for x in range(0, 3):
                 if getPlayerInvItemNum(g.myIndex, curItemSlot) != None:
@@ -600,6 +603,11 @@ class GameGUI():
                     tempSurface = pygame.transform.scale2x(tempSurface)
 
                     tempPos = (524 + x*(66+24) + 1, 90 + y*(66+24) + 1)
+
+                    # if item is equipped, then mark it
+                    if curItemSlot in equippedItems:
+                        pygame.draw.rect(tempSurface, (255, 0, 0), (0, 0, 64, 64), 1)
+
                     g.guiSurface.blit(tempSurface, tempPos)
 
                 curItemSlot += 1
