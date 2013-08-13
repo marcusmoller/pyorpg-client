@@ -1,6 +1,8 @@
 pyorpg-client
 =============
 
+![PyORPG](https://raw.github.com/marcusmoller/pyorpg-client/master/pyorpg-logo.png)
+
 The client for the PyORPG project (http://www.powrtoch.org/pyorpg/)
 
 ## Quick start guide
