@@ -11,6 +11,7 @@ from utils.utils import countFiles
 
 from gui_mapeditor import MapEditorContainer, MapEditorGUI
 from gui_itemeditor import ItemEditorContainer, ItemEditorGUI
+from gui_npceditor import NPCEditorContainer, NPCEditorGUI
 
 # gui states
 GUI_STATS = 0
@@ -185,8 +186,10 @@ class GUIContainer(gui.Container):
 
         self.chatCtrl = ChatControl(name="chatCtrl")
         self.uiCtrl = uiContainer(self.engine, name="uiCtrl")
+
         self.mapEditorControl = MapEditorContainer(self.engine.mapEditorGUI, name="mapEditorCtrl")
         self.itemEditorControl = ItemEditorContainer(self.engine.itemEditorGUI, name='itemEditorCtrl')
+        self.npcEditorControl = NPCEditorContainer(self.engine.npcEditorGUI, name='npcEditorCtrl')
 
         # default controls
         self.add(self.chatCtrl, 16, 384)
@@ -216,6 +219,20 @@ class GUIContainer(gui.Container):
 
     def closeItemEditor(self, value=0):
         self.remove(self.find('itemEditorCtrl'))
+
+        # add ui
+        self.add(self.uiCtrl, 512, 16)
+
+    # npc editor
+    def openNpcEditor(self, value=0):
+        self.add(self.npcEditorControl, 512, 16)
+        g.canMoveNow = False
+
+        # close ui
+        self.remove(self.find('uiCtrl'))
+
+    def closeNpcEditor(self, value=0):
+        self.remove(self.find('npcEditorCtrl'))
 
         # add ui
         self.add(self.uiCtrl, 512, 16)
@@ -250,6 +267,7 @@ class GameGUI():
         # game GUIs
         self.mapEditorGUI = MapEditorGUI(g.guiSurface)
         self.itemEditorGUI = ItemEditorGUI(g.guiSurface)
+        self.npcEditorGUI = NPCEditorGUI(g.guiSurface)
 
         # GUI
         self.app = gui.App()
@@ -337,6 +355,9 @@ class GameGUI():
         elif self.state == GUI_ITEMEDITOR:
             self.itemEditorGUI.update(event)
 
+        elif self.state == GUI_NPCEDITOR:
+            self.npcEditorGUI.update(event)
+
     def handleMouseClick(self, button, invNum):
         # right click
         if button == 3:
@@ -353,6 +374,7 @@ class GameGUI():
         self.drawUI()
 
     def drawUI(self):
+        ''' renders the ui depending on the menu state '''
         if self.state == GUI_STATS:
             self.drawStats()
             self.drawEquipment()
@@ -370,6 +392,9 @@ class GameGUI():
 
         elif self.state == GUI_ITEMEDITOR:
             self.itemEditorGUI.drawElements()
+
+        elif self.state == GUI_NPCEDITOR:
+            self.npcEditorGUI.drawElements()
 
         g.screenSurface.blit(g.guiSurface, (0, 0))
 
@@ -613,6 +638,7 @@ class GameGUI():
                 curItemSlot += 1
 
     def drawInventoryTooltip(self, itemSlot):
+        ''' draw a tooltip when the mouse is hovering over an item in the inventory '''
 
         def generateTooltip(itemNum, itemSlot):
             # determine rect size

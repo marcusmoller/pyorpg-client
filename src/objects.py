@@ -1,4 +1,4 @@
-from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS
+from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_NPCS, MAX_MAP_NPCS
 import pygame
 
 # Public data structures
@@ -130,6 +130,7 @@ class MapClass():
         self.bootY = 0
 
         self.tile = [[TileClass() for i in range(MAX_MAPY)] for i in range(MAX_MAPX)]
+        self.npc = [None for i in range(MAX_MAP_NPCS)]
 
 class ItemClass():
     def __init__(self):
@@ -139,6 +140,42 @@ class ItemClass():
         self.data1 = 0
         self.data2 = 0
         self.data3 = 0
+
+class NPCClass():
+    def __init__(self):
+        self.name = ''
+        self.attackSay = ''
+
+        self.sprite = None
+        self.spawnSecs = None
+        self.behaviour = None
+        self.range = None
+
+        self.dropChance = None
+        self.dropItem = None
+        self.dropItemValue = None
+
+        self.stat = [None for i in range(Stats.stat_count)]
+
+class MapNPCClass():
+    def __init__(self):
+        self.num = None
+        self.target = None
+
+        self.vital = [None for i in range(Vitals.vital_count)]
+
+        self.map = None
+        self.x = None
+        self.y = None
+        self.dir = None
+
+        # client use only
+        self.xOffset = None
+        self.yOffset = None
+        self.moving = False
+        self.attacking = False
+        self.attackTimer = None
+
 
 
 # Data initializations
@@ -152,3 +189,5 @@ PlayerInv = [PlayerInvClass() for i in range(MAX_INV)]
 #todo: dont use a fixed size, please
 Class = [ClassClass() for i in range(99)]
 Item = [ItemClass() for i in range(MAX_ITEMS)]
+NPC = [NPCClass() for i in range(MAX_NPCS)]
+mapNPC = [MapNPCClass() for i in range(MAX_MAP_NPCS)]

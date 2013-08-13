@@ -198,6 +198,14 @@ def handleMsg(text):
 
                 g.tcpConn.sendRequestEditItem()
 
+            ''' enables the npc editor '''
+            if command[0] == '/npceditor':
+                if getPlayerAccess(g.myIndex) < ADMIN_DEVELOPER:
+                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    return
+
+                g.tcpConn.sendRequestEditNpc()
+
             ''' gives an item to a player '''
             if command[0] == '/giveitem':
                 if getPlayerAccess(g.myIndex) < ADMIN_DEVELOPER:
@@ -269,6 +277,24 @@ def processMovement(index):
     if Player[index].xOffset == 0:
         if Player[index].yOffset == 0:
             Player[index].moving = 0
+
+def processNPCMovement(mapNpcNum):
+    ''' check if npc is walking and if so, move them '''
+    npcDir = mapNPC[mapNpcNum].dir
+
+    if npcDir == DIR_UP:
+        mapNPC[mapNpcNum].yOffset = mapNPC[mapNpcNum].yOffset - WALK_SPEED
+    elif npcDir == DIR_DOWN:
+        mapNPC[mapNpcNum].yOffset = mapNPC[mapNpcNum].yOffset + WALK_SPEED
+    elif npcDir == DIR_LEFT:
+        mapNPC[mapNpcNum].xOffset = mapNPC[mapNpcNum].xOffset - WALK_SPEED
+    elif npcDir == DIR_RIGHT:
+        mapNPC[mapNpcNum].xOffset = mapNPC[mapNpcNum].xOffset + WALK_SPEED
+
+    # check if on new tile
+    if mapNPC[mapNpcNum].xOffset == 0:
+        if mapNPC[mapNpcNum].yOffset == 0:
+            mapNPC[mapNpcNum].moving = False
 
 
 def isTryingToMove():

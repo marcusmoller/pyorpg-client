@@ -104,6 +104,9 @@ class DataHandler():
         elif packetType == ServerPackets.SEditMap:
             self.handleEditMap()
 
+        elif packetType == ServerPackets.SNpcEditor:
+            self.handleEditNpc()
+
         elif packetType == ServerPackets.SMapList:
             self.handleMapList(jsonData)
 
@@ -404,6 +407,13 @@ class DataHandler():
         g.gameEngine.graphicsEngine.gameGUI.guiContainer.openEditor()
         g.gameEngine.graphicsEngine.gameGUI.setState(3)
         g.gameEngine.graphicsEngine.gameGUI.mapEditorGUI.init()
+
+    def handleEditNpc(self):
+        g.editor = EDITOR_NPC
+
+        g.gameEngine.graphicsEngine.gameGUI.guiContainer.openNpcEditor()
+        g.gameEngine.graphicsEngine.gameGUI.setState(5)
+        g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.init()
 
     def handleMapList(self, jsonData):
         ''' called when receiving list of map names from server which is used for map editing '''

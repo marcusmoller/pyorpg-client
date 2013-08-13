@@ -39,6 +39,7 @@ inpCTRL = False
 highIndex = 0
 playersOnMapHighIndex = 0
 playersOnMap = []
+npcHighIndex = 0
 
 # used for draggin picture boxes
 sOffsetX = 0

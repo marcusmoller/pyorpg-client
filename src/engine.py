@@ -136,6 +136,12 @@ class Engine:
                         if Player[g.playersOnMap[i]].moving > 0:
                             processMovement(g.playersOnMap[i])
 
+                    for i in range(g.npcHighIndex):
+                        if Map.npc[i] > 0:
+                            if mapNPC[i].moving > 0:
+                                #processNPCmovement
+                                print "todo"
+
                     self.walkTimer = self.clockTick + 30
 
                 self.graphicsEngine.renderGraphics()

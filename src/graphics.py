@@ -93,6 +93,10 @@ class GraphicsEngine():
         for i in range(0, len(g.playersOnMap)):
             self.drawPlayer(g.playersOnMap[i])
 
+        # npcs
+        for i in range(0, g.npcHighIndex):
+            self.drawNPC(i)
+
         # upper tiles
         for x in range(MAX_MAPX):
             for y in range(MAX_MAPY):
@@ -203,8 +207,61 @@ class GraphicsEngine():
 
         if y < 0:
             y = 0
+            #rect.y = rect.y + (y * -1)
 
         self.drawSprite(sprite, x, y, rect)
+
+        # todo: draw spell animations
+
+    def drawNPC(mapNpcNum):
+        if mapNPC[mapNpcNum].num == None:
+            return
+
+        sprite = NPC[mapNPC[mapNpcNum]].sprite
+
+        # check for animation
+        anim = 0
+        if mapNPC[mapNpcNum].attacking == 0:
+            direction = mapNPC[mapNpcNum].dir
+
+            if direction == DIR_UP:
+                if mapNPC[mapNpcNum].yOffset < (SIZE_Y/2):
+                    anim = 1
+
+            elif direction == DIR_DOWN:
+                if mapNPC[mapNpcNum].yOffset < (SIZE_Y/2 * -1):
+                    anim = 1
+
+            elif direction == DIR_LEFT:
+                if mapNPC[mapNpcNum].xOffset < (SIZE_X/2):
+                    anim = 1
+
+            elif direction == DIR_RIGHT:
+                if mapNPC[mapNpcNum].xOffset < (SIZE_X/2 * -1):
+                    anim = 1
+
+        elif (mapNPC[mapNpcNum].attackTimer + 0.5) > tickCount:
+                anim = 2
+
+        # do we want to stop sprite from attacking?
+        if (mapNPC[mapNpcNum].attackTimer + 1) < tickCount:
+            mapNPC[mapNpcNum].attacking = 0
+            mapNPC[mapNpcNum].attackTimer = 0
+
+        # rect(x, y, width, height)
+        rect = pygame.Rect((mapNPC[mapNpcNum].dir*3+anim)*32, 0, 32, 32)
+
+        x = mapNPC[mapNpcNum].x * SIZE_X + mapNPC[mapNpcNum].xOffset
+        y = mapNPC[mapNpcNum].y * SIZE_Y + mapNPC[mapNpcNum].yOffset - 4
+
+        # check if out of bounds because of y offset
+        if y < 0:
+            y = 0
+            #rect.y = rect.y + (y * -1)
+
+        self.drawSprite(sprite, x, y, rect)
+
+        # todo: draw spell animations
 
     ##################
     # TEXT FUNCTIONS #
