@@ -87,6 +87,7 @@ clock = pygame.time.Clock()
 
 # fonts
 ''' change these to customize the in-game fonts '''
+systemFont = pygame.font.Font(dataPath + '/fonts/Lato-Regular.ttf', 16)
 nameFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 chatFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 16)
 charSelFont = pygame.font.Font(dataPath + '/fonts/Romulus.ttf', 23)

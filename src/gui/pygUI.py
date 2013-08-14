@@ -5,8 +5,8 @@ import global_vars as g
 
 pygame.font.init()
 
-FONT = pygame.font.SysFont(None, 24)
-SYSFONT = pygame.font.SysFont(None, 24)
+FONT = g.systemFont
+SYSFONT = g.systemFont
 
 #colors
 BLACK  = (  0,   0,   0)

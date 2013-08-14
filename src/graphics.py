@@ -36,7 +36,7 @@ class GraphicsEngine():
         self.tileOutlineSurface = pygame.image.load(g.dataPath + "/gui/editor_outline.bmp").convert()
         self.tileOutlineSurface.set_colorkey((255, 0, 204))
 
-        self.fontPlrName = pygame.font.SysFont(None, 18)
+        self.fontPlrName = g.systemFont #pygame.font.SysFont(None, 18)
         self.drawMapNameColor = textColor.BRIGHT_RED
 
         # fringe tiles
@@ -51,7 +51,7 @@ class GraphicsEngine():
         self.blockSurface = pygame.Surface((PIC_X, PIC_Y))
         self.blockSurface.set_alpha(128)
         self.blockSurface.fill((255, 0, 0))
-        font = pygame.font.SysFont(None, 27)
+        font = g.systemFont #pygame.font.SysFont(None, 27)
         markerText = font.render("B", True, (0, 0, 0))
         markerTextRect = markerText.get_rect()
         markerTextRect.centerx = self.blockSurface.get_rect().centerx
@@ -62,7 +62,7 @@ class GraphicsEngine():
         self.warpSurface = pygame.Surface((PIC_X, PIC_Y))
         self.warpSurface.set_alpha(128)
         self.warpSurface.fill((0, 0, 255))
-        font = pygame.font.SysFont(None, 27)
+        font = g.systemFont #pygame.font.SysFont(None, 27)
         markerText = font.render("W", True, (255, 255, 255))
         markerTextRect = markerText.get_rect()
         markerTextRect.centerx = self.warpSurface.get_rect().centerx

@@ -5,7 +5,7 @@ echo "--------------------------------------------------------"
 read -p "Choose a name for your executable: " execname
 
 echo "Building executable using PyInstaller..."
-pyinstaller ../src/pyorpg.py -F -o ../tmp/ -n $execname
+pyinstaller ../src/pyorpg.py -F -o ../tmp -n $execname
 
 echo "Making bin folder if it doesnt exist..."
 mkdir ../bin

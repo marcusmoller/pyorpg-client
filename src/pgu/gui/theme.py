@@ -65,7 +65,7 @@ class Theme:
         
         #if the package isn't installed and people are just
         #trying out the scripts or examples
-        dnames.append(os.path.join(os.path.dirname(__file__),"..","..","..","data","themes",name))
+        dnames.append(os.path.join("..","data","themes",name))
         
         #if the package is installed, and the package is installed
         #in /usr/lib/python2.3/site-packages/pgu/
@@ -150,7 +150,7 @@ class Theme:
                 # Load the font from a file
                 v = pygame.font.Font(os.path.join(dname, name), size)
             else:
-                # Must be a system font
+                # Must be a system font (doesnt work with PyInstaller)
                 v = pygame.font.SysFont(name, size)
 
         else:
