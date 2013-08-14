@@ -1,0 +1,3 @@
+# ignore folders used for executables
+bin/
+tmp/

@@ -1,0 +1,2 @@
+# ignore log files generated when building executables
+*.log
