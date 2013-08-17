@@ -519,10 +519,10 @@ class MapEditorGUI():
 
                 if self.state == PLACE_TILE:
                     # remove tile
-                    Map.tile[x][y].ground = 0
+                    Map.tile[x][y].ground = None
                     Map.tile[x][y].mask = 0
                     Map.tile[x][y].anim = 0
-                    Map.tile[x][y].fringe = 0
+                    Map.tile[x][y].fringe = None
 
                     calcTilePositions()
 
