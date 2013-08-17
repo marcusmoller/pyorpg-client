@@ -45,6 +45,7 @@ MAX_ITEMS = 255       # the total maximum amount of items allowed in the game
 MAX_NPCS = 255        # the total maximum amount of npcs allowed in the game
 MAX_MAP_NPCS = 5      # the maximum amount of npcs allowed on a map
 MAX_INV = 9  # 50     # the amount of inventory slots
+MAX_MAP_ITEMS = 20    # the maxmium amount of items on a map
 MAX_LEVELS = 100      # the maximum player and npc level
 
 # website

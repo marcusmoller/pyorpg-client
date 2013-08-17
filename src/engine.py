@@ -241,6 +241,9 @@ class Engine:
             g.inpSHIFT = False
             g.inpCTRL = True
 
+        elif pressed(pygame.K_RETURN):
+            checkMapGetItem()
+
         else:
             g.inpDIR_UP = False
             g.inpDIR_DOWN = False

@@ -153,6 +153,10 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CRequestNewMap, "direction": getPlayerDir(g.myIndex)}])
         self.sendData(packet)
 
+    def sendMapGetItem(self):
+        packet = json.dumps([{"packet": ClientPackets.CMapGetItem}])
+        self.sendData(packet)
+
     def sendMap(self):
         #todo: npc
 

@@ -1,4 +1,4 @@
-from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_NPCS, MAX_MAP_NPCS
+from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_MAP_ITEMS, MAX_NPCS, MAX_MAP_NPCS
 import pygame
 
 # Public data structures
@@ -62,7 +62,7 @@ class PlayerClass():
         self.y = 5          # None
         self.Dir = 1        # None
 
-        # Client
+        # Client only
         self.maxHP = None
         self.maxMP = None
         self.maxSP = None
@@ -132,6 +132,15 @@ class MapClass():
         self.tile = [[TileClass() for i in range(MAX_MAPY)] for i in range(MAX_MAPX)]
         self.npc = [None for i in range(MAX_MAP_NPCS)]
 
+class MapItemClass():
+    def __init__(self):
+        self.num = None
+        self.value = None
+        self.dur = None
+
+        self.x = None
+        self.y = None
+
 class ItemClass():
     def __init__(self):
         self.name = ""
@@ -190,4 +199,5 @@ PlayerInv = [PlayerInvClass() for i in range(MAX_INV)]
 Class = [ClassClass() for i in range(99)]
 Item = [ItemClass() for i in range(MAX_ITEMS)]
 NPC = [NPCClass() for i in range(MAX_NPCS)]
+MapItem = [MapItemClass() for i in range(MAX_MAP_ITEMS)]
 mapNPC = [MapNPCClass() for i in range(MAX_MAP_NPCS)]

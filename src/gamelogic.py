@@ -457,6 +457,14 @@ def checkMovement():
         g.canMoveNow = False
 
 
+def checkMapGetItem():
+    if time.time() * 1000 > Player[g.myIndex].mapGetTimer + 250:
+        # todo: check if chat is empty
+        if g.gameEngine.graphicsEngine.gameGUI.guiContainer.chatCtrl.chatMsg.value == '':
+            Player[g.myIndex].mapGetTimer = time.time() * 1000
+            g.tcpConn.sendMapGetItem()
+
+
 def updateInventory():
     # redraw the inventory interface
     print "todo"

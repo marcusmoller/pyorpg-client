@@ -104,6 +104,74 @@ class MapSelectorDialog(gui.Dialog):
         self._count = 1
 
 
+class OpenItemDialog(gui.Dialog):
+    def __init__(self, engine, **params):
+        self.engine = engine
+
+        self._count = 0
+
+        title = gui.Label("Open Item")
+
+        t = gui.Table()
+
+        t.tr()
+        t.td(gui.Label('Select an item:'), colspan=2)
+
+        t.tr()
+        t.td(gui.Spacer(10, 20))
+
+        t.tr()
+        self.itemList = gui.List(width=200, height=140)
+        t.td(self.itemList, colspan=2)
+
+        t.tr()
+        t.td(gui.Spacer(10, 20))
+
+        t.tr()
+        e = gui.Button('Open item')
+        e.connect(gui.CLICK, self.openItem, None)
+        t.td(e)
+
+        e = gui.Button('Cancel')
+        e.connect(gui.CLICK, self.close, None)
+        t.td(e)
+
+        t.tr()
+        t.td(gui.Spacer(10, 10))
+
+        gui.Dialog.__init__(self, title, t)
+
+    def openItem(self, value):
+        listValue = self.itemList.value
+
+        if listValue != None:
+            self.engine.openItem(itemNum=listValue)
+            self.close()
+
+    def openDialog(self, value):
+        self.loadItems()
+        self.open()
+
+    def loadItems(self):
+        self.clearList()
+        for i in range(MAX_ITEMS):
+            if Item[i].name != '':
+                self.addItem(str(i) + ' - "' + Item[i].name + '"')
+
+        self.itemList.resize()
+        self.itemList.repaint()
+
+    def addItem(self, item):
+        self.itemList.add(gui.Label(item), value=self._count)
+        self._count += 1
+
+    def clearList(self):
+        self.itemList.clear()
+        self.itemList.resize()
+        self.itemList.repaint()
+        self._count = 0
+
+
 class propertiesControl(gui.Table):
     def __init__(self, **params):
         gui.Table.__init__(self, **params)
@@ -228,6 +296,53 @@ class placeWarpControl(gui.Table):
         self.alertDialog = EmptyFieldAlertDialog()
 
 
+class placeItemControl(gui.Table):
+    def __init__(self, **params):
+        gui.Table.__init__(self, **params)
+
+        self.value = gui.Form()
+
+        # item information
+        self.itemNum = 0
+        self.itemVal = 0
+
+        # dialogs
+        openItemDialog = OpenItemDialog(self)
+
+        self.tr()
+        e = gui.Button("Open item...", width=100)
+        e.connect(gui.CLICK, openItemDialog.openDialog, None)
+        self.td(e)
+
+        self.tr()
+        self.td(gui.Spacer(10, 20))
+
+        self.tr()
+        self.td(gui.Label('Select an item to spawn', color=UI_FONT_COLOR, name='lblItemName'))
+
+        self.tr()
+        self.td(gui.Spacer(10, 80))
+
+    def openItem(self, itemNum):
+        # redraw selected sprite
+        #g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum = Item[itemNum].pic
+        #g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.draw()
+
+        if self.find('lblItemName'):
+            self.value['lblItemName'].set_text(Item[itemNum].name)
+
+        # set type and data
+        typeValue = Item[itemNum].type
+
+        if typeValue == ITEM_TYPE_CURRENCY:
+            # do stuff
+            print "todo: add value scroller"
+
+        # update item num
+        self.itemNum = itemNum
+        self.itemVal = 0
+
+
 class MapEditorContainer(gui.Container):
     def __init__(self, engine, **params):
         gui.Container.__init__(self, **params)
@@ -239,6 +354,7 @@ class MapEditorContainer(gui.Container):
         self.tileCtrl       = placeTileControl(name="tileCtrl")
         self.blockCtrl      = placeBlockControl(name="blockCtrl")
         self.warpCtrl       = placeWarpControl(name="warpCtrl")
+        self.itemCtrl       = placeItemControl(name='itemCtrl')
 
         # menu title
         self.tTitle = gui.Table(width=272, height=32)
@@ -252,19 +368,23 @@ class MapEditorContainer(gui.Container):
         self.t.tr()
         e = gui.Button("Map Properties", width=200)
         e.connect(gui.CLICK, self.toggleProperties, None)
-        self.t.td(e, colspan=3)
+        self.t.td(e, colspan=4)
 
         self.t.tr()
-        e = gui.Button("Tile", width=65)
+        e = gui.Button("Tile", width=40)
         e.connect(gui.CLICK, self.toggleTile, None)
         self.t.td(e)
 
-        e = gui.Button("Block", width=65)
+        e = gui.Button("Block", width=40)
         e.connect(gui.CLICK, self.toggleBlock, None)
         self.t.td(e)
 
-        e = gui.Button("Warp", width=65)
+        e = gui.Button("Warp", width=40)
         e.connect(gui.CLICK, self.toggleWarp, None)
+        self.t.td(e)
+
+        e = gui.Button("Item", width=40)
+        e.connect(gui.CLICK, self.toggleItem, None)
         self.t.td(e)
 
         self.tContent = gui.Table(width=272, height=318)
@@ -331,6 +451,9 @@ class MapEditorContainer(gui.Container):
         if self.tContent.find("warpCtrl"):
             self.tContent.remove(self.tContent.find("warpCtrl"))
 
+        if self.tContent.find("itemCtrl"):
+            self.tContent.remove(self.tContent.find("itemCtrl"))
+
     def toggleProperties(self, value):
         self.engine.setState(None)
         self.engine.draw()
@@ -363,6 +486,14 @@ class MapEditorContainer(gui.Container):
         self.hideAll()
         self.tContent.tr()
         self.tContent.td(self.warpCtrl, valign=-1)
+
+    def toggleItem(self, value):
+        self.engine.setState(PLACE_ITEM)
+        self.engine.draw()
+
+        self.hideAll()
+        self.tContent.tr()
+        self.tContent.td(self.itemCtrl, valign=-1)
 
 
 class MapEditorGUI():
@@ -487,6 +618,8 @@ class MapEditorGUI():
                 x = (g.cursorX-16) // PIC_X
                 y = (g.cursorY-16) // PIC_Y
 
+                print self.state
+
                 if self.state == PLACE_TILE:
 
                     if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
@@ -512,6 +645,12 @@ class MapEditorGUI():
                         Map.tile[x][y].data1 = int(g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.warpCtrl.value["inpWarpMapID"].value)
                         Map.tile[x][y].data2 = int(g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.warpCtrl.value["inpWarpX"].value)
                         Map.tile[x][y].data3 = int(g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.warpCtrl.value["inpWarpY"].value)
+
+                    elif self.state == PLACE_ITEM:
+                        Map.tile[x][y].type = TILE_TYPE_ITEM
+                        Map.tile[x][y].data1 = int(g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.itemCtrl.itemNum)
+                        Map.tile[x][y].data2 = int(g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.itemCtrl.itemVal)
+                        Map.tile[x][y].data3 = 0
 
             elif event.button == 3:
                 x = (g.cursorX-16) // PIC_X

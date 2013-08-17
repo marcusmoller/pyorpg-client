@@ -77,6 +77,9 @@ class DataHandler():
         elif packetType == ServerPackets.SMapData:
             self.handleMapData(jsonData)
 
+        elif packetType == ServerPackets.SMapItemData:
+            self.handleMapitemData(jsonData)
+
         elif packetType == ServerPackets.SMapDone:
             self.handleMapDone()
 
@@ -94,6 +97,9 @@ class DataHandler():
 
         elif packetType == ServerPackets.SMapMsg:
             self.handleMapMsg(jsonData)
+
+        elif packetType == ServerPackets.SSpawnItem:
+            self.handleSpawnItem(jsonData)
 
         elif packetType == ServerPackets.SItemEditor:
             self.handleItemEditor()
@@ -300,9 +306,10 @@ class DataHandler():
 
         # erase temporary tiles
         clearTempTile()
+
         # clearMapNPCS
-        # clearMapitems
-        # clearMap
+        clearMapItems()
+        clearMap()
 
         mapNum = jsonData[0]["mapnum"]
         revision = jsonData[0]["revision"]
@@ -349,6 +356,15 @@ class DataHandler():
         # save map
         saveMap(jsonData[0]["mapnum"])
 
+    def handleMapitemData(self, jsonData):
+        for i in range(MAX_MAP_ITEMS):
+            MapItem[i].num = jsonData[i+1]['itemnum']
+            MapItem[i].value = jsonData[i+1]['itemval']
+            MapItem[i].dur = jsonData[i+1]['itemdur']
+            MapItem[i].x = jsonData[i+1]['x']
+            MapItem[i].y = jsonData[i+1]['y']
+
+
     def handleMapDone(self):
         calcTilePositions()
 
@@ -380,6 +396,15 @@ class DataHandler():
         msg = jsonData[0]["msg"]
         color = jsonData[0]["color"]
         addText(msg, color)
+
+    def handleSpawnItem(self, jsonData):
+        itemSlot = jsonData[0]['slot']
+
+        MapItem[itemSlot].num = jsonData[0]['itemnum']
+        MapItem[itemSlot].value = jsonData[0]['itemval']
+        MapItem[itemSlot].dur = jsonData[0]['itemdur']
+        MapItem[itemSlot].x = jsonData[0]['x']
+        MapItem[itemSlot].y = jsonData[0]['y']
 
     def handleItemEditor(self):
         ''' called when server allows player to edit items '''

@@ -27,6 +27,7 @@ class GraphicsEngine():
         self.surfaceRect.left = 16
 
         # sprites
+        self.itemSprites = []
         self.sprites = []
 
         # surfaces
@@ -69,6 +70,17 @@ class GraphicsEngine():
         markerTextRect.centery = self.warpSurface.get_rect().centery
         self.warpSurface.blit(markerText, markerTextRect)
 
+        # - item
+        self.itemSurface = pygame.Surface((PIC_X, PIC_Y))
+        self.itemSurface.set_alpha(128)
+        self.itemSurface.fill((255, 255, 255))
+        font = g.systemFont #pygame.font.SysFont(None, 27)
+        markerText = font.render("I", True, (0, 0, 0))
+        markerTextRect = markerText.get_rect()
+        markerTextRect.centerx = self.itemSurface.get_rect().centerx
+        markerTextRect.centery = self.itemSurface.get_rect().centery
+        self.itemSurface.blit(markerText, markerTextRect)
+
         #######
         # GUI #
         #######
@@ -88,6 +100,11 @@ class GraphicsEngine():
         for x in range(MAX_MAPX):
             for y in range(MAX_MAPY):
                 self.drawMapTile(x, y)
+
+        # items
+        for i in range(MAX_MAP_ITEMS):
+            if MapItem[i].num is not None:
+                self.drawMapItem(i)
 
         # players
         for i in range(0, len(g.playersOnMap)):
@@ -153,6 +170,13 @@ class GraphicsEngine():
             tempImage.set_colorkey((0, 0, 0))
             self.sprites.append(tempImage)
 
+         # count how many sprites there are
+        itemAmount = countFiles(g.dataPath + '/items/')
+
+        # load them all
+        for i in range(0, itemAmount):
+            tempImage = pygame.image.load(g.dataPath + "/items/" + str(i) + ".png").convert_alpha()
+            self.itemSprites.append(tempImage)
 
     def drawMapTile(self, x, y):
         if Map.tile[x][y].ground != None:
@@ -165,6 +189,16 @@ class GraphicsEngine():
         if Map.tile[x][y].fringe != None:
             self.surface.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].fringe))
 
+    def drawMapItem(self, itemNum):
+        picNum = Item[MapItem[itemNum].num].pic
+
+        if picNum is None:
+            return
+
+        x = MapItem[itemNum].x
+        y = MapItem[itemNum].y
+
+        self.surface.blit(self.itemSprites[picNum], (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
 
     def drawSprite(self, sprite, x, y, rect):
         self.surface.blit(self.sprites[sprite], (x, y), rect)
@@ -325,6 +359,9 @@ class GraphicsEngine():
 
                 elif tempTile.type == TILE_TYPE_WARP:
                     self.surface.blit(self.warpSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
+
+                elif tempTile.type == TILE_TYPE_ITEM:
+                    self.surface.blit(self.itemSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
 
     def drawLocation(self):
         # render text
