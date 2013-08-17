@@ -291,7 +291,7 @@ class GameGUI():
         spritesAmount = countFiles(g.dataPath + '/items/')
 
         for i in range(spritesAmount):
-            tempImage = pygame.image.load(g.dataPath + '/items/' + str(i) + '.bmp').convert()
+            tempImage = pygame.image.load(g.dataPath + '/items/' + str(i) + '.png').convert_alpha()
             self.itemSprites.append(tempImage)
 
     def setState(self, state):

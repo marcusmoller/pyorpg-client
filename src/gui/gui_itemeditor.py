@@ -372,7 +372,8 @@ class ItemEditorGUI():
 
     def draw(self):
         # update selected sprite surface
-        tempImage = pygame.image.load(g.dataPath + '/items/' + str(self.selectedSpriteNum) + '.bmp').convert()
+        tempImage = pygame.image.load(g.dataPath + '/items/' + str(self.selectedSpriteNum) + '.png').convert()
+        pygame.draw.rect(self.selectedSpriteSurface, (0, 0, 0), (0, 0, 32, 32))
         self.selectedSpriteSurface.blit(tempImage, (0, 0))
 
         # render it onto the ui
