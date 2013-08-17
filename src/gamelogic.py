@@ -481,15 +481,17 @@ def calcTilePositions():
             MapTilePosition[x][y].x = x * PIC_X
             MapTilePosition[x][y].y = y * PIC_Y
 
-            MapTilePosition[x][y].ground.top    = (Map.tile[x][y].ground // TILESHEET_WIDTH) * PIC_Y
-            MapTilePosition[x][y].ground.left   = (Map.tile[x][y].ground % TILESHEET_WIDTH) * PIC_X
-            MapTilePosition[x][y].ground.width  = PIC_X
-            MapTilePosition[x][y].ground.height = PIC_Y
+            if Map.tile[x][y].ground != None:
+                MapTilePosition[x][y].ground.top    = (Map.tile[x][y].ground // TILESHEET_WIDTH) * PIC_Y
+                MapTilePosition[x][y].ground.left   = (Map.tile[x][y].ground % TILESHEET_WIDTH) * PIC_X
+                MapTilePosition[x][y].ground.width  = PIC_X
+                MapTilePosition[x][y].ground.height = PIC_Y
 
-            MapTilePosition[x][y].fringe.top    = (Map.tile[x][y].fringe // TILESHEET_WIDTH) * PIC_Y
-            MapTilePosition[x][y].fringe.left   = (Map.tile[x][y].fringe % TILESHEET_WIDTH) * PIC_X
-            MapTilePosition[x][y].fringe.width  = PIC_X
-            MapTilePosition[x][y].fringe.height = PIC_Y
+            if Map.tile[x][y].fringe != None:
+                MapTilePosition[x][y].fringe.top    = (Map.tile[x][y].fringe // TILESHEET_WIDTH) * PIC_Y
+                MapTilePosition[x][y].fringe.left   = (Map.tile[x][y].fringe % TILESHEET_WIDTH) * PIC_X
+                MapTilePosition[x][y].fringe.width  = PIC_X
+                MapTilePosition[x][y].fringe.height = PIC_Y
 
 
 def initMapData():

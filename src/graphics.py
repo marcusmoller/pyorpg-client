@@ -30,7 +30,7 @@ class GraphicsEngine():
         self.sprites = []
 
         # surfaces
-        self.tileSurface = pygame.image.load(g.dataPath + "/tilesets/Tiles1.bmp").convert()
+        self.tileSurface = pygame.image.load(g.dataPath + "/tilesets/Tiles1.png").convert()
         # todo: transparency
         #self.tileSurface.set_colorkey((0, 0, 255))
         self.tileOutlineSurface = pygame.image.load(g.dataPath + "/gui/editor_outline.bmp").convert()
@@ -40,7 +40,7 @@ class GraphicsEngine():
         self.drawMapNameColor = textColor.BRIGHT_RED
 
         # fringe tiles
-        self.tileSurfaceTrans = pygame.image.load(g.dataPath + "/tilesets/Tiles1.bmp").convert()
+        self.tileSurfaceTrans = pygame.image.load(g.dataPath + "/tilesets/Tiles1.png").convert()
         self.tileSurfaceTrans.set_colorkey((0, 0, 0))
 
         ###############
@@ -155,10 +155,14 @@ class GraphicsEngine():
 
 
     def drawMapTile(self, x, y):
-        self.surface.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
+        if Map.tile[x][y].ground != None:
+            self.surface.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
+        else:
+            # draw black square
+            pygame.draw.rect(self.surface, (0, 0, 0), (MapTilePosition[x][y].x, MapTilePosition[x][y].y, 32, 32))
 
     def drawMapFringeTile(self, x, y):
-        if Map.tile[x][y].fringe > 0:
+        if Map.tile[x][y].fringe != None:
             self.surface.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].fringe))
 
 

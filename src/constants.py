@@ -3,7 +3,7 @@ GAME_IP = "127.0.0.1"
 
 # Tilesheet width
 # - Number of tiles in width in tileset
-TILESHEET_WIDTH = 7
+TILESHEET_WIDTH = 32
 
 # movement speed variables
 WALK_SPEED = 4

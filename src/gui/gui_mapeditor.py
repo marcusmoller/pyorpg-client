@@ -392,7 +392,7 @@ class MapEditorGUI():
         self.tilesetOffsetX = 0
         self.tilesetOffsetY = 0
 
-        self.tilesetImg = pygame.image.load(g.dataPath + '/tilesets/Tiles1.bmp').convert_alpha()
+        self.tilesetImg = pygame.image.load(g.dataPath + '/tilesets/Tiles1.png').convert()
         self.tilesetImgRect = self.tilesetImg.get_rect()
 
         self.tilesetSurfaceRect = pygame.Rect((540, 212, PIC_X*6, PIC_Y*4))

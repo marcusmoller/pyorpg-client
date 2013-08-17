@@ -87,10 +87,10 @@ class ClassClass():
 
 class TileClass():
     def __init__(self):
-        self.ground = 0
+        self.ground = None
         self.mask = 0
         self.anim = 0
-        self.fringe = 0
+        self.fringe = None
         self.type = 0
         self.data1 = 0
         self.data2 = 0
