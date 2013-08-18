@@ -20,7 +20,7 @@ class characterControl(gui.Table):
             self.engine.updateCharSelection()
 
         def btnUseChar(btn=None):
-            if self.lblPlayerName.value != 'Create a new character':
+            if self.lblPlayerName.value != 'Empty':
                 g.tcpConn.sendUseChar(self.engine.charIndex-1)
                 g.gameEngine.setState(MENU_INGAME)
             else:
@@ -119,7 +119,7 @@ class menuCharacters():
             self.doUseChar()
 
     def doUseChar(self):
-        if self.charControl.lblPlayerName.value != 'Create a new character':
+        if self.charControl.lblPlayerName.value != 'Empty':
             g.tcpConn.sendUseChar(self.charIndex-1)
             g.gameEngine.setState(MENU_INGAME)
         else:
