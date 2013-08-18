@@ -44,6 +44,8 @@ def handleMsg(text):
                     addText("Usage: /info (name)", alertColor)
                     return
 
+                g.tcpConn.sendInfoRequest(command[1])
+
             ''' who's online '''
             if command[0] == "/who":
                 g.tcpConn.sendWhosOnline()
@@ -184,7 +186,14 @@ def handleMsg(text):
                     addText("You need to be a high enough staff member to do this!", alertColor)
                     return
 
-                #sendData mapreport
+                g.tcpConn.sendMapReport()
+
+            if command[0] == '/respawn':
+                if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
+                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    return
+
+                g.tcpConn.sendMapRespawn()
 
             ###################
             # DEVELOPER ADMIN #

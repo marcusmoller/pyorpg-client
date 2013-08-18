@@ -12,6 +12,7 @@ from datahandler import *
 from utils.utils import *
 from constants import *
 import global_vars as g
+from objects import *
 
 dataHandler = None
 
@@ -218,8 +219,20 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CSetSprite, "sprite": spriteNum}])
         self.sendData(packet)
 
+    def sendMapReport(self):
+        packet = json.dumps([{"packet": ClientPackets.CMapReport}])
+        self.sendData(packet)
+
+    def sendMapRespawn(self):
+        packet = json.dumps([{"packet": ClientPackets.CMapRespawn}])
+        self.sendData(packet)
+
     def sendUseItem(self, invNum):
         packet = json.dumps([{"packet": ClientPackets.CUseItem, "invnum": invNum}])
+        self.sendData(packet)
+
+    def sendInfoRequest(self, plrName):
+        packet = json.dumps([{"packet": ClientPackets.CPlayerInfoRequest, "name": plrName}])
         self.sendData(packet)
 
     def sendWhosOnline(self):
@@ -240,6 +253,12 @@ class TCPConnection():
 
     def sendRequestEditNpc(self):
         packet = json.dumps([{"packet": ClientPackets.CRequestEditNpc}])
+        self.sendData(packet)
+
+    def sendSaveNpc(self, npcNum):
+        packet = json.dumps([{"packet": ClientPackets.CSaveNpc, 'npcnum': npcNum, 'name': NPC[npcNum].name, 'attacksay': NPC[npcNum].attackSay, 'sprite': NPC[npcNum].sprite, 'spawnsec': NPC[npcNum].spawnSecs, 'behavior': NPC[npcNum].behaviour, 'range': NPC[npcNum].range, \
+                                                                'dropchance': NPC[npcNum].dropChance, 'dropitem': NPC[npcNum].dropItem, 'dropitemval': NPC[npcNum].dropItemValue, \
+                                                                'strength': NPC[npcNum].stat[Stats.strength], 'defense': NPC[npcNum].stat[Stats.defense], 'magic': NPC[npcNum].stat[Stats.magic], 'speed': NPC[npcNum].stat[Stats.speed]}])
         self.sendData(packet)
 
     def sendQuit(self):
