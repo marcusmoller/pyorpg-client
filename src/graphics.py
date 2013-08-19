@@ -253,7 +253,7 @@ class GraphicsEngine():
         # todo: draw spell animations
 
     def drawNPC(self, mapNpcNum):
-        if mapNPC[mapNpcNum].num == None:
+        if mapNPC[mapNpcNum].num is None:
             return
 
         tickCount = time.time()
@@ -282,7 +282,7 @@ class GraphicsEngine():
                     anim = 1
 
         elif (mapNPC[mapNpcNum].attackTimer + 0.5) > tickCount:
-                anim = 2
+            anim = 2
 
         # do we want to stop sprite from attacking?
         if (mapNPC[mapNpcNum].attackTimer + 1) < tickCount:

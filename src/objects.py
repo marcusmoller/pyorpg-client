@@ -179,9 +179,9 @@ class MapNPCClass():
         self.dir = None
 
         # client use only
-        self.xOffset = None
-        self.yOffset = None
-        self.moving = False
+        self.xOffset = 0
+        self.yOffset = 0
+        self.moving = 0
         self.attacking = False
         self.attackTimer = 0
 

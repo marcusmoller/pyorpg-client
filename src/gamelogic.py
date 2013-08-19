@@ -289,21 +289,25 @@ def processMovement(index):
 
 def processNPCMovement(mapNpcNum):
     ''' check if npc is walking and if so, move them '''
+    
     npcDir = mapNPC[mapNpcNum].dir
 
     if npcDir == DIR_UP:
         mapNPC[mapNpcNum].yOffset = mapNPC[mapNpcNum].yOffset - WALK_SPEED
+
     elif npcDir == DIR_DOWN:
         mapNPC[mapNpcNum].yOffset = mapNPC[mapNpcNum].yOffset + WALK_SPEED
+
     elif npcDir == DIR_LEFT:
         mapNPC[mapNpcNum].xOffset = mapNPC[mapNpcNum].xOffset - WALK_SPEED
+
     elif npcDir == DIR_RIGHT:
         mapNPC[mapNpcNum].xOffset = mapNPC[mapNpcNum].xOffset + WALK_SPEED
 
     # check if on new tile
     if mapNPC[mapNpcNum].xOffset == 0:
         if mapNPC[mapNpcNum].yOffset == 0:
-            mapNPC[mapNpcNum].moving = False
+            mapNPC[mapNpcNum].moving = 0
 
 
 def isTryingToMove():

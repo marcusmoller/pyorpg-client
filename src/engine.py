@@ -136,11 +136,11 @@ class Engine:
                         if Player[g.playersOnMap[i]].moving > 0:
                             processMovement(g.playersOnMap[i])
 
-                    for i in range(g.npcHighIndex):
-                        if Map.npc[i] > 0:
+                    #for i in range(g.npcHighIndex):
+                    for i in range(0, MAX_MAP_NPCS):
+                        if Map.npc[i] != None:
                             if mapNPC[i].moving > 0:
-                                #processNPCmovement
-                                print "todo"
+                                processNPCMovement(i)
 
                     self.walkTimer = self.clockTick + 30
 

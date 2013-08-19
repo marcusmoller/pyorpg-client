@@ -289,7 +289,8 @@ class NPCEditorContainer(gui.Container):
         NPC[self.npcNum].name = self.npcGeneralCtrl.value['inpNpcName'].value
         NPC[self.npcNum].attackSay = self.npcCombatCtrl.value['inpNpcAttackSay'].value
         NPC[self.npcNum].sprite = g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.selectedSpriteNum
-       # NPC[self.npcNum].spawnSecs = self.npcCombatCtrl.value['inpNpcName'].value
+        #NPC[self.npcNum].spawnSecs = self.npcCombatCtrl.value['inpNpcName'].value
+        NPC[self.npcNum].spawnSecs = 100
         NPC[self.npcNum].behaviour = self.npcGeneralCtrl.value['selBehaviour'].value
         NPC[self.npcNum].range = self.npcCombatCtrl.value['selDataRan'].value
         NPC[self.npcNum].stat[Stats.strength] = self.npcStatsCtrl.value['selDataStr'].value

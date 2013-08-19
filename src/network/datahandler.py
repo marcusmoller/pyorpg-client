@@ -119,6 +119,9 @@ class DataHandler():
         elif packetType == ServerPackets.SSpawnNpc:
             self.handleSpawnNpc(jsonData)
 
+        elif packetType == ServerPackets.SNpcMove:
+            self.handleNpcMove(jsonData)
+
         elif packetType == ServerPackets.SUpdateNpc:
             self.handleUpdateNpc(jsonData)
 
@@ -472,7 +475,32 @@ class DataHandler():
         # client use only
         mapNPC[mapNpcNum].xOffset = 0
         mapNPC[mapNpcNum].yOffset = 0
-        mapNPC[mapNpcNum].moving = False
+        mapNPC[mapNpcNum].moving = 0
+
+    def handleNpcMove(self, jsonData):
+        mapNpcNum = jsonData[0]['mapnpcnum']
+
+        mapNPC[mapNpcNum].x = jsonData[0]['x']
+        mapNPC[mapNpcNum].y = jsonData[0]['y']
+        mapNPC[mapNpcNum].dir = jsonData[0]['dir']
+        direction = jsonData[0]['dir']
+
+        mapNPC[mapNpcNum].xOffset = 0
+        mapNPC[mapNpcNum].yOffset = 0
+        mapNPC[mapNpcNum].moving = jsonData[0]['movement']
+
+        if direction == DIR_UP:
+            mapNPC[mapNpcNum].yOffset = PIC_Y
+
+        elif direction == DIR_DOWN:
+            mapNPC[mapNpcNum].yOffset = PIC_Y * -1
+
+        elif direction == DIR_LEFT:
+            mapNPC[mapNpcNum].xOffset = PIC_X
+
+        elif direction == DIR_RIGHT:
+            mapNPC[mapNpcNum].xOffset = PIC_X * -1
+
 
     def handleUpdateNpc(self, jsonData):
         npcNum = jsonData[0]['npcnum']
