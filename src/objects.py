@@ -183,7 +183,7 @@ class MapNPCClass():
         self.yOffset = None
         self.moving = False
         self.attacking = False
-        self.attackTimer = None
+        self.attackTimer = 0
 
 
 

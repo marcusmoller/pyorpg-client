@@ -171,10 +171,81 @@ class OpenItemDialog(gui.Dialog):
         self.itemList.repaint()
         self._count = 0
 
+class OpenNPCDialog(gui.Dialog):
+    def __init__(self, engine, **params):
+        self.engine = engine
+
+        self._count = 0
+
+        title = gui.Label("Open NPC")
+
+        t = gui.Table()
+
+        t.tr()
+        t.td(gui.Label('Select a NPC:'), colspan=2)
+
+        t.tr()
+        t.td(gui.Spacer(10, 20))
+
+        t.tr()
+        self.npcList = gui.List(width=200, height=140)
+        t.td(self.npcList, colspan=2)
+
+        t.tr()
+        t.td(gui.Spacer(10, 20))
+
+        t.tr()
+        e = gui.Button('Add NPC')
+        e.connect(gui.CLICK, self.openNPC, None)
+        t.td(e)
+
+        e = gui.Button('Cancel')
+        e.connect(gui.CLICK, self.close, None)
+        t.td(e)
+
+        t.tr()
+        t.td(gui.Spacer(10, 10))
+
+        gui.Dialog.__init__(self, title, t)
+
+    def openNPC(self, value):
+        listValue = self.npcList.value
+
+        if listValue != None:
+            self.engine.addNpc(listValue)
+            self.close()
+
+    def openDialog(self, value):
+        self.loadNPCs()
+        self.open()
+
+    def loadNPCs(self):
+        self.clearList()
+        for i in range(MAX_NPCS):
+            if NPC[i].name != '':
+                self.addItem(str(i) + ' - "' + NPC[i].name + '"')
+
+        self.npcList.resize()
+        self.npcList.repaint()
+
+    def addItem(self, item):
+        self.npcList.add(gui.Label(item), value=self._count)
+        self._count += 1
+
+    def clearList(self):
+        self.npcList.clear()
+        self.npcList.resize()
+        self.npcList.repaint()
+        self._count = 0
 
 class propertiesControl(gui.Table):
     def __init__(self, **params):
         gui.Table.__init__(self, **params)
+
+        self.listCount = 0
+
+        # dialogs
+        openNpcDialog = OpenNPCDialog(self)
 
         self.value = gui.Form()
 
@@ -198,6 +269,19 @@ class propertiesControl(gui.Table):
         self.td(gui.Label("Warp Right:", color=UI_FONT_COLOR))
         self.td(gui.Input("0", size=4, name="inpMapRight"))
 
+        self.tr()
+        self.td(gui.Spacer(10, 10))
+
+        # npc list
+        self.tr()
+        e = gui.Button('Add NPC...', width=200)
+        e.connect(gui.CLICK, openNpcDialog.openDialog, None)
+        self.td(e, colspan=2)
+
+        self.tr()
+        self.npcList = gui.List(width=200, height=80, name='lstNpcs')
+        self.td(self.npcList, colspan=2)
+
         self.loadProperties()
 
     def loadProperties(self):
@@ -207,6 +291,11 @@ class propertiesControl(gui.Table):
         self.value["inpMapLeft"].value = str(Map.left)
         self.value["inpMapRight"].value = str(Map.right)
 
+    def addNpc(self, npcNum):
+        self.npcList.add(str(npcNum) + ' - "' + str(NPC[npcNum].name) + '"', value=npcNum)
+        self.npcList.resize()
+        self.npcList.repaint()
+        self.listCount += 1
 
 class placeTileControl(gui.Table):
     def __init__(self, **params):
@@ -414,6 +503,18 @@ class MapEditorContainer(gui.Container):
         Map.down  = int(self.propertiesCtrl.value["inpMapDown"].value)
         Map.left  = int(self.propertiesCtrl.value["inpMapLeft"].value)
         Map.right = int(self.propertiesCtrl.value["inpMapRight"].value)
+
+        # retrieve the npcs from the list
+        npcList = []
+        for item in self.propertiesCtrl.value['lstNpcs'].items:
+            npcList.append(item.value)
+
+        # add them to the map
+        for i in range(MAX_MAP_NPCS):
+            try:
+                Map.npc[i] = npcList[i]
+            except:
+                break
 
         # send the map
         g.tcpConn.sendMap()

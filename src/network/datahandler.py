@@ -78,7 +78,10 @@ class DataHandler():
             self.handleMapData(jsonData)
 
         elif packetType == ServerPackets.SMapItemData:
-            self.handleMapitemData(jsonData)
+            self.handleMapItemData(jsonData)
+
+        elif packetType == ServerPackets.SMapNpcData:
+            self.handleMapNpcData(jsonData)
 
         elif packetType == ServerPackets.SMapDone:
             self.handleMapDone()
@@ -112,6 +115,9 @@ class DataHandler():
 
         elif packetType == ServerPackets.SNpcEditor:
             self.handleEditNpc()
+
+        elif packetType == ServerPackets.SSpawnNpc:
+            self.handleSpawnNpc(jsonData)
 
         elif packetType == ServerPackets.SUpdateNpc:
             self.handleUpdateNpc(jsonData)
@@ -359,7 +365,7 @@ class DataHandler():
         # save map
         saveMap(jsonData[0]["mapnum"])
 
-    def handleMapitemData(self, jsonData):
+    def handleMapItemData(self, jsonData):
         for i in range(MAX_MAP_ITEMS):
             MapItem[i].num = jsonData[i+1]['itemnum']
             MapItem[i].value = jsonData[i+1]['itemval']
@@ -367,9 +373,21 @@ class DataHandler():
             MapItem[i].x = jsonData[i+1]['x']
             MapItem[i].y = jsonData[i+1]['y']
 
+    def handleMapNpcData(self, jsonData):
+        for i in range(MAX_MAP_NPCS):
+            mapNPC[i].num = jsonData[i+1]['num']
+            mapNPC[i].x = jsonData[i+1]['x']
+            mapNPC[i].y = jsonData[i+1]['y']
+            mapNPC[i].dir = jsonData[i+1]['dir']
+
 
     def handleMapDone(self):
-        calcTilePositions()
+        # calculate amount of npcs on map
+        g.npcHighIndex = 0
+        for i in range(MAX_MAP_NPCS):
+            if Map.npc[i] != None:
+                g.npcHighIndex += 1
+            calcTilePositions()
 
         g.gettingMap = False
         g.canMoveNow = True
@@ -442,6 +460,19 @@ class DataHandler():
         g.gameEngine.graphicsEngine.gameGUI.guiContainer.openNpcEditor()
         g.gameEngine.graphicsEngine.gameGUI.setState(5)
         g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.init()
+
+    def handleSpawnNpc(self, jsonData):
+        mapNpcNum = jsonData[0]['mapnpcnum']
+
+        mapNPC[mapNpcNum].num = jsonData[0]['num']
+        mapNPC[mapNpcNum].x = jsonData[0]['x']
+        mapNPC[mapNpcNum].y = jsonData[0]['y']
+        mapNPC[mapNpcNum].dir = jsonData[0]['dir']
+
+        # client use only
+        mapNPC[mapNpcNum].xOffset = 0
+        mapNPC[mapNpcNum].yOffset = 0
+        mapNPC[mapNpcNum].moving = False
 
     def handleUpdateNpc(self, jsonData):
         npcNum = jsonData[0]['npcnum']

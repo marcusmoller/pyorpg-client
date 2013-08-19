@@ -187,7 +187,12 @@ class TCPConnection():
                                 "data1": tempTile.data1, \
                                 "data2": tempTile.data2, \
                                 "data3": tempTile.data3}])
-        print packet[5][0]
+
+
+        for i in range(MAX_MAP_NPCS):
+            packet.append([{'npcnum': Map.npc[i]}])
+
+
         packet = json.dumps(packet)
         self.sendData(packet)
 

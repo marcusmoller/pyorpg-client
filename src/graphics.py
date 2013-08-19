@@ -111,7 +111,8 @@ class GraphicsEngine():
             self.drawPlayer(g.playersOnMap[i])
 
         # npcs
-        for i in range(0, g.npcHighIndex):
+        #for i in range(0, g.npcHighIndex):
+        for i in range(0, MAX_MAP_NPCS):
             self.drawNPC(i)
 
         # upper tiles
@@ -251,11 +252,13 @@ class GraphicsEngine():
 
         # todo: draw spell animations
 
-    def drawNPC(mapNpcNum):
+    def drawNPC(self, mapNpcNum):
         if mapNPC[mapNpcNum].num == None:
             return
 
-        sprite = NPC[mapNPC[mapNpcNum]].sprite
+        tickCount = time.time()
+
+        sprite = NPC[mapNPC[mapNpcNum].num].sprite
 
         # check for animation
         anim = 0

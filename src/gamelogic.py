@@ -512,6 +512,12 @@ def calcTilePositions():
 
 
 def initMapData():
+    # calculate amount of npcs on map
+    g.npcHighIndex = 0
+    for i in range(MAX_MAP_NPCS):
+        if Map.npc[i] != None:
+            g.npcHighIndex += 1
+
     calcTilePositions()
 
 # should be in clienttcp.bas
