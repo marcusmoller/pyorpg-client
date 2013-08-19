@@ -156,13 +156,13 @@ class NPCClass():
         self.attackSay = ''
 
         self.sprite = None
-        self.spawnSecs = None
-        self.behaviour = None
-        self.range = None
+        self.spawnSecs = 20
+        self.behaviour = 0
+        self.range = 0
 
-        self.dropChance = None
-        self.dropItem = None
-        self.dropItemValue = None
+        self.dropChance = 0
+        self.dropItem = 0
+        self.dropItemValue = 0
 
         self.stat = [None for i in range(Stats.stat_count)]
 

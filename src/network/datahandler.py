@@ -365,6 +365,11 @@ class DataHandler():
 
                 i += 1
 
+        for j in range(MAX_MAP_NPCS):
+            Map.npc[j] = jsonData[i][0]["npc"]
+
+            i += 1
+
         # save map
         saveMap(jsonData[0]["mapnum"])
 
