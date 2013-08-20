@@ -47,8 +47,6 @@ class registerControl(gui.Table):
                         g.tcpConn.sendNewAccount(username, password)
                         print "Created user " + username
 
-                        # return to login screen
-                        g.gameEngine.setState(MENU_LOGIN)
                 else:
                     # todo: msgbox
                     print "passwords didn't match"
