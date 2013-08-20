@@ -82,14 +82,14 @@ class MapSelectorDialog(gui.Dialog):
     def openDialog(self, value):
         #self.loadMaps()
         self.open()
-        #self.loadMaps()
+        self.loadMaps()
 
     def loadMaps(self):
-        #self.clearList()
+        self.clearList()
 
         for i in range(1, len(g.mapNames)):
-            print g.mapNames
-            self.addItem(str(i) + ' - "' + g.mapNames[i] + '"')
+            if g.mapNames[i] != '':
+                self.addItem(str(i) + ' - "' + str(g.mapNames[i]) + '"')
 
     def addItem(self, item):
         self.mapList.add(item, value=self._count)
@@ -365,14 +365,12 @@ class placeWarpControl(gui.Table):
         self.td(self.inpMapID, colspan=2)
 
         # used for selecting the map - todo
-        '''
         mapDialog = MapSelectorDialog(self.inpMapID)
 
         self.tr()
         e = gui.Button('Choose map...')
         e.connect(gui.CLICK, mapDialog.openDialog, None)
         self.td(e, colspan=2)
-        '''
 
         self.tr()
         self.td(gui.Spacer(10, 20))
