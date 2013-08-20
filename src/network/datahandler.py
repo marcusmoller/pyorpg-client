@@ -1,6 +1,7 @@
 import time
 import os.path
 
+from pgu import gui
 from database import *
 from gamelogic import *
 import global_vars as g
@@ -142,6 +143,16 @@ class DataHandler():
             # show msg and disconnect until log in
             # todo: this is a stupid way of checking for account created
             g.gameEngine.disconnect()
+        else:
+            
+            # show an alert message
+            title = gui.Label("Alert Message")
+            main = gui.Container()
+            main.add(gui.TextArea(msg,len(msg) * 10, 20),0,0)
+            
+            d = gui.Dialog(title,main)
+            d.open()
+            
 
         # todo: show dialog
 
