@@ -274,9 +274,13 @@ class propertiesControl(gui.Table):
 
         # npc list
         self.tr()
-        e = gui.Button('Add NPC...', width=200)
+        e = gui.Button('Add NPC...', width=80)
         e.connect(gui.CLICK, openNpcDialog.openDialog, None)
-        self.td(e, colspan=2)
+        self.td(e)
+
+        e = gui.Button('Remove', width=80)
+        e.connect(gui.CLICK, self.removeNpc, None)
+        self.td(e)
 
         self.tr()
         self.npcList = gui.List(width=200, height=80, name='lstNpcs')
@@ -291,11 +295,25 @@ class propertiesControl(gui.Table):
         self.value["inpMapLeft"].value = str(Map.left)
         self.value["inpMapRight"].value = str(Map.right)
 
+        # load npcs
+        self.npcList.clear()
+        for i in range(MAX_MAP_NPCS):
+            if Map.npc[i] != None:
+                self.npcList.add(gui.Label(str(i) + ' - "' + NPC[Map.npc[i]].name + '"'), value=Map.npc[i])
+
     def addNpc(self, npcNum):
         self.npcList.add(str(npcNum) + ' - "' + str(NPC[npcNum].name) + '"', value=npcNum)
         self.npcList.resize()
         self.npcList.repaint()
         self.listCount += 1
+
+    def removeNpc(self, arg):
+        item = self.npcList.value
+
+        if item:
+            self.npcList.remove(item)
+            self.npcList.resize()
+            self.npcList.repaint()
 
 class placeTileControl(gui.Table):
     def __init__(self, **params):
@@ -514,7 +532,7 @@ class MapEditorContainer(gui.Container):
             try:
                 Map.npc[i] = npcList[i]
             except:
-                break
+                Map.npc[i] = None
 
         # send the map
         g.tcpConn.sendMap()
@@ -718,8 +736,6 @@ class MapEditorGUI():
                 # TODO: Fix the game screen offset problem (-16)
                 x = (g.cursorX-16) // PIC_X
                 y = (g.cursorY-16) // PIC_Y
-
-                print self.state
 
                 if self.state == PLACE_TILE:
 

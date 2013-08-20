@@ -151,7 +151,7 @@ class Engine:
 
         pygame.event.pump()
         for event in pygame.event.get():
-            # todo: organize this better...wd
+            # todo: organize this better...
             if g.gameState == MENU_LOGIN:
                 self.menuLogin._handleEvents(event)
 

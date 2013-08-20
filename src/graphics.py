@@ -3,7 +3,6 @@ import pygame
 from pygame.locals import *
 
 from gui.gui import *
-import gui.pygUI as pygUI
 from network.database import *
 from objects import *
 from constants import *

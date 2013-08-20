@@ -431,6 +431,12 @@ def checkDirection(direction):
             if getPlayerY(g.playersOnMap[i]) == y:
                 return True
 
+    # check if npc is already on tile
+    for i in range(MAX_MAP_NPCS):
+        if mapNPC[i].num != None:
+            if mapNPC[i].x == x and mapNPC[i].y == y:
+                return True
+
     return False
 
 def checkMovement():
