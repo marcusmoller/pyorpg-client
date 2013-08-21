@@ -342,6 +342,16 @@ class GraphicsEngine():
         textX = getPlayerX(index) * PIC_X + Player[index].xOffset + (PIC_X//2) - (textSize[0]/2)
         textY = getPlayerY(index) * PIC_Y + Player[index].yOffset - (PIC_Y//2) - 4
 
+        # make sure text isnt out of screen
+        if textY <= 0:
+            textY = 0
+
+        if textX <= 0:
+            textX = 0
+
+        if textX + textSize[0] >= 480:
+            textX = 480 - textSize
+
         self.drawText(textX, textY, getPlayerName(index), color)
 
     def drawMapName(self, mapname):
