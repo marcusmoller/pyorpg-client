@@ -540,7 +540,6 @@ class MapEditorContainer(gui.Container):
         self.quitEditor()
 
     def getTileType(self):
-        print self.tileCtrl.value['grpTileType'].value
         return self.tileCtrl.value['grpTileType'].value
 
     def cancelMap(self, value):

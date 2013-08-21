@@ -122,6 +122,12 @@ class DataHandler():
         elif packetType == ServerPackets.SNpcMove:
             self.handleNpcMove(jsonData)
 
+        elif packetType == ServerPackets.SNpcDir:
+            self.handleNpcDir(jsonData)
+
+        elif packetType == ServerPackets.SNpcDead:
+            self.handleNpcDead(jsonData)
+
         elif packetType == ServerPackets.SUpdateNpc:
             self.handleUpdateNpc(jsonData)
 
@@ -309,6 +315,7 @@ class DataHandler():
 
         # play attack sound
         g.soundEngine.playAttack()
+        print "attacksound!"
 
     def handleCheckForMap(self, jsonData):
         # erase other players
@@ -319,7 +326,7 @@ class DataHandler():
         # erase temporary tiles
         clearTempTile()
 
-        # clearMapNPCS
+        clearMapNpcs()
         clearMapItems()
         clearMap()
 
@@ -505,6 +512,19 @@ class DataHandler():
 
         elif direction == DIR_RIGHT:
             mapNPC[mapNpcNum].xOffset = PIC_X * -1
+
+    def handleNpcDir(self, jsonData):
+        mapNpcNum = jsonData[0]['mapnpcnum']
+        direction = jsonData[0]['direction']
+
+        mapNPC[mapNpcNum].dir = direction
+        mapNPC[mapNpcNum].xOffset = 0
+        mapNPC[mapNpcNum].yOffset = 0
+        mapNPC[mapNpcNum].moving = 0
+
+    def handleNpcDead(self, jsonData):
+        mapNpcNum = jsonData[0]['mapnpcnum']
+        clearMapNpc(mapNpcNum)
 
 
     def handleUpdateNpc(self, jsonData):

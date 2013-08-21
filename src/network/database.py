@@ -1,7 +1,7 @@
 import pickle
 import global_vars as g
 from objects import *
-from constants import MAX_MAP_ITEMS
+from constants import MAX_MAP_ITEMS, MAX_MAP_NPCS
 
 
 def saveMap(mapNum):
@@ -24,6 +24,13 @@ def clearMapItem(index):
 def clearMapItems():
     for i in range(MAX_MAP_ITEMS):
         clearMapItem(i)
+
+def clearMapNpc(index):
+    mapNPC[index] = MapNPCClass()
+
+def clearMapNpcs():
+    for i in range(MAX_MAP_NPCS):
+        clearMapNpc(i)
 
 
 ''' Player name '''
