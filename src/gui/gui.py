@@ -156,13 +156,8 @@ class uiContainer(gui.Container):
         self.engine.setState(GUI_STATS)
 
         plrName = getPlayerName(g.myIndex)
-        plrLevel = getPlayerLevel(g.myIndex)
 
-        if plrLevel == None:
-            print "wtf"
-            plrLevel = 1
-
-        self.updateTitle(plrName + ', level ' + str(plrLevel))
+        self.updateTitle(plrName)
 
     def toggleInventory(self, value):
         self.engine.setState(GUI_INVENTORY)
@@ -406,6 +401,8 @@ class GameGUI():
 
     def drawStats(self):
         ''' the stats interface '''
+        # todo: redraw the player name and level
+
         self.drawHealthBar()
         self.drawManaBar()
         self.drawLevelText()
@@ -429,7 +426,7 @@ class GameGUI():
         font = g.nameFont
         fontColor = (251, 230, 204)
 
-        label = font.render('EXP: ' + str(getPlayerExp(g.myIndex)) +'/', 0, fontColor)
+        label = font.render('EXP: ' + str(getPlayerExp(g.myIndex)) +' / ' + str(g.expToNextLvl), 0, fontColor)
         labelRect = label.get_rect()
         labelRect.centerx = 648
         labelRect.centery = 130
