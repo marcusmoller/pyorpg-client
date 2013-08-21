@@ -350,7 +350,7 @@ class GraphicsEngine():
             textX = 0
 
         if textX + textSize[0] >= 480:
-            textX = 480 - textSize
+            textX = 480 - textSize[0]
 
         self.drawText(textX, textY, getPlayerName(index), color)
 
