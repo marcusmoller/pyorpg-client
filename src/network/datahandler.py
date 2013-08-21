@@ -162,15 +162,13 @@ class DataHandler():
         if msg == creatingAccount:
             def btnAccountCreated(btn):
                 g.gameEngine.setState(MENU_LOGIN)
+
             btn = gui.Button("OK", width=120)
             btn.connect(gui.CLICK, btnAccountCreated, None)
             main.add(btn,20,30)
             
         d = gui.Dialog(title,main)
         d.open()
-            
-
-        # todo: show dialog
 
     def handleAllChars(self, jsonData):
         # pass it on to the character selection
