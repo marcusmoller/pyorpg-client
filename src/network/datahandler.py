@@ -9,6 +9,7 @@ from objects import *
 from constants import *
 from packettypes import *
 from utils.utils import *
+from gui.dialogs import alertMessageDialog
 
 
 class DataHandler():
@@ -154,23 +155,7 @@ class DataHandler():
             # todo: this is a stupid way of checking for account created
             g.gameEngine.disconnect()
             
-        # show an alert message
-        title = gui.Label("Alert Message")
-        main = gui.Container()
-        main.add(gui.TextArea(msg,len(msg) * 10, 20),0,0)
-        
-        if msg == creatingAccount:
-            def btnAccountCreated(btn):
-                g.gameEngine.setState(MENU_LOGIN)
-            btn = gui.Button("OK", width=120)
-            btn.connect(gui.CLICK, btnAccountCreated, None)
-            main.add(btn,20,30)
-            
-        d = gui.Dialog(title,main)
-        d.open()
-            
-
-        # todo: show dialog
+        alertMessageDialog(msg)
 
     def handleAllChars(self, jsonData):
         # pass it on to the character selection
