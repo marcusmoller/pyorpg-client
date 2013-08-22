@@ -6,7 +6,7 @@ from twisted.internet import reactor
 import global_vars as g
 from constants import *
 
-from gui.dialogs import alertLengthDialog
+from gui.dialogs import alertMessageDialog
 
 class registerControl(gui.Table):
     def __init__(self, **params):
@@ -19,7 +19,7 @@ class registerControl(gui.Table):
                 if len(username) > 3 and len(password) > 3:
                     return True
                 else:
-                    print "username and password must be larger 3 characters"
+                    alertMessageDialog("Username and password must be larger than 3 characters")
 
             def isStringLegal(string):
                 restricted = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -27,7 +27,7 @@ class registerControl(gui.Table):
                 for i in range(len(string)):
                     if string[i] not in restricted:
                         # todo: msgbox (not valid)
-                        print "name is not valid"
+                        alertMessageDialog("Name is not valid!\nThe name may only contain a-z and 0-9")
                         return False
 
                 return True
@@ -45,11 +45,9 @@ class registerControl(gui.Table):
                 if checkPasswords(password, passwordConfirm):
                     if isStringLegal(username):
                         g.tcpConn.sendNewAccount(username, password)
-                        print "Created user " + username
 
                 else:
-                    # todo: msgbox
-                    print "passwords didn't match"
+                    alertMessageDialog("Passwords didn't match")
 
         def btnCancel(btn):
             g.gameState = MENU_LOGIN
