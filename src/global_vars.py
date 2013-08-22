@@ -16,6 +16,7 @@ connector = None
 
 # player variables
 myIndex = None
+expToNextLvl = 0
 
 # gameloop
 inGame = False

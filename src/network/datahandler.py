@@ -254,6 +254,14 @@ class DataHandler():
         setPlayerStat(g.myIndex, Stats.speed, jsonData[0]["speed"])
         setPlayerStat(g.myIndex, Stats.magic, jsonData[0]["magic"])
 
+    def handlePlayerLevel(self, jsonData):
+        setPlayerLevel(g.myIndex, jsonData[0]['level'])
+        setPlayerExp(g.myIndex, jsonData[0]['exp'])
+        g.expToNextLvl = jsonData[0]['exptolevel']
+
+        # refresh main ui
+        g.gameEngine.graphicsEngine.gameGUI.reset()
+
     def handlePlayerData(self, jsonData):
         index = jsonData[0]["index"]
 

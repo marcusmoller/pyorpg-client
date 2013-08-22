@@ -41,10 +41,10 @@ class PlayerClass():
         self.Name = ""
         self.Class = None
         self.Sprite = 0
-        self.level = None
-        self.exp = None
-        self.access = None
-        self.pk = None
+        self.level = 0
+        self.exp = 0
+        self.access = 0
+        self.pk = 0
 
         # stats
         self.stats = [None for i in range(Stats.stat_count)]

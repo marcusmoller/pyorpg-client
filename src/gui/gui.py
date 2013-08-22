@@ -68,8 +68,13 @@ class ChatControl(gui.Table):
         self._count = 1
         self.focused = False
 
+        def clickChatMsg(value):
+            # disable movement when chat msg is mouse clicked
+            g.canMoveNow = False
+
         self.tr()
         self.chatMsg = gui.Input(maxlength=128, width=468, focusable=False)
+        self.chatMsg.connect(gui.CLICK, clickChatMsg, None)
         self.chatMsg.connect(gui.KEYDOWN, self.lkey)
         self.td(self.chatMsg)
 
@@ -151,12 +156,8 @@ class uiContainer(gui.Container):
         self.engine.setState(GUI_STATS)
 
         plrName = getPlayerName(g.myIndex)
-        plrLevel = getPlayerLevel(g.myIndex)
 
-        if plrLevel == None:
-            plrLevel = 1
-
-        self.updateTitle(plrName + ', level ' + str(plrLevel))
+        self.updateTitle(plrName)
 
     def toggleInventory(self, value):
         self.engine.setState(GUI_INVENTORY)
@@ -400,8 +401,11 @@ class GameGUI():
 
     def drawStats(self):
         ''' the stats interface '''
+        # todo: redraw the player name and level
+
         self.drawHealthBar()
         self.drawManaBar()
+        self.drawLevelText()
         self.drawStatText()
         self.drawStatIcons()
 
@@ -417,6 +421,16 @@ class GameGUI():
     #############
     # FUNCTIONS #
     #############
+
+    def drawLevelText(self):
+        font = g.nameFont
+        fontColor = (251, 230, 204)
+
+        label = font.render('EXP: ' + str(getPlayerExp(g.myIndex)) +' / ' + str(g.expToNextLvl), 0, fontColor)
+        labelRect = label.get_rect()
+        labelRect.centerx = 648
+        labelRect.centery = 130
+        g.guiSurface.blit(label, labelRect)
 
     def drawStatText(self):
         font = g.nameFont
