@@ -3,7 +3,7 @@ from pygame.locals import *
 from pgu import gui
 import pygUI as pygUI
 
-from objects import NPC, Stats
+from objects import Item, NPC, Stats
 from constants import *
 import global_vars as g
 
@@ -74,6 +74,73 @@ class OpenNPCDialog(gui.Dialog):
         self.npcList.repaint()
         self._count = 0
 
+class OpenItemDialog(gui.Dialog):
+    def __init__(self, engine, **params):
+        self.engine = engine
+
+        self._count = 0
+
+        title = gui.Label("Choose Item")
+
+        t = gui.Table()
+
+        t.tr()
+        t.td(gui.Label('Select an item:'), colspan=2)
+
+        t.tr()
+        t.td(gui.Spacer(10, 20))
+
+        t.tr()
+        self.itemList = gui.List(width=200, height=140)
+        t.td(self.itemList, colspan=2)
+
+        t.tr()
+        t.td(gui.Spacer(10, 20))
+
+        t.tr()
+        e = gui.Button('Choose item')
+        e.connect(gui.CLICK, self.openItem, None)
+        t.td(e)
+
+        e = gui.Button('Cancel')
+        e.connect(gui.CLICK, self.close, None)
+        t.td(e)
+
+        t.tr()
+        t.td(gui.Spacer(10, 10))
+
+        gui.Dialog.__init__(self, title, t)
+
+    def openItem(self, value):
+        listValue = self.itemList.value
+
+        if listValue != None:
+            self.engine.selectDropItem(Item[listValue].name)
+            self.close()
+
+    def openDialog(self, value):
+        self.loadItems()
+        self.open()
+
+    def loadItems(self):
+        self.clearList()
+        for i in range(MAX_ITEMS):
+            if Item[i].name != '':
+                self.addItem(str(i) + ' - "' + Item[i].name + '"')
+
+        self.itemList.resize()
+        self.itemList.repaint()
+
+    def addItem(self, item):
+        self.itemList.add(gui.Label(item), value=self._count)
+        self._count += 1
+
+    def clearList(self):
+        self.itemList.clear()
+        self.itemList.resize()
+        self.itemList.repaint()
+        self._count = 0
+
 
 class NPCGeneralControl(gui.Table):
     def __init__(self, **params):
@@ -123,8 +190,11 @@ class NPCCombatControl(gui.Table):
 
         self.value = gui.Form()
 
+        # dialogs
+        openItemDialog = OpenItemDialog(self)
+
         # item information
-        self.itemNum = 0
+        self.itemNum = None
         self.itemVal = 0
 
         self.tr()
@@ -140,12 +210,45 @@ class NPCCombatControl(gui.Table):
         self.td(self.lblRan)
 
         self.tr()
-        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataRan')
+        e = gui.HSlider(value=0, min=0, max=50, size=10, width=120, name='selDataRan')
+        e.connect(gui.CHANGE, self.updateLabelRan, e)
+        self.td(e)
+
+        self.tr()
+        self.td(gui.Spacer(10, 20))
+
+        self.tr()
+        self.lblDropChance = gui.Label('Drop Chance: 0', color=UI_FONT_COLOR)
+        self.td(self.lblDropChance)
+
+        self.tr()
+        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataDropChance')
+        e.connect(gui.CHANGE, self.updateLabelRan, e)
+        self.td(e)
+
+        self.tr()
+        self.lblDropItem = gui.Label('Drop Item: None', color=UI_FONT_COLOR)
+        self.td(self.lblDropItem)
+
+        self.tr()
+        e = gui.Button("Choose item...", width=100)
+        e.connect(gui.CLICK, openItemDialog.openDialog, None)
+        self.td(e, colspan=2)
+
+        self.tr()
+        self.lblDropItemVal = gui.Label('Drop Item Value: 0', color=UI_FONT_COLOR)
+        self.td(self.lblDropItemVal)
+
+        self.tr()
+        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataDropItemVal')
         e.connect(gui.CHANGE, self.updateLabelRan, e)
         self.td(e)
 
     def updateLabelRan(self, value):
         self.lblRan.set_text('Range: ' + str(value.value))
+
+    def selectDropItem(self, value):
+        self.lblDropItem.set_text('Drop Item: ' + str(value))
 
 class NPCStatsControl(gui.Table):
     def __init__(self, **params):

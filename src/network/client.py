@@ -95,7 +95,7 @@ class TCPConnection():
         self.sendData(packet)
 
     def sendLogin(self, username, password):
-        packet = json.dumps([{"packet": ClientPackets.CLogin, "name": username, "password": password}])
+        packet = json.dumps([{"packet": ClientPackets.CLogin, "name": username, "password": password}], ensure_ascii=False)
         self.sendData(packet)
 
     def sendAddChar(self, name, sex, classNum, slot):
