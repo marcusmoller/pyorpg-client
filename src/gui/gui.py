@@ -108,9 +108,47 @@ class ChatControl(gui.Table):
                 g.canMoveNow = True
 
     def addText(self, text, color=(0, 0, 0)):
-        self.chatList.tr()
-        self.chatList.td(gui.Label(str(text), antialias=0, color=color, font=g.chatFont), align=-1)
-        self.box.resize()
+        def write(text, color):
+            self.chatList.tr()
+            self.chatList.td(gui.Label(str(text), antialias=0, color=color, font=g.chatFont), align=-1)
+            self.box.resize()
+
+        # check if textlength is greater than the chat list length
+        textLength = g.chatFont.size(text)[0]
+
+        if textLength > 459:
+            # todo: allow custom size chat list (459 is found with GIMP)
+            # todo: optimize the loop
+
+            lines = ['']
+
+            words = text.split()
+            curLine = 0
+            curLineLength = 0
+
+            for i in range(len(words)):
+                word = words[i]
+
+                # if adding the new word to the current line would be too long,
+                # then put it on a new line
+                wordLength = g.chatFont.size(word)[0]
+
+                if (curLineLength + wordLength) > 400: # todo: why does it only work with 400?
+
+                    # only move down to a new line if we have text on the current line
+                    lines.append('')
+                    curLine += 1
+                    curLineLength = 0
+
+                lines[curLine] += word + ' '
+                curLineLength += wordLength
+
+            for line in lines:
+                write(line, color)
+
+        else:
+            # text fits, so just print it
+            write(text, color)
 
     def clearChat(self):
         print "todo"
