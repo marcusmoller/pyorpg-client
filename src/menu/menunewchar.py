@@ -9,6 +9,7 @@ from objects import *
 from constants import *
 
 import gui.pygUI as pygUI
+from gui.dialogs import alertMessageDialog
 
 class newCharControl(gui.Table):
     def __init__(self, **params):
@@ -135,8 +136,7 @@ class menuNewCharacter():
 
         for i in range(len(string)):
             if string[i] not in restricted:
-                # todo: msgbox (not valid)
-                print "name is not valid"
+                alertMessageDialog(msg='The name is not valid! The name may only contain a-z and 0-9.', title='An error occured')
                 return False
 
         return True

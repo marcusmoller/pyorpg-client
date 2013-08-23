@@ -2,6 +2,7 @@ import time
 import os.path
 
 from pgu import gui
+from gui.dialogs import alertMessageDialog
 from database import *
 from gamelogic import *
 import global_vars as g
@@ -150,28 +151,8 @@ class DataHandler():
 
     def handleAlertMsg(self, jsonData):
         msg = jsonData[0]['msg']
-        creatingAccount = 'Your account has been created!'
 
-        if msg == creatingAccount:
-            # show msg and disconnect until log in
-            # todo: this is a stupid way of checking for account created
-            g.gameEngine.disconnect()
-            
-        # show an alert message
-        title = gui.Label("Alert Message")
-        main = gui.Container()
-        main.add(gui.TextArea(msg,len(msg) * 10, 20),0,0)
-        
-        if msg == creatingAccount:
-            def btnAccountCreated(btn):
-                g.gameEngine.setState(MENU_LOGIN)
-
-            btn = gui.Button("OK", width=120)
-            btn.connect(gui.CLICK, btnAccountCreated, None)
-            main.add(btn,20,30)
-            
-        d = gui.Dialog(title,main)
-        d.open()
+        alertMessageDialog(msg=msg)
 
     def handleAllChars(self, jsonData):
         # pass it on to the character selection
