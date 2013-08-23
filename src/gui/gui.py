@@ -754,8 +754,15 @@ class GameGUI():
             elif itemType == ITEM_TYPE_CURRENCY:
                 nameColor = textColor.YELLOW
 
+                strValue = 'Amount: ' + str(getPlayerInvItemValue(g.myIndex, itemSlot))
+                strValueSize = g.tooltipFont.size(strValue)
+
                 # draw surface
-                tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + 10))
+                if textSize[0] > strValueSize[0]:
+                    tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + strValueSize[1] + 10))
+                else:
+                    tempSurface = pygame.Surface((strValueSize[0] + 10, textSize[1] + strValueSize[1] + 10))
+
                 tempSurface.fill((0, 0, 0))
 
                 # draw border
@@ -765,8 +772,16 @@ class GameGUI():
                 # - name
                 img = g.tooltipFont.render(itemName, 0, nameColor)
                 imgRect = img.get_rect()
-                imgRect.centerx = tempSurface.get_rect().w / 2
-                imgRect.centery = tempSurface.get_rect().h / 2
+                imgRect.x = 5
+                imgRect.centery = tempSurface.get_rect().h / 3
+
+                tempSurface.blit(img, imgRect)
+
+                # - value
+                img = g.tooltipFont.render(strValue, 0, (255, 255, 255))
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = (tempSurface.get_rect().h / 3) * 2
 
                 tempSurface.blit(img, imgRect)
 
