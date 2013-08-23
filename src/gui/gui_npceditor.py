@@ -115,6 +115,7 @@ class OpenItemDialog(gui.Dialog):
         listValue = self.itemList.value
 
         if listValue != None:
+            self.engine.itemNum = listValue
             self.engine.selectDropItem(Item[listValue].name)
             self.close()
 
@@ -210,7 +211,7 @@ class NPCCombatControl(gui.Table):
         self.td(self.lblRan)
 
         self.tr()
-        e = gui.HSlider(value=0, min=0, max=50, size=10, width=120, name='selDataRan')
+        e = gui.HSlider(value=0, min=0, max=20, size=10, width=120, name='selDataRan')
         e.connect(gui.CHANGE, self.updateLabelRan, e)
         self.td(e)
 
@@ -218,12 +219,12 @@ class NPCCombatControl(gui.Table):
         self.td(gui.Spacer(10, 20))
 
         self.tr()
-        self.lblDropChance = gui.Label('Drop Chance: 0', color=UI_FONT_COLOR)
+        self.lblDropChance = gui.Label('Drop Chance: 0 (0%)', color=UI_FONT_COLOR)
         self.td(self.lblDropChance)
 
         self.tr()
-        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataDropChance')
-        e.connect(gui.CHANGE, self.updateLabelRan, e)
+        e = gui.HSlider(value=0, min=0, max=50, size=10, width=120, name='selDataDropChance')
+        e.connect(gui.CHANGE, self.updateLabelDropChance, e)
         self.td(e)
 
         self.tr()
@@ -236,19 +237,29 @@ class NPCCombatControl(gui.Table):
         self.td(e, colspan=2)
 
         self.tr()
-        self.lblDropItemVal = gui.Label('Drop Item Value: 0', color=UI_FONT_COLOR)
+        self.lblDropItemVal = gui.Label('Drop Item Value: 1', color=UI_FONT_COLOR)
         self.td(self.lblDropItemVal)
 
         self.tr()
-        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataDropItemVal')
-        e.connect(gui.CHANGE, self.updateLabelRan, e)
+        e = gui.HSlider(value=1, min=1, max=99, size=10, width=120, name='selDataDropItemVal')
+        e.connect(gui.CHANGE, self.updateLabelDropItemVal, e)
         self.td(e)
 
     def updateLabelRan(self, value):
         self.lblRan.set_text('Range: ' + str(value.value))
 
+    def updateLabelDropChance(self, value):
+        if value.value != 0:
+            self.lblDropChance.set_text('Drop Item Chance: ' + str(value.value) + ' (' + str(round(1./value.value*100, 1)) +'%)')
+
+        else:
+            self.lblDropChance.set_text('Drop Item Chance: 0 (0%)')
+
     def selectDropItem(self, value):
         self.lblDropItem.set_text('Drop Item: ' + str(value))
+
+    def updateLabelDropItemVal(self, value):
+        self.lblDropItemVal.set_text('Drop Item Value: ' + str(value.value))
 
 class NPCStatsControl(gui.Table):
     def __init__(self, **params):
@@ -394,6 +405,11 @@ class NPCEditorContainer(gui.Container):
         NPC[self.npcNum].sprite = g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.selectedSpriteNum
         #NPC[self.npcNum].spawnSecs = self.npcCombatCtrl.value['inpNpcName'].value
         NPC[self.npcNum].spawnSecs = 100
+
+        NPC[self.npcNum].dropChance = self.npcCombatCtrl.value['selDataDropChance'].value
+        NPC[self.npcNum].dropItem = self.npcCombatCtrl.itemNum
+        NPC[self.npcNum].dropItemValue = self.npcCombatCtrl.value['selDataDropItemVal'].value
+
         NPC[self.npcNum].behaviour = self.npcGeneralCtrl.value['selBehaviour'].value
         NPC[self.npcNum].range = self.npcCombatCtrl.value['selDataRan'].value
         NPC[self.npcNum].stat[Stats.strength] = self.npcStatsCtrl.value['selDataStr'].value
