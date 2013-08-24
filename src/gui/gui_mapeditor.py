@@ -655,6 +655,10 @@ class MapEditorGUI():
 
     def init(self):
         self.setState(STATE_PROPERTIES)
+
+        # set PROPERTIES ctrl as default
+        g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.toggleProperties(None)
+
         self.draw()
 
     def draw(self):
