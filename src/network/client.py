@@ -260,6 +260,10 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CRequestEditNpc}])
         self.sendData(packet)
 
+    def sendEditNpc(self, npcNum):
+        packet = json.dumps([{"packet": ClientPackets.CEditNpc, 'npcnum': npcNum}])
+        self.sendData(packet)
+
     def sendSaveNpc(self, npcNum):
         packet = json.dumps([{"packet": ClientPackets.CSaveNpc, 'npcnum': npcNum, 'name': NPC[npcNum].name, 'attacksay': NPC[npcNum].attackSay, 'sprite': NPC[npcNum].sprite, 'spawnsec': NPC[npcNum].spawnSecs, 'behavior': NPC[npcNum].behaviour, 'range': NPC[npcNum].range, \
                                                                 'dropchance': NPC[npcNum].dropChance, 'dropitem': NPC[npcNum].dropItem, 'dropitemval': NPC[npcNum].dropItemValue, \

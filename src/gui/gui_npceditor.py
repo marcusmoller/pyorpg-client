@@ -48,7 +48,7 @@ class OpenNPCDialog(gui.Dialog):
         listValue = self.npcList.value
 
         if listValue != None:
-            self.engine.openItem(itemNum=listValue)
+            self.engine.openNPC(npcNum=listValue)
             self.close()
 
     def openDialog(self, value):
@@ -144,8 +144,10 @@ class OpenItemDialog(gui.Dialog):
 
 
 class NPCGeneralControl(gui.Table):
-    def __init__(self, **params):
+    def __init__(self, parent=None, **params):
         gui.Table.__init__(self, **params)
+
+        self.parent = parent
 
         self.value = gui.Form()
 
@@ -161,7 +163,7 @@ class NPCGeneralControl(gui.Table):
         self.td(e, colspan=2)
 
         self.tr()
-        self.td(gui.Spacer(10, 20))
+        self.td(gui.Spacer(10, 10))
 
         self.tr()
         self.td(gui.Label('Name:', color=UI_FONT_COLOR), colspan=2)
@@ -169,7 +171,7 @@ class NPCGeneralControl(gui.Table):
         self.td(gui.Input('', size=26, name='inpNpcName'), colspan=2, valign=-1)
 
         self.tr()
-        self.td(gui.Spacer(10, 20))
+        self.td(gui.Spacer(10, 10))
 
         self.tr()
         self.td(gui.Label('Behaviour:', color=UI_FONT_COLOR), colspan=2)
@@ -183,6 +185,26 @@ class NPCGeneralControl(gui.Table):
         e.value = 0
         #e.connect(gui.CHANGE, self.updateType, None)
         self.td(e, colspan=2)
+
+        self.tr()
+        self.td(gui.Spacer(10, 10))
+
+        self.tr()
+        self.lblSpawnSecs = gui.Label('Respawn rate: 0 secs', color=UI_FONT_COLOR)
+        self.td(self.lblSpawnSecs, colspan=2)
+
+        self.tr()
+        e = gui.HSlider(value=5, min=5, max=120, size=10, width=120, name='selDataSpawnSecs')
+        e.connect(gui.CHANGE, self.updateLabelSpawnSecs, e)
+        self.td(e, colspan=2)
+
+    def openNPC(self, npcNum):
+        # pass it on to NPCEditorContainer
+        self.parent.requestOpenNpc(npcNum)
+
+    def updateLabelSpawnSecs(self, value):
+        self.lblSpawnSecs.set_text('Respawn rate: ' + str(value.value) + ' secs')
+
 
 
 class NPCCombatControl(gui.Table):
@@ -228,6 +250,9 @@ class NPCCombatControl(gui.Table):
         self.td(e)
 
         self.tr()
+        self.td(gui.Spacer(10, 10))
+
+        self.tr()
         self.lblDropItem = gui.Label('Drop Item: None', color=UI_FONT_COLOR)
         self.td(self.lblDropItem)
 
@@ -235,6 +260,9 @@ class NPCCombatControl(gui.Table):
         e = gui.Button("Choose item...", width=100)
         e.connect(gui.CLICK, openItemDialog.openDialog, None)
         self.td(e, colspan=2)
+
+        self.tr()
+        self.td(gui.Spacer(10, 10))
 
         self.tr()
         self.lblDropItemVal = gui.Label('Drop Item Value: 1', color=UI_FONT_COLOR)
@@ -338,7 +366,7 @@ class NPCEditorContainer(gui.Container):
         self.npcNum = None
 
         # menus
-        self.npcGeneralCtrl = NPCGeneralControl(name='generalCtrl')
+        self.npcGeneralCtrl = NPCGeneralControl(parent=self, name='generalCtrl')
         self.npcCombatCtrl = NPCCombatControl(name='combatCtrl')
         self.npcStatsCtrl = NPCStatsControl(name='statsCtrl')
 
@@ -386,8 +414,39 @@ class NPCEditorContainer(gui.Container):
         self.add(self.tContent, 0, 100)
         self.add(self.tBottom, 0, 368)
 
-    def openNPC(self, itemNum):
-        print 'todo'
+    def requestOpenNpc(self, npcNum):
+        # request edit npc
+        g.tcpConn.sendEditNpc(npcNum)
+
+    def openNPC(self, npcNum):
+        # set general as default first menu
+        self.toggleGeneral(None)
+
+        # redraw selected npc sprite
+        g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.selectedSpriteNum = NPC[npcNum].sprite
+        g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.draw()
+
+        # load npc variables
+        self.npcGeneralCtrl.value['inpNpcName'].value = NPC[npcNum].name
+        self.npcCombatCtrl.value['inpNpcAttackSay'].value = NPC[npcNum].attackSay 
+        self.npcGeneralCtrl.value['selDataSpawnSecs'].value = NPC[npcNum].spawnSecs
+
+        self.npcCombatCtrl.value['selDataDropChance'].value = NPC[npcNum].dropChance
+        self.npcCombatCtrl.itemNum = NPC[npcNum].dropItem
+        self.npcCombatCtrl.value['selDataDropItemVal'].value = NPC[npcNum].dropItemValue
+
+        self.npcGeneralCtrl.value['selBehaviour'].value = NPC[npcNum].behaviour
+        self.npcCombatCtrl.value['selDataRan'].value = NPC[npcNum].range
+        self.npcStatsCtrl.value['selDataStr'].value = NPC[npcNum].stat[Stats.strength]
+        self.npcStatsCtrl.value['selDataDef'].value = NPC[npcNum].stat[Stats.defense]
+        self.npcStatsCtrl.value['selDataMag'].value = NPC[npcNum].stat[Stats.magic]
+        self.npcStatsCtrl.value['selDataSpd'].value = NPC[npcNum].stat[Stats.speed]
+
+        # change save button
+        self.saveButton.value = 'Save NPC'
+
+        # update npcNum
+        self.npcNum = npcNum
 
     def updateType(self, value):
         print 'todo'
@@ -403,8 +462,7 @@ class NPCEditorContainer(gui.Container):
         NPC[self.npcNum].name = self.npcGeneralCtrl.value['inpNpcName'].value
         NPC[self.npcNum].attackSay = self.npcCombatCtrl.value['inpNpcAttackSay'].value
         NPC[self.npcNum].sprite = g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.selectedSpriteNum
-        #NPC[self.npcNum].spawnSecs = self.npcCombatCtrl.value['inpNpcName'].value
-        NPC[self.npcNum].spawnSecs = 100
+        NPC[self.npcNum].spawnSecs = self.npcGeneralCtrl.value['selDataSpawnSecs'].value
 
         NPC[self.npcNum].dropChance = self.npcCombatCtrl.value['selDataDropChance'].value
         NPC[self.npcNum].dropItem = self.npcCombatCtrl.itemNum

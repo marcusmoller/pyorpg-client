@@ -119,7 +119,10 @@ class DataHandler():
             self.handleEditMap()
 
         elif packetType == ServerPackets.SNpcEditor:
-            self.handleEditNpc()
+            self.handleNpcEditor()
+
+        elif packetType == ServerPackets.SEditNpc:
+            self.handleEditNpc(jsonData)
 
         elif packetType == ServerPackets.SSpawnNpc:
             self.handleSpawnNpc(jsonData)
@@ -477,12 +480,35 @@ class DataHandler():
         g.gameEngine.graphicsEngine.gameGUI.setState(3)
         g.gameEngine.graphicsEngine.gameGUI.mapEditorGUI.init()
 
-    def handleEditNpc(self):
+    def handleNpcEditor(self):
         g.editor = EDITOR_NPC
 
         g.gameEngine.graphicsEngine.gameGUI.guiContainer.openNpcEditor()
         g.gameEngine.graphicsEngine.gameGUI.setState(5)
         g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.init()
+
+    def handleEditNpc(self, jsonData):
+        npcNum = jsonData[0]['npcnum']
+
+        # update npc
+        NPC[npcNum].name = jsonData[0]['name']
+        NPC[npcNum].attackSay = jsonData[0]['attacksay']
+        NPC[npcNum].sprite = jsonData[0]['sprite']
+        NPC[npcNum].spawnSecs = jsonData[0]['spawnsec']
+        NPC[npcNum].behaviour = jsonData[0]['behavior']
+        NPC[npcNum].range = jsonData[0]['range']
+
+        NPC[npcNum].dropChance = jsonData[0]['dropchance']
+        NPC[npcNum].dropItem = jsonData[0]['dropitem']
+        NPC[npcNum].dropItemValue = jsonData[0]['dropitemval']
+
+        NPC[npcNum].stat[Stats.strength] = jsonData[0]['strength']
+        NPC[npcNum].stat[Stats.defense] = jsonData[0]['defense']
+        NPC[npcNum].stat[Stats.magic] = jsonData[0]['magic']
+        NPC[npcNum].stat[Stats.speed] = jsonData[0]['speed']
+
+        # update the npc editor
+        g.gameEngine.graphicsEngine.gameGUI.guiContainer.npcEditorControl.openNPC(npcNum)
 
     def handleSpawnNpc(self, jsonData):
         mapNpcNum = jsonData[0]['mapnpcnum']
