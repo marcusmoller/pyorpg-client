@@ -495,7 +495,34 @@ class NPCEditorContainer(gui.Container):
         g.canMoveNow = True
 
     def resetEditor(self):
-        print 'todo'
+        # set general as default first menu
+        self.toggleGeneral(None)
+
+        # redraw selected npc sprite
+        g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.selectedSpriteNum = 0
+        g.gameEngine.graphicsEngine.gameGUI.npcEditorGUI.draw()
+
+        # load npc variables
+        self.npcGeneralCtrl.value['inpNpcName'].value = ''
+        self.npcCombatCtrl.value['inpNpcAttackSay'].value = ''
+        self.npcGeneralCtrl.value['selDataSpawnSecs'].value = 5
+
+        self.npcCombatCtrl.value['selDataDropChance'].value = 0
+        self.npcCombatCtrl.itemNum = None
+        self.npcCombatCtrl.value['selDataDropItemVal'].value = 0
+
+        self.npcGeneralCtrl.value['selBehaviour'].value = 0
+        self.npcCombatCtrl.value['selDataRan'].value = 0
+        self.npcStatsCtrl.value['selDataStr'].value = 0
+        self.npcStatsCtrl.value['selDataDef'].value = 0
+        self.npcStatsCtrl.value['selDataMag'].value = 0
+        self.npcStatsCtrl.value['selDataSpd'].value = 0
+
+        # change save button
+        self.saveButton.value = 'Add NPC'
+
+        # update npcNum
+        self.npcNum = None
 
     def hideAll(self):
         if self.tContent.find("generalCtrl"):
