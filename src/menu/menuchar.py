@@ -77,15 +77,15 @@ class menuCharacters():
 
         self.charName = ""
         self.charLevel = 0
-        self.charClass = "WAAZZOR"
+        self.charClass = "#CLASS"
         self.charSprite = 1
 
         # sprite image
-        self.spriteScale = 3
-        self.spriteImage = pygame.Surface((PIC_X * self.spriteScale, PIC_Y * self.spriteScale))
+        self.spriteScale = 2
+        self.spriteImage = pygame.Surface((2*PIC_X * self.spriteScale, 2*PIC_Y * self.spriteScale))
         self.spriteImageRect = self.spriteImage.get_rect()
         self.spriteImageRect.centerx = 800/2
-        self.spriteImageRect.centery = 600/2
+        self.spriteImageRect.centery = 600/2 - 20
 
         # GUI
         self.app = gui.App()
@@ -160,9 +160,9 @@ class menuCharacters():
 
     def updateCharSprite(self, sprite):
         tempImage = g.gameEngine.graphicsEngine.sprites[sprite]
-        tempSprite = pygame.Surface((32, 32))
+        tempSprite = pygame.Surface((64, 64))
 
-        tempSprite.blit(tempImage, (0, 0), (128, 0, 32, 32))
+        tempSprite.blit(tempImage, (0, 0), (0, 128, 64, 64))
 
-        self.spriteImage = pygame.transform.scale(tempSprite, (PIC_X * self.spriteScale, PIC_Y * self.spriteScale))
+        self.spriteImage = pygame.transform.scale(tempSprite, (2*PIC_X * self.spriteScale, 2*PIC_Y * self.spriteScale))
         self.spriteImage.set_colorkey((0, 0, 0))

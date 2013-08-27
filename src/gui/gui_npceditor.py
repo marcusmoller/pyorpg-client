@@ -566,13 +566,13 @@ class NPCEditorGUI():
 
         # selected item sprite
         self.selectedSpriteNum = 0
-        self.selectedSpriteSurface = pygame.Surface((PIC_X, PIC_Y))
-        self.selectedSpriteRect = pygame.Rect((632, 150, 32, 32))
+        self.selectedSpriteSurface = pygame.Surface((2*PIC_X, 2*PIC_Y))
+        self.selectedSpriteRect = pygame.Rect((616, 122, 64, 64))
 
         # scroll buttons
         # - scroll buttons (place them near self.selectedSpriteRect)
-        btnScrollLeft = pygUI.pygButton((600, 158, 32, 32), normal=g.dataPath + '/themes/default/hslider.left.tga')
-        btnScrollRight = pygUI.pygButton((680, 158, 32, 32), normal=g.dataPath + '/themes/default/hslider.right.tga')
+        btnScrollLeft = pygUI.pygButton((600, 146, 32, 32), normal=g.dataPath + '/themes/default/hslider.left.tga')
+        btnScrollRight = pygUI.pygButton((680, 146, 32, 32), normal=g.dataPath + '/themes/default/hslider.right.tga')
 
         self.scrollButtons = (btnScrollLeft, btnScrollRight)
 
@@ -585,8 +585,8 @@ class NPCEditorGUI():
 
         if self.state == 0:
             # update selected sprite surface
-            tempImage = pygame.image.load(g.dataPath + '/sprites/' + str(self.selectedSpriteNum) + '.bmp').convert()
-            self.selectedSpriteSurface.blit(tempImage, (0, 0), (96, 0, 32, 32))
+            tempImage = pygame.image.load(g.dataPath + '/sprites/' + str(self.selectedSpriteNum) + '.png').convert_alpha()
+            self.selectedSpriteSurface.blit(tempImage, (0, 0), (0, 128, 64, 64))
 
             # render it onto the ui
             self.surface.blit(self.selectedSpriteSurface, self.selectedSpriteRect)

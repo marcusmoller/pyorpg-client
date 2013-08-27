@@ -105,14 +105,22 @@ class GraphicsEngine():
             if MapItem[i].num is not None:
                 self.drawMapItem(i)
 
-        # players
+        # players (bottom)
         for i in range(0, len(g.playersOnMap)):
             self.drawPlayer(g.playersOnMap[i])
 
-        # npcs
+        # players (top)
+        for i in range(0, len(g.playersOnMap)):
+            self.drawPlayerTop(g.playersOnMap[i])
+
+        # npcs (bottom)
         #for i in range(0, g.npcHighIndex):
         for i in range(0, MAX_MAP_NPCS):
             self.drawNPC(i)
+
+        # npcs (top)
+        for i in range(0, MAX_MAP_NPCS):
+            self.drawNPCTop(i)
 
         # upper tiles
         for x in range(MAX_MAPX):
@@ -166,9 +174,13 @@ class GraphicsEngine():
 
         # load them all
         for i in range(0, spriteAmount):
-            tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(i) + ".bmp").convert()
-            tempImage.set_colorkey((0, 0, 0))
-            self.sprites.append(tempImage)
+            try:
+                tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(i) + ".png").convert_alpha()
+                tempImage.set_colorkey((0, 0, 0))
+                self.sprites.append(tempImage)
+            except:
+                # cant load file
+                continue
 
          # count how many sprites there are
         itemAmount = countFiles(g.dataPath + '/items/')
@@ -203,6 +215,39 @@ class GraphicsEngine():
     def drawSprite(self, sprite, x, y, rect):
         self.surface.blit(self.sprites[sprite], (x, y), rect)
 
+    def calculatePlrAnimFrame(self, offset, tileSize):
+        ''' returns the number of the current animation frame '''
+        offset = abs(offset)
+
+        anim = 0
+
+        # dividing by 8 because of 8 movement sprites
+        if offset < (tileSize/8 * 1):
+            anim = 1
+
+        elif offset < (tileSize/8 * 2):
+            anim = 2
+
+        elif offset < (tileSize/8 * 3):
+            anim = 3
+
+        elif offset < (tileSize/8 * 4):
+            anim = 4
+
+        elif offset < (tileSize/8 * 5):
+            anim = 5
+
+        elif offset < (tileSize/8 * 6):
+            anim = 6
+
+        elif offset < (tileSize/8 * 7):
+            anim = 7
+
+        elif offset < (tileSize/8 * 8):
+            anim = 8
+
+        return anim
+
     def drawPlayer(self, index):
         sprite = getPlayerSprite(index)
 
@@ -211,23 +256,56 @@ class GraphicsEngine():
         # check for animation
         anim = 0
         if Player[index].attacking == 0:
-            direction = getPlayerDir(index)
+            if Player[index].moving != 0:
+                direction = getPlayerDir(index)
 
-            if direction == DIR_UP:
-                if Player[index].yOffset < (SIZE_Y/2):
-                    anim = 1
+                if direction == DIR_UP or direction == DIR_DOWN:
+                    anim = self.calculatePlrAnimFrame(Player[index].yOffset, SIZE_Y)
 
-            elif direction == DIR_DOWN:
-                if Player[index].yOffset < (SIZE_Y/2 * -1):
-                    anim = 1
+                elif direction == DIR_LEFT or direction == DIR_RIGHT:
+                    anim = self.calculatePlrAnimFrame(Player[index].xOffset, SIZE_X)
 
-            elif direction == DIR_LEFT:
-                if Player[index].xOffset < (SIZE_X/2):
-                    anim = 1
+        elif (Player[index].attackTimer + 0.5) > tickCount:
+            # todo: attack animation
+            anim = 2
 
-            elif direction == DIR_RIGHT:
-                if Player[index].xOffset < (SIZE_X/2 * -1):
-                    anim = 1
+        # do we want to stop sprite from attacking?
+        if (Player[index].attackTimer + 1) < tickCount:
+            Player[index].attacking = 0
+            Player[index].attackTimer = 0
+
+        # rect(x, y, width, height)
+        rect = pygame.Rect(64*anim+16, 64*getPlayerDir(index)+32, 32, 32)
+
+        x = getPlayerX(index) * SIZE_X + Player[index].xOffset
+        y = getPlayerY(index) * SIZE_Y + Player[index].yOffset - 4
+
+        if y < 0:
+            y = 0
+            #rect.y = rect.y + (y * -1)
+
+        self.drawSprite(sprite, x, y, rect)
+
+        # todo: draw spell animations
+
+    def drawPlayerTop(self, index):
+        ''' draw the upper part of the 32x64 player '''
+        ''' comment this out of if you want to use 32x32 sprites only '''
+        sprite = getPlayerSprite(index)
+
+        tickCount = time.time()
+
+        # check for animation
+        anim = 0
+        if Player[index].attacking == 0:
+            if Player[index].moving != 0:
+                direction = getPlayerDir(index)
+
+                if direction == DIR_UP or direction == DIR_DOWN:
+                    anim = self.calculatePlrAnimFrame(Player[index].yOffset, SIZE_Y)
+
+                elif direction == DIR_LEFT or direction == DIR_RIGHT:
+                    anim = self.calculatePlrAnimFrame(Player[index].xOffset, SIZE_X)
 
         elif (Player[index].attackTimer + 0.5) > tickCount:
                 anim = 2
@@ -238,12 +316,13 @@ class GraphicsEngine():
             Player[index].attackTimer = 0
 
         # rect(x, y, width, height)
-        rect = pygame.Rect((getPlayerDir(index)*3+anim)*32, 0, 32, 32)
+        rect = pygame.Rect(64*anim+16, 64*getPlayerDir(index), 32, 32)
 
         x = getPlayerX(index) * SIZE_X + Player[index].xOffset
         y = getPlayerY(index) * SIZE_Y + Player[index].yOffset - 4
 
-        if y < 0:
+        y = y - 32
+        if y < 0 and y > -32:
             y = 0
             #rect.y = rect.y + (y * -1)
 
@@ -264,21 +343,11 @@ class GraphicsEngine():
         if mapNPC[mapNpcNum].attacking == 0:
             direction = mapNPC[mapNpcNum].dir
 
-            if direction == DIR_UP:
-                if mapNPC[mapNpcNum].yOffset < (SIZE_Y/2):
-                    anim = 1
+            if direction == DIR_UP or direction == DIR_DOWN:
+                    anim = self.calculatePlrAnimFrame(mapNPC[mapNpcNum].yOffset, SIZE_Y)
 
-            elif direction == DIR_DOWN:
-                if mapNPC[mapNpcNum].yOffset < (SIZE_Y/2 * -1):
-                    anim = 1
-
-            elif direction == DIR_LEFT:
-                if mapNPC[mapNpcNum].xOffset < (SIZE_X/2):
-                    anim = 1
-
-            elif direction == DIR_RIGHT:
-                if mapNPC[mapNpcNum].xOffset < (SIZE_X/2 * -1):
-                    anim = 1
+            elif direction == DIR_LEFT or direction == DIR_RIGHT:
+                    anim = self.calculatePlrAnimFrame(mapNPC[mapNpcNum].xOffset, SIZE_X)
 
         elif (mapNPC[mapNpcNum].attackTimer + 0.5) > tickCount:
             anim = 2
@@ -289,13 +358,58 @@ class GraphicsEngine():
             mapNPC[mapNpcNum].attackTimer = 0
 
         # rect(x, y, width, height)
-        rect = pygame.Rect((mapNPC[mapNpcNum].dir*3+anim)*32, 0, 32, 32)
+        rect = pygame.Rect(64*anim+16, 64*mapNPC[mapNpcNum].dir+32, 32, 32)
 
         x = mapNPC[mapNpcNum].x * SIZE_X + mapNPC[mapNpcNum].xOffset
         y = mapNPC[mapNpcNum].y * SIZE_Y + mapNPC[mapNpcNum].yOffset - 4
 
         # check if out of bounds because of y offset
         if y < 0:
+            y = 0
+            #rect.y = rect.y + (y * -1)
+
+        self.drawSprite(sprite, x, y, rect)
+
+        # todo: draw spell animations
+
+    def drawNPCTop(self, mapNpcNum):
+        if mapNPC[mapNpcNum].num is None:
+            return
+
+        tickCount = time.time()
+
+        sprite = NPC[mapNPC[mapNpcNum].num].sprite
+
+        # check for animation
+        anim = 0
+        if mapNPC[mapNpcNum].attacking == 0:
+            direction = mapNPC[mapNpcNum].dir
+
+            if direction == DIR_UP or direction == DIR_DOWN:
+                    anim = self.calculatePlrAnimFrame(mapNPC[mapNpcNum].yOffset, SIZE_Y)
+
+            elif direction == DIR_LEFT or direction == DIR_RIGHT:
+                    anim = self.calculatePlrAnimFrame(mapNPC[mapNpcNum].xOffset, SIZE_X)
+
+        elif (mapNPC[mapNpcNum].attackTimer + 0.5) > tickCount:
+            anim = 2
+
+        # do we want to stop sprite from attacking?
+        if (mapNPC[mapNpcNum].attackTimer + 1) < tickCount:
+            mapNPC[mapNpcNum].attacking = 0
+            mapNPC[mapNpcNum].attackTimer = 0
+
+        # rect(x, y, width, height)
+        rect = pygame.Rect(64*anim+16, 64*mapNPC[mapNpcNum].dir, 32, 32)
+
+        x = mapNPC[mapNpcNum].x * SIZE_X + mapNPC[mapNpcNum].xOffset
+        y = mapNPC[mapNpcNum].y * SIZE_Y + mapNPC[mapNpcNum].yOffset - 4
+
+        # set on top of bottom
+        y = y - 32
+
+        # check if out of bounds because of y offset
+        if y < 0 and y > -32:
             y = 0
             #rect.y = rect.y + (y * -1)
 
@@ -340,7 +454,7 @@ class GraphicsEngine():
 
         # center text
         textX = getPlayerX(index) * PIC_X + Player[index].xOffset + (PIC_X//2) - (textSize[0]/2)
-        textY = getPlayerY(index) * PIC_Y + Player[index].yOffset - (PIC_Y//2) - 4
+        textY = getPlayerY(index) * PIC_Y + Player[index].yOffset - (2*PIC_Y//2) - 4
 
         # make sure text isnt out of screen
         if textY <= 0:

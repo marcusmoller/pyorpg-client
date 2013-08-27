@@ -124,8 +124,8 @@ ITEM_TYPE_SPELL       = 13
 
 # direction constants
 DIR_UP = 0
-DIR_DOWN = 1
-DIR_LEFT = 2
+DIR_LEFT = 1
+DIR_DOWN = 2
 DIR_RIGHT = 3
 
 # player movement

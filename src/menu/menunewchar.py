@@ -95,11 +95,11 @@ class menuNewCharacter():
         self.labels = (self.labelInfoStats, self.labelHP, self.labelMP, self.labelSP, self.labelStr, self.labelDef, self.labelSpd, self.labelMag)
 
         # sprite image
-        self.spriteScale = 3
-        self.spriteImage = pygame.Surface((PIC_X * self.spriteScale, PIC_Y * self.spriteScale))
+        self.spriteScale = 2
+        self.spriteImage = pygame.Surface((2*PIC_X * self.spriteScale, 2*PIC_Y * self.spriteScale))
         self.spriteImageRect = self.spriteImage.get_rect()
         self.spriteImageRect.centerx = 800/2
-        self.spriteImageRect.centery = 600/2
+        self.spriteImageRect.centery = 600/2 - 20
 
         # GUI
         self.app = gui.App()
@@ -169,11 +169,11 @@ class menuNewCharacter():
         self.updateCharSprite(Class[self.classIndex].sprite)
 
     def updateCharSprite(self, sprite):
-        tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(sprite) + ".bmp").convert()
-        tempSprite = pygame.Surface((32, 32))
+        tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(sprite) + ".png").convert_alpha()
+        tempSprite = pygame.Surface((64, 64))
 
-        tempSprite.blit(tempImage, (0, 0), (128, 0, 32, 32))
+        tempSprite.blit(tempImage, (0, 0), (0, 128, 64, 64))
 
-        self.spriteImage = pygame.transform.scale(tempSprite, (PIC_X * self.spriteScale, PIC_Y * self.spriteScale))
+        self.spriteImage = pygame.transform.scale(tempSprite, (2*PIC_X * self.spriteScale, 2*PIC_Y * self.spriteScale))
         self.spriteImage.set_colorkey((0, 0, 0))
 
