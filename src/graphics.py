@@ -109,14 +109,14 @@ class GraphicsEngine():
         for i in range(0, len(g.playersOnMap)):
             self.drawPlayer(g.playersOnMap[i])
 
-        # players (top)
-        for i in range(0, len(g.playersOnMap)):
-            self.drawPlayerTop(g.playersOnMap[i])
-
         # npcs (bottom)
         #for i in range(0, g.npcHighIndex):
         for i in range(0, MAX_MAP_NPCS):
             self.drawNPC(i)
+
+        # players (top)
+        for i in range(0, len(g.playersOnMap)):
+            self.drawPlayerTop(g.playersOnMap[i])
 
         # npcs (top)
         for i in range(0, MAX_MAP_NPCS):
