@@ -659,6 +659,10 @@ class MapEditorGUI():
         # set PROPERTIES ctrl as default
         g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.toggleProperties(None)
 
+        # write hotkeys
+        addText('Tip: Hold SHIFT while placing a tile to fill the whole layer.', textColor.YELLOW)
+        addText('Tip: Hold CTRL while removing a tile to clear the whole layer.', textColor.YELLOW)
+
         self.draw()
 
     def draw(self):
@@ -722,6 +726,36 @@ class MapEditorGUI():
 
                 self.draw()
 
+    def fillLayer(self):
+        ''' fills the layer with the currently selected tile '''
+        # fill ground layer
+        if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+            for x in range(MAX_MAPX):
+                for y in range(MAX_MAPY):
+                    Map.tile[x][y].ground = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+
+
+        # clear fringe layer
+        elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
+            for x in range(MAX_MAPX):
+                for y in range(MAX_MAPY):
+                    Map.tile[x][y].fringe = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+
+    def clearLayer(self):
+        ''' clears the layer '''
+        # clear ground layer
+        if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+            for x in range(MAX_MAPX):
+                for y in range(MAX_MAPY):
+                    Map.tile[x][y].ground = None
+
+
+        # clear fringe layer
+        elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
+            for x in range(MAX_MAPX):
+                for y in range(MAX_MAPY):
+                    Map.tile[x][y].fringe = None
+
     def handleMouseDown(self, event):
         # todo: better mouse rightclick/leftclick
         # todo: the linking to g.gameEngine.graphicsEngine.gameGUI blabhalbha is WAY too stupid
@@ -739,6 +773,11 @@ class MapEditorGUI():
                 y = (g.cursorY-16) // PIC_Y
 
                 if self.state == PLACE_TILE:
+
+                    # check if shift is down
+                    if pygame.key.get_mods() & KMOD_SHIFT:
+                        self.fillLayer()
+                        return
 
                     if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
                         Map.tile[x][y].ground = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
@@ -775,6 +814,10 @@ class MapEditorGUI():
                 y = (g.cursorY-16) // PIC_Y
 
                 if self.state == PLACE_TILE:
+                    if pygame.key.get_mods() & KMOD_CTRL:
+                        self.clearLayer()
+                        return
+
                     # remove tile
                     Map.tile[x][y].ground = None
                     Map.tile[x][y].mask = 0
