@@ -322,7 +322,7 @@ class GraphicsEngine():
         y = getPlayerY(index) * SIZE_Y + Player[index].yOffset - 4
 
         y = y - 32
-        if y < 0 and y > -32:
+        if y < -32 and y > -32:
             y = 0
             #rect.y = rect.y + (y * -1)
 
@@ -409,7 +409,7 @@ class GraphicsEngine():
         y = y - 32
 
         # check if out of bounds because of y offset
-        if y < 0 and y > -32:
+        if y < -32 and y > -32:
             y = 0
             #rect.y = rect.y + (y * -1)
 
