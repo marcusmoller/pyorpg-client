@@ -1,4 +1,4 @@
-from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_MAP_ITEMS, MAX_NPCS, MAX_MAP_NPCS
+from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_MAP_ITEMS, MAX_NPCS, MAX_MAP_NPCS, MAX_SPELLS, MAX_TRADES, MAX_SHOPS
 import pygame
 
 # Public data structures
@@ -150,6 +150,20 @@ class ItemClass():
         self.data2 = 0
         self.data3 = 0
 
+class SpellClass():
+    def __init__(self):
+        self.name = ''
+        self.pic = None
+
+        self.reqMp = None
+        self.reqClass = None
+        self.reqLevel = None
+
+        self.type = None
+        self.data1 = 0
+        self.data2 = 0
+        self.data3 = 0
+
 class NPCClass():
     def __init__(self):
         self.name = ''
@@ -185,6 +199,22 @@ class MapNPCClass():
         self.attacking = False
         self.attackTimer = 0
 
+class TradeItemClass():
+    def __init__(self):
+        self.giveItem = None
+        self.giveValue = None
+
+        self.getItem = None
+        self.getValue = None
+
+class ShopClass():
+    def __init__(self):
+        self.name = ''
+        self.joinSay = ''
+        self.leaveSay = ''
+        self.fixesItems = False
+        self.tradeItem = [TradeItemClass() for i in range(MAX_TRADES)]
+
 
 
 # Data initializations
@@ -198,6 +228,8 @@ PlayerInv = [PlayerInvClass() for i in range(MAX_INV)]
 #todo: dont use a fixed size, please
 Class = [ClassClass() for i in range(99)]
 Item = [ItemClass() for i in range(MAX_ITEMS)]
+Spell = [SpellClass() for i in range(MAX_SPELLS)]
 NPC = [NPCClass() for i in range(MAX_NPCS)]
 MapItem = [MapItemClass() for i in range(MAX_MAP_ITEMS)]
 mapNPC = [MapNPCClass() for i in range(MAX_MAP_NPCS)]
+Shop = [ShopClass() for i in range(MAX_SHOPS)]

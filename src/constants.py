@@ -47,6 +47,10 @@ MAX_MAP_NPCS = 5      # the maximum amount of npcs allowed on a map
 MAX_INV = 9  # 50     # the amount of inventory slots
 MAX_MAP_ITEMS = 20    # the maxmium amount of items on a map
 MAX_LEVELS = 100      # the maximum player and npc level
+MAX_SPELLS = 255      # the maximum amount of spells
+MAX_PLAYER_SPELLS = 20 # the maximum amount of spells allowed by a player
+MAX_TRADES = 8        # the maximum amount of items allowed to be traded in a trade
+MAX_SHOPS = 50        # the maximum amount of shops allowed in the game
 
 # website
 GAME_WEBSITE = "https://powrtoch.org/pyorpg/"
@@ -144,6 +148,15 @@ NPC_BEHAVIOUR_ATTACKWHENATTACKED = 1
 NPC_BEHAVIOUR_FRIENDLY = 2
 NPC_BEHAVIOUR_SHOPKEEPER = 3
 NPC_BEHAVIOUR_GUARD = 4
+
+# spell constants
+SPELL_TYPE_ADDHP = 0
+SPELL_TYPE_ADDMP = 1
+SPELL_TYPE_ADDSP = 2
+SPELL_TYPE_SUBHP = 3
+SPELL_TYPE_SUBMP = 4
+SPELL_TYPE_SUBSP = 5
+SPELL_TYPE_GIVEITEM = 6
 
 # game editor constants
 EDITOR_NONE  = 0

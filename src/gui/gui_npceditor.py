@@ -586,6 +586,7 @@ class NPCEditorGUI():
         if self.state == 0:
             # update selected sprite surface
             tempImage = pygame.image.load(g.dataPath + '/sprites/' + str(self.selectedSpriteNum) + '.png').convert_alpha()
+            pygame.draw.rect(self.selectedSpriteSurface, (0, 0, 0), (0, 0, 65, 75))
             self.selectedSpriteSurface.blit(tempImage, (0, 0), (0, 128, 64, 64))
 
             # render it onto the ui

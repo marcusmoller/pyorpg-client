@@ -207,6 +207,13 @@ def handleMsg(text):
 
                 g.tcpConn.sendRequestEditItem()
 
+            if command[0] == '/spelleditor':
+                if getPlayerAccess(g.myIndex) < ADMIN_DEVELOPER:
+                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    return
+
+                g.tcpConn.sendRequestEditSpell()
+
             ''' enables the npc editor '''
             if command[0] == '/npceditor':
                 if getPlayerAccess(g.myIndex) < ADMIN_DEVELOPER:

@@ -321,6 +321,28 @@ class placeTileControl(gui.Table):
 
         self.value = gui.Form()
 
+        '''self.content = gui.Table()
+        self.scrollArea = gui.ScrollArea(self.content, width=270, height=372, hscrollbar=False)
+
+        self.tr()
+        self.td(self.scrollArea)
+
+        self.tr()
+        g = gui.Group(name="grpTileType")
+
+        self.content.td(gui.Label("Ground", color=UI_FONT_COLOR))
+        self.content.td(gui.Spacer(10, 0))
+        e = gui.Radio(g, value=1)
+        e.click()
+        self.content.td(e)
+
+        self.content.tr()
+        self.content.td(gui.Label("Fringe", color=UI_FONT_COLOR))
+        self.content.td(gui.Spacer(10, 0))
+        self.content.td(gui.Radio(g, value=2))
+
+        '''
+
         self.tr()
         g = gui.Group(name="grpTileType")
 
@@ -853,4 +875,5 @@ class MapEditorGUI():
 
         g.editor = EDITOR_NONE
         loadMap(getPlayerMap(g.myIndex))
+        print "load map?"
         initMapData()

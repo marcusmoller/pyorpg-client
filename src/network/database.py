@@ -9,6 +9,7 @@ def saveMap(mapNum):
 
 
 def loadMap(mapNum):
+    global Map
     Map = pickle.load(open(g.dataPath + "/maps/" + str(mapNum) + ".pom", 'rb'))
 
 
@@ -16,6 +17,7 @@ def clearPlayer(index):
     Player[index] = PlayerClass()
 
 def clearMap():
+    global Map
     Map = MapClass()
 
 def clearMapItem(index):

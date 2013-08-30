@@ -11,6 +11,7 @@ from utils.utils import countFiles
 
 from gui_mapeditor import MapEditorContainer, MapEditorGUI
 from gui_itemeditor import ItemEditorContainer, ItemEditorGUI
+from gui_spelleditor import SpellEditorContainer, SpellEditorGUI
 from gui_npceditor import NPCEditorContainer, NPCEditorGUI
 
 # gui states
@@ -228,6 +229,7 @@ class GUIContainer(gui.Container):
 
         self.mapEditorControl = MapEditorContainer(self.engine.mapEditorGUI, name="mapEditorCtrl")
         self.itemEditorControl = ItemEditorContainer(self.engine.itemEditorGUI, name='itemEditorCtrl')
+        self.spellEditorControl = SpellEditorContainer(self.engine.spellEditorGUI, name='spellEditorCtrl')
         self.npcEditorControl = NPCEditorContainer(self.engine.npcEditorGUI, name='npcEditorCtrl')
 
         # default controls
@@ -258,6 +260,20 @@ class GUIContainer(gui.Container):
 
     def closeItemEditor(self, value=0):
         self.remove(self.find('itemEditorCtrl'))
+
+        # add ui
+        self.add(self.uiCtrl, 512, 16)
+
+    # spell editor
+    def openSpellEditor(self, value=0):
+        self.add(self.spellEditorControl, 512, 16)
+        g.canMoveNow = False
+
+        # close ui
+        self.remove(self.find('uiCtrl'))
+
+    def closeSpellEditor(self, value=0):
+        self.remove(self.find('spellEditorCtrl'))
 
         # add ui
         self.add(self.uiCtrl, 512, 16)
@@ -306,6 +322,7 @@ class GameGUI():
         # game GUIs
         self.mapEditorGUI = MapEditorGUI(g.guiSurface)
         self.itemEditorGUI = ItemEditorGUI(g.guiSurface)
+        self.spellEditorGUI = SpellEditorGUI(g.guiSurface)
         self.npcEditorGUI = NPCEditorGUI(g.guiSurface)
 
         # GUI
@@ -393,6 +410,9 @@ class GameGUI():
 
         elif self.state == GUI_ITEMEDITOR:
             self.itemEditorGUI.update(event)
+
+        elif self.state == GUI_SPELLEDITOR:
+            self.spellEditorGUI.update(event)
 
         elif self.state == GUI_NPCEDITOR:
             self.npcEditorGUI.update(event)
