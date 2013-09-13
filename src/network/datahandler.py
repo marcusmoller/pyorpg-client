@@ -118,6 +118,9 @@ class DataHandler():
         elif packetType == ServerPackets.SSpellEditor:
             self.handleSpellEditor()
 
+        elif packetType == ServerPackets.SUpdateSpell:
+            self.handleUpdateSpell(jsonData)
+
         elif packetType == ServerPackets.SEditMap:
             self.handleEditMap()
 
@@ -481,6 +484,14 @@ class DataHandler():
         g.gameEngine.graphicsEngine.gameGUI.guiContainer.openSpellEditor()
         g.gameEngine.graphicsEngine.gameGUI.setState(6)
         g.gameEngine.graphicsEngine.gameGUI.spellEditorGUI.init()
+
+    def handleUpdateSpell(self, jsonData):
+        spellNum = jsonData[0]['spellnum']
+
+        # update everything
+        Spell[spellNum].name = jsonData[0]['spellname']
+        Spell[spellNum].pic = jsonData[0]['pic']
+        Spell[spellNum].reqMp = jsonData[0]['reqmp']
 
     def handleEditMap(self):
         ''' called when server allows player to edit the map '''

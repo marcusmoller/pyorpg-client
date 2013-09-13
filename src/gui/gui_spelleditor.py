@@ -63,7 +63,7 @@ class OpenSpellDialog(gui.Dialog):
         self.clearList()
         for i in range(MAX_SPELLS):
             if Spell[i].name != '':
-                self.addItem(str(i) + ' - "' + Spell[i].name + '"')
+                self.addItem(str(i) + ' - "' + str(Spell[i].name) + '"')
 
         self.spellList.resize()
         self.spellList.repaint()
@@ -88,7 +88,7 @@ class DataGiveItem(gui.Table):
         self.td(self.lblItemNum)
 
         self.tr()
-        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataDur')
+        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataItemNum')
         e.connect(gui.CHANGE, self.updateLabelItemNum, e)
         self.td(e)
 
@@ -96,11 +96,11 @@ class DataGiveItem(gui.Table):
         self.td(gui.Spacer(10, 20))
 
         self.tr()
-        self.lblStr = gui.Label('Strength: 0', color=UI_FONT_COLOR)
+        self.lblStr = gui.Label('Item Value: 0', color=UI_FONT_COLOR)
         self.td(self.lblStr)
 
         self.tr()
-        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataStr')
+        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataItemVal')
         e.connect(gui.CHANGE, self.updateLabelStr, e)
         self.td(e)
 
@@ -137,8 +137,8 @@ class SpellEditorContainer(gui.Container):
         self.engine = engine
         self.value = gui.Form()
 
-        # item editor state
-        self.itemNum = None
+        # spell editor state
+        self.spellNum = None
 
         # dialogs
         openSpellDialog = OpenSpellDialog(self)
@@ -188,7 +188,7 @@ class SpellEditorContainer(gui.Container):
 
         self.tBottom.tr()
         self.saveButton = gui.Button("Add Spell", width=100, height=40)
-        self.saveButton .connect(gui.CLICK, self.saveItem, None)
+        self.saveButton .connect(gui.CLICK, self.saveSpell, None)
         self.tBottom.td(self.saveButton)
 
         e = gui.Button("Cancel", width=100, height=40)
@@ -223,10 +223,10 @@ class SpellEditorContainer(gui.Container):
             self.value['selDataSpell'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
 
         # rename save button
-        self.saveButton.value = 'Save Item'
+        self.saveButton.value = 'Save Spell'
 
         # update item num
-        self.itemNum = itemNum
+        self.spellNum = itemNum
 
     def hideAll(self):
         if self.tData.find("dataVitalMod"):
@@ -249,33 +249,31 @@ class SpellEditorContainer(gui.Container):
             self.tData.tr()
             self.tData.td(self.dataGiveItem, valign=-1)
 
-    def saveItem(self, value):
-        typeValue = self.value['selItemType'].value
+    def saveSpell(self, value):
+        typeValue = self.value['selSpellType'].value
 
-        if self.itemNum == None:
-            # if it's a new item then find a new item id to use
-            for i in range(len(Item)):
-                if Item[i].name == '':
-                    self.itemNum = i
+        if self.spellNum is None:
+            # if it's a new spell then find a new spell id to use
+            for i in range(len(Spell)):
+                if Spell[i].name == '':
+                    self.spellNum = i
                     break
 
-        # save item properties
-        Item[self.itemNum].name = self.value['inpItemName'].value
-        Item[self.itemNum].pic = g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum
-        Item[self.itemNum].type = typeValue
+        # save spell properties
+        Spell[self.spellNum].name = self.value['inpSpellName'].value
+        Spell[self.spellNum].pic = g.gameEngine.graphicsEngine.gameGUI.spellEditorGUI.selectedSpriteNum
+        Spell[self.spellNum].type = typeValue
 
-        # save item data
-        if typeValue >= ITEM_TYPE_WEAPON and typeValue <= ITEM_TYPE_SHIELD:
-            Item[self.itemNum].data1 = self.value['selDataDur'].value
-            Item[self.itemNum].data2 = self.value['selDataStr'].value
+        # save spell data
+        if typeValue != SPELL_TYPE_GIVEITEM:
+            Spell[self.spellNum].data1 = self.value['selDataVit'].value
+        else:
+            Spell[self.spellNum].data1 = self.value['selDataItemNum'].value
+            Spell[self.spellNum].data2 = self.value['selDataItemVal'].value
 
-        elif typeValue >= ITEM_TYPE_POTIONADDHP and typeValue <= ITEM_TYPE_POTIONSUBSP:
-            Item[self.itemNum].data1 = self.value['selDataVit'].value
+        Spell[self.spellNum].data3 = 0
 
-        elif typeValue == ITEM_TYPE_SPELL:
-            Item[self.itemNum].data1 = self.value['selDataSpell'].value
-
-        g.tcpConn.sendSaveItem(self.itemNum)
+        g.tcpConn.sendSaveSpell(self.spellNum)
 
         # quit editor
         self.quitEditor()
