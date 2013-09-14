@@ -52,7 +52,7 @@ class OpenSpellDialog(gui.Dialog):
         listValue = self.spellList.value
 
         if listValue != None:
-            self.engine.openSpell(spellNum=listValue)
+            self.engine.requestOpenSpell(spellNum=listValue)
             self.close()
 
     def openDialog(self, value):
@@ -183,6 +183,10 @@ class SpellEditorContainer(gui.Container):
         # data input
         self.tData = gui.Table(width=272, height=75)
 
+        # - make vital mod default
+        self.tData.tr()
+        self.tData.td(self.dataVitalMod, valign=-1)
+
         # bottom buttons
         self.tBottom = gui.Table(width=272, height=200)
 
@@ -200,33 +204,33 @@ class SpellEditorContainer(gui.Container):
         self.add(self.tData, 0, 255)
         self.add(self.tBottom, 0, 368)
 
-    def openItem(self, itemNum):
-        # redraw selected sprite
-        g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum = Item[itemNum].pic
-        g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.draw()
+    def requestOpenSpell(self, spellNum):
+        # request edit spell
+        g.tcpConn.sendEditSpell(spellNum)
 
-        if self.tContent.find('inpItemName'):
-            self.value['inpItemName'].value = Item[itemNum].name
+    def openSpell(self, spellNum):
+        # redraw selected sprite
+        g.gameEngine.graphicsEngine.gameGUI.spellEditorGUI.selectedSpriteNum = Spell[spellNum].pic
+        g.gameEngine.graphicsEngine.gameGUI.spellEditorGUI.draw()
+
+        self.value['inpSpellName'].value = Spell[spellNum].name
 
         # set type and data
-        typeValue = Item[itemNum].type
-        self.value['selItemType'].value = typeValue
+        typeValue = Spell[spellNum].type
+        self.value['selSpellType'].value = typeValue
 
-        if typeValue >= ITEM_TYPE_WEAPON and typeValue <= ITEM_TYPE_SHIELD:
-            self.value['selDataDur'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
-            self.value['selDataStr'].value = int(0 if Item[itemNum].data2 is None else Item[itemNum].data2)
+        if typeValue != SPELL_TYPE_GIVEITEM:
+            self.value['selDataVit'].value = int(0 if Spell[spellNum].data1 is None else Spell[spellNum].data1)
 
-        elif typeValue >= ITEM_TYPE_POTIONADDHP and typeValue <= ITEM_TYPE_POTIONSUBSP:
-            self.value['selDataVit'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
-
-        elif typeValue == ITEM_TYPE_SPELL:
-            self.value['selDataSpell'].value = int(0 if Item[itemNum].data1 is None else Item[itemNum].data1)
+        else:
+            self.value['selDataItemNum'].value = int(0 if Spell[spellNum].data1 is None else Spell[spellNum].data1)
+            self.value['selDataItemVal'].value = int(0 if Spell[spellNum].data2 is None else Spell[spellNum].data2)
 
         # rename save button
         self.saveButton.value = 'Save Spell'
 
         # update item num
-        self.spellNum = itemNum
+        self.spellNum = spellNum
 
     def hideAll(self):
         if self.tData.find("dataVitalMod"):
@@ -295,7 +299,7 @@ class SpellEditorContainer(gui.Container):
         self.itemNum = None
 
         # selected sprite
-        g.gameEngine.graphicsEngine.gameGUI.itemEditorGUI.selectedSpriteNum = 0
+        g.gameEngine.graphicsEngine.gameGUI.spellEditorGUI.selectedSpriteNum = 0
 
         # reset everything on quit
         self.value['inpItemName'].value = ''

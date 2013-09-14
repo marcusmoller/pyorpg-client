@@ -118,6 +118,9 @@ class DataHandler():
         elif packetType == ServerPackets.SSpellEditor:
             self.handleSpellEditor()
 
+        elif packetType == ServerPackets.SEditSpell:
+            self.handleEditSpell(jsonData)
+
         elif packetType == ServerPackets.SUpdateSpell:
             self.handleUpdateSpell(jsonData)
 
@@ -484,6 +487,25 @@ class DataHandler():
         g.gameEngine.graphicsEngine.gameGUI.guiContainer.openSpellEditor()
         g.gameEngine.graphicsEngine.gameGUI.setState(6)
         g.gameEngine.graphicsEngine.gameGUI.spellEditorGUI.init()
+
+    def handleEditSpell(self, jsonData):
+        spellNum = jsonData[0]['spellnum']
+
+        # update spell
+        Spell[spellNum].name = jsonData[0]['spellname']
+        Spell[spellNum].pic = jsonData[0]['pic']
+        Spell[spellNum].type = jsonData[0]['type']
+
+        Spell[spellNum].reqMp = jsonData[0]['reqmp']
+        Spell[spellNum].reqClass = jsonData[0]['reqclass']
+        Spell[spellNum].reqLevel = jsonData[0]['reqlevel']
+
+        Spell[spellNum].data1 = jsonData[0]['data1']
+        Spell[spellNum].data2 = jsonData[0]['data2']
+        Spell[spellNum].data3 = jsonData[0]['data3']
+
+        # update the spell editor
+        g.gameEngine.graphicsEngine.gameGUI.guiContainer.spellEditorControl.openSpell(spellNum)
 
     def handleUpdateSpell(self, jsonData):
         spellNum = jsonData[0]['spellnum']
