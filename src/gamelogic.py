@@ -516,10 +516,10 @@ def castSpell(spellNum):
         addText('Not enough MP to cast ' + Spell[spellSelected].name + '.', textColor.BRIGHT_RED)
 
     if PlayerSpells[spellSelected] != None:
-        tickCount = time.time()
+        tickCount = time.time() * 1000
         if tickCount > Player[g.myIndex].attackTimer + 1000:
             if Player[g.myIndex].moving == 0:
-                # sendData
+                g.tcpConn.sendCastSpell(spellSelected)
                 Player[g.myIndex].attacking = 1
                 Player[g.myIndex].attackTimer = tickCount
                 Player[g.myIndex].castedSpell = True

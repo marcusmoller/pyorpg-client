@@ -465,7 +465,7 @@ class GameGUI():
     def handleSpellbookMouseClick(self, button, spellNum):
         # right click - cast spell
         if button == 3:
-            g.tcpConn.sendCastSpell(spellNum)
+            castSpell(spellNum)
             return
 
     ##############

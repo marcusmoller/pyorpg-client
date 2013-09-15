@@ -10,6 +10,7 @@ from database import *
 from packettypes import *
 from datahandler import *
 from utils.utils import *
+from gui.dialogs import alertMessageDialog
 from constants import *
 import global_vars as g
 from objects import *
@@ -67,8 +68,9 @@ class gameClientFactory(ClientFactory):
         return self.protocol
 
     def clientConnectionFailed(self, connector, reason):
+        errorMsg = reason.getErrorMessage().split(':')
+        alertMessageDialog('Unable to connect to server: ' + errorMsg[1] + errorMsg[2], 'An error occured')
         print reason.getErrorMessage()
-        reactor.stop()
 
     def clientConnectionLost(self, connector, reason):
         print reason.getErrorMessage()

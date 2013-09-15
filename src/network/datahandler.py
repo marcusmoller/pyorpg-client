@@ -76,6 +76,9 @@ class DataHandler():
         elif packetType == ServerPackets.SPlayerDir:
             self.handlePlayerDir(jsonData)
 
+        elif packetType == ServerPackets.SPlayerXY:
+            self.handlePlayerXY(jsonData)
+
         elif packetType == ServerPackets.SAttack:
             self.handleAttack(jsonData)
 
@@ -337,6 +340,18 @@ class DataHandler():
         direction = jsonData[0]["direction"]
 
         setPlayerDir(index, direction)
+
+    def handlePlayerXY(self, jsonData):
+        x = jsonData[0]['x']
+        y = jsonData[0]['y']
+
+        setPlayerX(g.myIndex, x)
+        setPlayerY(g.myIndex, y)
+
+        # make sure they arent walking
+        Player[g.myIndex].moving = 0
+        Player[g.myIndex].xOffset = 0
+        Player[g.myIndex].yOffset = 0
 
     def handleAttack(self, jsonData):
         i = jsonData[0]['attacker']
