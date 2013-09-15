@@ -16,6 +16,7 @@ class ClientPackets:
     CPlayerMove, \
     CPlayerDir,  \
     CUseItem, \
+    CTarget, \
     CAttack, \
     CUseStatPoint, \
     CPlayerInfoRequest, \
@@ -49,7 +50,7 @@ class ClientPackets:
     CWhosOnline, \
     CSetMotd, \
     CQuit        \
-    = range(49)
+    = range(50)
 
 
 class ServerPackets:

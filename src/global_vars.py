@@ -5,6 +5,8 @@ import os
 import pygame
 from pygame.locals import *
 
+from constants import TARGET_TYPE_NONE
+
 pygame.init()
 
 # connection
@@ -17,6 +19,8 @@ connector = None
 # player variables
 myIndex = None
 expToNextLvl = 0
+target = None
+targetType = TARGET_TYPE_NONE
 
 # gameloop
 inGame = False

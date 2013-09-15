@@ -504,6 +504,60 @@ def getPlayersOnMap():
                 g.playersOnMap.append(i)
 
 
+def castSpell():
+    # debug
+    spellSelected = 0
+
+    if spellSelected < 0 or spellSelected > MAX_SPELLS:
+        return
+
+    # check if player has enough mp
+    if getPlayerVital(g.myIndex, vitals.mp) < Spell[spellSelected].reqMp:
+        addText('Not enough MP to cast ' + Spell[spellSelected].name + '.', textColor.BRIGHT_RED)
+
+    if PlayerSpells[spellSelected] != None:
+        tickCount = time.time()
+        if tickCount > Player[g.myIndex].attackTimer + 1000:
+            if Player[g.myIndex].moving == 0:
+                # sendData
+                Player[g.myIndex].attacking = 1
+                Player[g.myIndex].attackTimer = tickCount
+                Player[g.myIndex].castedSpell = True
+
+            else:
+                addText('Cannot cast while walking!', textColor.BRIGHT_RED)
+
+    else:
+        addText('No spell here.', textColor.BRIGHT_RED)
+
+    # todo more
+
+def findTarget(x, y):
+    g.targetType = TARGET_TYPE_NONE
+
+    # check for player
+    for i in range(0, len(g.playersOnMap)):
+        if getPlayerMap(g.myIndex) == getPlayerMap(g.playersOnMap[i]):
+            if getPlayerX(g.playersOnMap[i]) == x and getPlayerY(g.playersOnMap[i]) == y:
+                if g.playersOnMap[i] != g.myIndex:
+                    # change target
+                    g.target = g.playersOnMap[i]
+                    g.targetType = TARGET_TYPE_PLAYER
+                    break
+
+    # check for npc
+    for i in range(0, MAX_MAP_NPCS):
+        if mapNPC[i].num is not None:
+            if mapNPC[i].x == x and mapNPC[i].y == y:
+                # change target
+                g.target = i
+                g.targetType = TARGET_TYPE_NPC
+                break
+
+    if g.targetType != TARGET_TYPE_NONE:
+        g.tcpConn.sendTarget(x, y)
+
+
 def clearTempTile():
     for x in range(MAX_MAPX):
         for y in range(MAX_MAPY):

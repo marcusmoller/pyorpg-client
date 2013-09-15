@@ -236,6 +236,10 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CUseItem, "invnum": invNum}])
         self.sendData(packet)
 
+    def sendTarget(self, x, y):
+        packet = json.dumps([{"packet": ClientPackets.CTarget, 'x': x, 'y': y}])
+        self.sendData(packet)
+
     def sendInfoRequest(self, plrName):
         packet = json.dumps([{"packet": ClientPackets.CPlayerInfoRequest, "name": plrName}])
         self.sendData(packet)

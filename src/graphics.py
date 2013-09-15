@@ -31,6 +31,8 @@ class GraphicsEngine():
 
         # surfaces
         self.tileSurface = pygame.image.load(g.dataPath + "/tilesets/Tiles1.png").convert()
+        self.shadowSurface = pygame.image.load(g.dataPath + "/sprites/shadow.png").convert_alpha()
+        self.targetSurface = pygame.image.load(g.dataPath + "/sprites/target.png").convert_alpha()
         # todo: transparency
         #self.tileSurface.set_colorkey((0, 0, 255))
         self.tileOutlineSurface = pygame.image.load(g.dataPath + "/gui/editor_outline.bmp").convert()
@@ -215,6 +217,20 @@ class GraphicsEngine():
     def drawSprite(self, sprite, x, y, rect):
         self.surface.blit(self.sprites[sprite], (x, y), rect)
 
+    def drawShadow(self, x, y):
+        ''' render a shadow under the sprite '''
+        self.surface.blit(self.shadowSurface, (x, y))
+
+    def drawPlayerTarget(self, x, y):
+        if g.targetType == TARGET_TYPE_NONE:
+            return
+
+        rect = self.targetSurface.get_rect()
+        rect.centerx = x + (PIC_X / 2)
+        rect.y = y - 15
+
+        self.surface.blit(self.targetSurface, rect)
+
     def calculatePlrAnimFrame(self, offset, tileSize):
         ''' returns the number of the current animation frame '''
         offset = abs(offset)
@@ -284,6 +300,7 @@ class GraphicsEngine():
             y = 0
             #rect.y = rect.y + (y * -1)
 
+        self.drawShadow(x, y+18)
         self.drawSprite(sprite, x, y, rect)
 
         # todo: draw spell animations
@@ -328,6 +345,10 @@ class GraphicsEngine():
 
         self.drawSprite(sprite, x, y, rect)
 
+        # draw target
+        if g.targetType == TARGET_TYPE_PLAYER and index == g.target:
+            self.drawPlayerTarget(x, y)
+
         # todo: draw spell animations
 
     def drawNPC(self, mapNpcNum):
@@ -368,6 +389,7 @@ class GraphicsEngine():
             y = 0
             #rect.y = rect.y + (y * -1)
 
+        self.drawShadow(x, y+18)
         self.drawSprite(sprite, x, y, rect)
 
         # todo: draw spell animations
@@ -414,6 +436,10 @@ class GraphicsEngine():
             #rect.y = rect.y + (y * -1)
 
         self.drawSprite(sprite, x, y, rect)
+
+        # draw target
+        if g.targetType == TARGET_TYPE_NPC and mapNpcNum == g.target:
+            self.drawPlayerTarget(x, y)
 
         # todo: draw spell animations
 

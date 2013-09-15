@@ -1,4 +1,4 @@
-from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_MAP_ITEMS, MAX_NPCS, MAX_MAP_NPCS, MAX_SPELLS, MAX_TRADES, MAX_SHOPS
+from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_MAP_ITEMS, MAX_NPCS, MAX_MAP_NPCS, MAX_SPELLS, MAX_PLAYER_SPELLS, MAX_TRADES, MAX_SHOPS
 import pygame
 
 # Public data structures
@@ -224,6 +224,7 @@ TempTile = [[TempTileClass() for i in range(MAX_MAPY)] for i in range(MAX_MAPX)]
 
 Player = [PlayerClass() for i in range(MAX_PLAYERS)]
 PlayerInv = [PlayerInvClass() for i in range(MAX_INV)]
+PlayerSpells = [None for i in range(MAX_PLAYER_SPELLS)]
 
 #todo: dont use a fixed size, please
 Class = [ClassClass() for i in range(99)]

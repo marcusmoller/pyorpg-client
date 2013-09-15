@@ -377,6 +377,10 @@ class GameGUI():
     def update(self, event):
         self.app.event(event)
 
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # mouse click
+            self.handleMouseClick(event.button)
+
         if event.type == KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if self.guiContainer.chatCtrl.focused == False:
@@ -401,7 +405,8 @@ class GameGUI():
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         # mouse click
-                        self.handleMouseClick(event.button, i)
+                        self.handleInventoryMouseClick(event.button, i)
+
                 else:
                     self.hoveredInventorySlot = None
 
@@ -417,8 +422,20 @@ class GameGUI():
         elif self.state == GUI_NPCEDITOR:
             self.npcEditorGUI.update(event)
 
-    def handleMouseClick(self, button, invNum):
-        # right click
+    def handleMouseClick(self, button):
+        # left click - target npc/player
+        if button == 1:
+            # calculate mouse tile pos
+            x = (g.cursorX-16) // PIC_X
+            y = (g.cursorY-16) // PIC_Y
+
+            # find target
+            findTarget(x, y)
+
+            return
+
+    def handleInventoryMouseClick(self, button, invNum):
+        # right click - use inventory item
         if button == 3:
             g.tcpConn.sendUseItem(invNum)
             return
