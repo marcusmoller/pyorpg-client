@@ -18,6 +18,7 @@ from gui_npceditor import NPCEditorContainer, NPCEditorGUI
 GUI_STATS = 0
 GUI_INVENTORY = 1
 GUI_EQUIPMENT = 2
+GUI_SPELLBOOK = 3
 
 GUI_MAPEDITOR = 3
 GUI_ITEMEDITOR = 4
@@ -203,8 +204,9 @@ class uiContainer(gui.Container):
         self.updateTitle('Inventory')
 
     def toggleSpellbook(self, value):
-        self.engine.setState(GUI_STATS)
+        self.engine.setState(GUI_SPELLBOOK)
         self.updateTitle('Spellbook')
+        g.tcpConn.sendRequestSpells()
 
     def toggleSettings(self, value):
         self.engine.setState(GUI_STATS)
@@ -316,6 +318,13 @@ class GameGUI():
 
         self.emptySlotSurface = pygame.image.load(g.dataPath + '/gui/empty_slot.png').convert_alpha()
 
+        # spellbook boxes
+        # inventory boxes
+        self.spellbookBoxes = []
+        for y in range(0, 3):
+            for x in range(0, 3):
+                self.spellbookBoxes.append(pygame.Rect((524 + x*(66+24) + 1, 90 + y*(66+24) + 1, 64, 64)))
+
         # inventory tooltip
         self.tooltipRect = pygame.Rect((0, 0, 128, 64))
 
@@ -341,14 +350,21 @@ class GameGUI():
 
         # init
         self.itemSprites = []
-        self.loadItemSprites()
+        self.spellSprites = []
+        self.loadSprites()
 
-    def loadItemSprites(self):
+    def loadSprites(self):
         spritesAmount = countFiles(g.dataPath + '/items/')
 
         for i in range(spritesAmount):
             tempImage = pygame.image.load(g.dataPath + '/items/' + str(i) + '.png').convert_alpha()
             self.itemSprites.append(tempImage)
+
+        spritesAmount = countFiles(g.dataPath + '/spells/')
+
+        for i in range(spritesAmount):
+            tempImage = pygame.image.load(g.dataPath + '/spells/' + str(i) + '.bmp').convert()
+            self.spellSprites.append(tempImage)
 
     def setState(self, state):
         ''' sets UI engine state '''
@@ -377,10 +393,6 @@ class GameGUI():
     def update(self, event):
         self.app.event(event)
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            # mouse click
-            self.handleMouseClick(event.button)
-
         if event.type == KEYDOWN:
             if event.key == pygame.K_RETURN:
                 if self.guiContainer.chatCtrl.focused == False:
@@ -397,7 +409,12 @@ class GameGUI():
                     if not self.quitDialog.is_open():
                         self.quitDialog.open()
 
-        if self.state == GUI_INVENTORY:
+        if self.state == GUI_STATS or self.state == GUI_INVENTORY or self.state == GUI_SPELLBOOK:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                # mouse click
+                self.handleMouseTargetClick(event.button)
+
+        elif self.state == GUI_INVENTORY:
             # show item information
             for i in range(len(self.inventoryBoxes)):
                 if self.inventoryBoxes[i].collidepoint(g.cursorX, g.cursorY):
@@ -422,17 +439,19 @@ class GameGUI():
         elif self.state == GUI_NPCEDITOR:
             self.npcEditorGUI.update(event)
 
-    def handleMouseClick(self, button):
+    def handleMouseTargetClick(self, button):
         # left click - target npc/player
         if button == 1:
-            # calculate mouse tile pos
-            x = (g.cursorX-16) // PIC_X
-            y = (g.cursorY-16) // PIC_Y
+            # make sure we are clicking inside the game
+            if g.gameSurface.get_rect().collidepoint((g.cursorX, g.cursorY)):
+                # calculate mouse tile pos
+                x = (g.cursorX-16) // PIC_X
+                y = (g.cursorY-16) // PIC_Y
 
-            # find target
-            findTarget(x, y)
+                # find target
+                findTarget(x, y)
 
-            return
+                return
 
     def handleInventoryMouseClick(self, button, invNum):
         # right click - use inventory item
@@ -463,6 +482,16 @@ class GameGUI():
 
             self.drawInventoryUI()
 
+        elif self.state == GUI_SPELLBOOK:
+            g.guiSurface.blit(self.background, (513, 17), (513, 17, 274, 365))
+
+            # todo: render the empty slots once
+            self.drawSpellbookSlots()
+
+            self.drawSpellbookUI()
+
+        # EDITORS
+
         elif self.state == GUI_MAPEDITOR:
             self.mapEditorGUI.drawElements()
 
@@ -471,6 +500,9 @@ class GameGUI():
 
         elif self.state == GUI_NPCEDITOR:
             self.npcEditorGUI.drawElements()
+
+        elif self.state == GUI_SPELLEDITOR:
+            self.spellEditorGUI.drawElements()
 
         g.screenSurface.blit(g.guiSurface, (0, 0))
 
@@ -492,6 +524,13 @@ class GameGUI():
         for i in range(len(self.inventoryBoxes)):
             if self.inventoryBoxes[i].collidepoint(g.cursorX, g.cursorY):
                 self.drawInventoryTooltip(i)
+
+    def drawSpellbookUI(self):
+        self.drawSpellbook()
+
+        for i in range(len(self.spellbookBoxes)):
+            if self.spellbookBoxes[i].collidepoint(g.cursorX, g.cursorY):
+                self.drawSpellbookTooltip(i)
 
     #############
     # FUNCTIONS #
@@ -855,3 +894,218 @@ class GameGUI():
 
             # render tooltip on surface
             g.guiSurface.blit(tooltipSurface, self.tooltipRect)
+
+    def drawSpellbookSlots(self):
+        ''' render the empty inventory slots before the items '''
+        for y in range(0, 3):
+            for x in range(0, 3):
+                tempPos = (524 + x*(66+24), 90 + y*(66+24))
+                g.guiSurface.blit(self.emptySlotSurface, tempPos)
+
+    def drawSpellbook(self):
+        ''' render the items within the empty spellbook slots '''
+        curSpellSlot = 0
+
+        for y in range(0, 3):
+            for x in range(0, 3):
+                if PlayerSpells[curSpellSlot] is not None:
+                    spellNum = PlayerSpells[curSpellSlot]
+                    spellPic = Spell[spellNum].pic
+
+                    tempSurface = self.spellSprites[spellPic]
+                    tempSurface = pygame.transform.scale2x(tempSurface)
+
+                    tempPos = (524 + x*(66+24) + 1, 90 + y*(66+24) + 1)
+
+                    g.guiSurface.blit(tempSurface, tempPos, (0, 0, 64, 64))
+
+                curSpellSlot += 1
+
+                # todo: make grey if out of mana
+
+    def drawSpellbookTooltip(self, spellSlot):
+        ''' draw a tooltip when the mouse is hovering over a spell in the spellbook '''
+
+        def generateTooltip(spellNum, spellSlot):
+            # determine rect size
+            spellName = Spell[spellNum].name
+            textSize = g.tooltipFont.size(spellName)
+
+            # determine name color
+            spellType = Spell[spellNum].type
+
+            if spellType != SPELL_TYPE_GIVEITEM:
+                nameColor = textColor.WHITE
+                print 
+
+                # create strings
+                strReqMp = str(Spell[spellNum].reqMp) + ' Mana'
+                if spellType == SPELL_TYPE_ADDHP:
+                    strEffect = 'Effect: +' + str(Spell[spellNum].data1) + ' HP'
+                elif spellType == SPELL_TYPE_ADDMP:
+                    strEffect = 'Effect: +' + str(Spell[spellNum].data1) + ' MP'
+                elif spellType == SPELL_TYPE_ADDSP:
+                    strEffect = 'Effect: +' + str(Spell[spellNum].data1) + ' SP'
+                elif spellType == SPELL_TYPE_SUBHP:
+                    strEffect = 'Effect: -' + str(Spell[spellNum].data1) + ' HP'
+                elif spellType == SPELL_TYPE_SUBMP:
+                    strEffect = 'Effect: -' + str(Spell[spellNum].data1) + ' MP'
+                elif spellType == SPELL_TYPE_SUBSP:
+                    strEffect = 'Effect: -' + str(Spell[spellNum].data1) + ' SP'
+
+                strReqMpSize = g.tooltipFont.size(strReqMp)
+                strEffectSize = g.tooltipFont.size(strEffect)
+
+                # get largest width/height
+                if strReqMpSize[0] > strEffectSize[0]:
+                    infoTextSize = strReqMpSize
+                else:
+                    infoTextSize = strEffectSize
+
+                if textSize[0] > infoTextSize[0]:
+                    tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + strReqMpSize[1] + strEffectSize[1] + 10))
+                else:
+                    tempSurface = pygame.Surface((infoTextSize[0] + 10, textSize[1] + strReqMpSize[1] + strEffectSize[1] + 10))
+
+                tempSurface.fill((0, 0, 0))
+
+                # border
+                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
+
+                # render information
+                # - name
+                img = g.tooltipFont.render(spellName, 0, nameColor)
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = tempSurface.get_rect().h / 4
+
+                tempSurface.blit(img, imgRect)
+
+                # - mana required
+                img = g.tooltipFont.render(strReqMp, 0, textColor.BRIGHT_BLUE)
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = (tempSurface.get_rect().h / 4) * 2
+
+                tempSurface.blit(img, imgRect)
+
+                # - effect
+                img = g.tooltipFont.render(strEffect, 0, textColor.YELLOW)
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = (tempSurface.get_rect().h / 4) * 3
+
+                tempSurface.blit(img, imgRect)
+
+            return tempSurface
+
+
+        if PlayerSpells[spellSlot] != None:
+            # generate tooltip
+            spellNum = PlayerSpells[spellSlot]
+            tooltipSurface = generateTooltip(spellNum, spellSlot)
+
+            # position the tooltip at the mouse
+            self.tooltipRect.x = g.cursorX
+            self.tooltipRect.y = g.cursorY - tooltipSurface.get_rect().h
+
+            # render tooltip on surface
+            g.guiSurface.blit(tooltipSurface, self.tooltipRect)
+
+            '''
+
+                # draw border
+                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
+
+                # render information
+                # - name
+                img = g.tooltipFont.render(itemName, 0, nameColor)
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = tempSurface.get_rect().h / 4
+
+                tempSurface.blit(img, imgRect)
+
+                # - strength
+                img = g.tooltipFont.render(strString, 0, (255, 255, 255))
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = (tempSurface.get_rect().h / 4) * 2
+
+                tempSurface.blit(img, imgRect)
+
+                # - durability
+                img = g.tooltipFont.render(strDurability, 0, (255, 255, 255))
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = (tempSurface.get_rect().h / 4) * 3
+
+                tempSurface.blit(img, imgRect)
+
+            elif itemType == ITEM_TYPE_CURRENCY:
+                nameColor = textColor.YELLOW
+
+                strValue = 'Amount: ' + str(getPlayerInvItemValue(g.myIndex, itemSlot))
+                strValueSize = g.tooltipFont.size(strValue)
+
+                # draw surface
+                if textSize[0] > strValueSize[0]:
+                    tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + strValueSize[1] + 10))
+                else:
+                    tempSurface = pygame.Surface((strValueSize[0] + 10, textSize[1] + strValueSize[1] + 10))
+
+                tempSurface.fill((0, 0, 0))
+
+                # draw border
+                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
+
+                # render information
+                # - name
+                img = g.tooltipFont.render(itemName, 0, nameColor)
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = tempSurface.get_rect().h / 3
+
+                tempSurface.blit(img, imgRect)
+
+                # - value
+                img = g.tooltipFont.render(strValue, 0, (255, 255, 255))
+                imgRect = img.get_rect()
+                imgRect.x = 5
+                imgRect.centery = (tempSurface.get_rect().h / 3) * 2
+
+                tempSurface.blit(img, imgRect)
+
+            else:
+                nameColor = textColor.GREY
+
+                # draw surface
+                tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + 10))
+                tempSurface.fill((0, 0, 0))
+
+                # draw border
+                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
+
+
+                # render information
+                # - name
+                img = g.tooltipFont.render(itemName, 0, nameColor)
+                imgRect = img.get_rect()
+                imgRect.centerx = tempSurface.get_rect().w / 2
+                imgRect.centery = tempSurface.get_rect().h / 2
+
+                tempSurface.blit(img, imgRect)
+
+            return tempSurface
+
+        if getPlayerInvItemNum(g.myIndex, itemSlot) != None:
+            # generate tooltip
+            itemNum = getPlayerInvItemNum(g.myIndex, itemSlot)
+            tooltipSurface = generateTooltip(itemNum, itemSlot)
+
+            # position the tooltip at the mouse
+            self.tooltipRect.x = g.cursorX
+            self.tooltipRect.y = g.cursorY - tooltipSurface.get_rect().h
+
+            # render tooltip on surface
+            g.guiSurface.blit(tooltipSurface, self.tooltipRect)'''

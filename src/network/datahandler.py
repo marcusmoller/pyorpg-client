@@ -40,6 +40,9 @@ class DataHandler():
         elif packetType == ServerPackets.SInGame:
             self.handleInGame()
 
+        elif packetType == ServerPackets.SSpells:
+            self.handlePlayerSpells(jsonData)
+
         elif packetType == ServerPackets.SPlayerInv:
             self.handlePlayerInv(jsonData)
 
@@ -221,6 +224,13 @@ class DataHandler():
 
         # TODO: fix this
         initMapData()
+
+    def handlePlayerSpells(self, jsonData):
+        for i in range(len(jsonData)-1):
+            slot = jsonData[i+1]['slot']
+            PlayerSpells[slot] = jsonData[i+1]['spellnum']
+
+        print PlayerSpells
 
     def handlePlayerInv(self, jsonData):
         for i in range(len(jsonData)-1):
@@ -513,7 +523,11 @@ class DataHandler():
         # update everything
         Spell[spellNum].name = jsonData[0]['spellname']
         Spell[spellNum].pic = jsonData[0]['pic']
+        Spell[spellNum].type = jsonData[0]['type']
+
         Spell[spellNum].reqMp = jsonData[0]['reqmp']
+
+        Spell[spellNum].data1 = jsonData[0]['data1']
 
     def handleEditMap(self):
         ''' called when server allows player to edit the map '''

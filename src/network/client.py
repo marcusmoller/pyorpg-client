@@ -260,6 +260,10 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CSaveItem, 'itemnum': itemNum, 'itemname': Item[itemNum].name, 'itempic': Item[itemNum].pic, 'itemtype': Item[itemNum].type, 'itemdata1': Item[itemNum].data1, 'itemdata2': Item[itemNum].data2, 'itemdata3': Item[itemNum].data3}])
         self.sendData(packet)
 
+    def sendRequestSpells(self):
+        packet = json.dumps([{"packet": ClientPackets.CSpells}])
+        self.sendData(packet)
+
     def sendRequestEditSpell(self):
         packet = json.dumps([{"packet": ClientPackets.CRequestEditSpell}])
         self.sendData(packet)
