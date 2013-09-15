@@ -448,9 +448,6 @@ class GraphicsEngine():
                     if mapNPC[mapNpcNum].spellAnimations[i].spellNum is not None:
                         rect = pygame.Rect((mapNPC[mapNpcNum].spellAnimations[i].framePointer * SIZE_X, 0, 32, 32))
                         self.drawSpell(Spell[spellNum].pic, x, y, rect)
-                        print 'draw spell'
-
-                    print mapNPC[mapNpcNum].spellAnimations[i].framePointer
 
     def drawNPCTop(self, mapNpcNum):
         if mapNPC[mapNpcNum].num is None:

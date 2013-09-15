@@ -233,8 +233,6 @@ class DataHandler():
             slot = jsonData[i+1]['slot']
             PlayerSpells[slot] = jsonData[i+1]['spellnum']
 
-        print PlayerSpells
-
     def handlePlayerInv(self, jsonData):
         for i in range(len(jsonData)-1):
             if jsonData[i+1]['itemnum'] is not None:

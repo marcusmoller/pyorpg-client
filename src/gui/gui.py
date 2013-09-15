@@ -17,8 +17,7 @@ from gui_npceditor import NPCEditorContainer, NPCEditorGUI
 # gui states
 GUI_STATS = 0
 GUI_INVENTORY = 1
-GUI_EQUIPMENT = 2
-GUI_SPELLBOOK = 3
+GUI_SPELLBOOK = 2
 
 GUI_MAPEDITOR = 3
 GUI_ITEMEDITOR = 4
