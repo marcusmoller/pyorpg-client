@@ -414,18 +414,22 @@ class GameGUI():
                 # mouse click
                 self.handleMouseTargetClick(event.button)
 
-        elif self.state == GUI_INVENTORY:
+        if self.state == GUI_INVENTORY:
             # show item information
             for i in range(len(self.inventoryBoxes)):
                 if self.inventoryBoxes[i].collidepoint(g.cursorX, g.cursorY):
-                    self.hoveredInventorySlot = i
 
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         # mouse click
                         self.handleInventoryMouseClick(event.button, i)
 
-                else:
-                    self.hoveredInventorySlot = None
+        elif self.state == GUI_SPELLBOOK:
+            # show item information
+            for i in range(len(self.spellbookBoxes)):
+                if self.spellbookBoxes[i].collidepoint(g.cursorX, g.cursorY):
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        # mouse click
+                        self.handleSpellbookMouseClick(event.button, i)
 
         elif self.state == GUI_MAPEDITOR:
             self.mapEditorGUI.update(event)
@@ -457,6 +461,12 @@ class GameGUI():
         # right click - use inventory item
         if button == 3:
             g.tcpConn.sendUseItem(invNum)
+            return
+
+    def handleSpellbookMouseClick(self, button, spellNum):
+        # right click - cast spell
+        if button == 3:
+            g.tcpConn.sendCastSpell(spellNum)
             return
 
     ##############
@@ -936,7 +946,6 @@ class GameGUI():
 
             if spellType != SPELL_TYPE_GIVEITEM:
                 nameColor = textColor.WHITE
-                print 
 
                 # create strings
                 strReqMp = str(Spell[spellNum].reqMp) + ' Mana'

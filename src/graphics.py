@@ -27,6 +27,7 @@ class GraphicsEngine():
 
         # sprites
         self.itemSprites = []
+        self.spellSprites = []
         self.sprites = []
 
         # surfaces
@@ -184,13 +185,22 @@ class GraphicsEngine():
                 # cant load file
                 continue
 
-         # count how many sprites there are
+        # count how many sprites there are
         itemAmount = countFiles(g.dataPath + '/items/')
 
         # load them all
         for i in range(0, itemAmount):
             tempImage = pygame.image.load(g.dataPath + "/items/" + str(i) + ".png").convert_alpha()
             self.itemSprites.append(tempImage)
+
+        # count how many sprites there are
+        spellAmount = countFiles(g.dataPath + '/spells/')
+
+        # load them all
+        for i in range(0, spellAmount):
+            tempImage = pygame.image.load(g.dataPath + "/spells/" + str(i) + ".bmp").convert()
+            tempImage.set_colorkey((0, 0, 0))
+            self.spellSprites.append(tempImage)
 
     def drawMapTile(self, x, y):
         if Map.tile[x][y].ground != None:
@@ -216,6 +226,12 @@ class GraphicsEngine():
 
     def drawSprite(self, sprite, x, y, rect):
         self.surface.blit(self.sprites[sprite], (x, y), rect)
+
+    def drawSpell(self, spellNum, x, y, rect):
+        if spellNum < 0 or spellNum > MAX_SPELLS:
+            return
+
+        self.surface.blit(self.spellSprites[spellNum], (x, y), rect)
 
     def drawShadow(self, x, y):
         ''' render a shadow under the sprite '''
@@ -304,6 +320,26 @@ class GraphicsEngine():
         self.drawSprite(sprite, x, y, rect)
 
         # todo: draw spell animations
+        for i in range(MAX_SPELLANIM):
+            spellNum = Player[index].spellAnimations[i].spellNum
+
+            if spellNum is not None:
+                if Spell[spellNum].pic != None:
+                    tickCount = time.time() * 1000
+
+                    if Player[index].spellAnimations[i].timer < tickCount:
+                        Player[index].spellAnimations[i].framePointer += 1
+                        Player[index].spellAnimations[i].timer = tickCount + 120
+
+                        if Player[index].spellAnimations[i].framePointer >= self.spellSprites[Spell[spellNum].pic].get_rect().w // SIZE_X:
+                            Player[index].spellAnimations[i].spellNum = 0
+                            Player[index].spellAnimations[i].timer = 0
+                            Player[index].spellAnimations[i].framePointer = 0
+
+                    if Player[index].spellAnimations[i].spellNum is not None:
+                        rect = pygame.Rect((Player[index].spellAnimations[i].framePointer * SIZE_X, 0, 32, 32))
+                        self.drawSpell(Spell[spellNum].pic, x, y, rect)
+
 
     def drawPlayerTop(self, index):
         ''' draw the upper part of the 32x64 player '''
@@ -393,6 +429,28 @@ class GraphicsEngine():
         self.drawSprite(sprite, x, y, rect)
 
         # todo: draw spell animations
+        for i in range(MAX_SPELLANIM):
+            spellNum = mapNPC[mapNpcNum].spellAnimations[i].spellNum
+
+            if spellNum is not None:
+                if Spell[spellNum].pic != None:
+                    tickCount = time.time() * 1000
+
+                    if mapNPC[mapNpcNum].spellAnimations[i].timer < tickCount:
+                        mapNPC[mapNpcNum].spellAnimations[i].framePointer += 1
+                        mapNPC[mapNpcNum].spellAnimations[i].timer = tickCount + 120
+
+                        if mapNPC[mapNpcNum].spellAnimations[i].framePointer >= self.spellSprites[Spell[spellNum].pic].get_rect().w // SIZE_X:
+                            mapNPC[mapNpcNum].spellAnimations[i].spellNum = None
+                            mapNPC[mapNpcNum].spellAnimations[i].timer = 0
+                            mapNPC[mapNpcNum].spellAnimations[i].framePointer = 0
+
+                    if mapNPC[mapNpcNum].spellAnimations[i].spellNum is not None:
+                        rect = pygame.Rect((mapNPC[mapNpcNum].spellAnimations[i].framePointer * SIZE_X, 0, 32, 32))
+                        self.drawSpell(Spell[spellNum].pic, x, y, rect)
+                        print 'draw spell'
+
+                    print mapNPC[mapNpcNum].spellAnimations[i].framePointer
 
     def drawNPCTop(self, mapNpcNum):
         if mapNPC[mapNpcNum].num is None:

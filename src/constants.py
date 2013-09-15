@@ -17,6 +17,8 @@ PIC_Y = 32
 SIZE_X = PIC_X
 SIZE_Y = PIC_Y
 
+MAX_SPELLANIM = 10
+
 # game states
 MENU_LOGIN    = 0
 MENU_REGISTER = 1

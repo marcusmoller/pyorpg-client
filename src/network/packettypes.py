@@ -16,6 +16,7 @@ class ClientPackets:
     CPlayerMove, \
     CPlayerDir,  \
     CUseItem, \
+    CCast, \
     CTarget, \
     CAttack, \
     CUseStatPoint, \
@@ -50,7 +51,7 @@ class ClientPackets:
     CWhosOnline, \
     CSetMotd, \
     CQuit        \
-    = range(50)
+    = range(51)
 
 
 class ServerPackets:
@@ -72,6 +73,7 @@ class ServerPackets:
     SPlayerMove, \
     SPlayerDir,  \
     SAttack,     \
+    SSpellCast,  \
     SNpcMove,    \
     SNpcDir,     \
     SNpcDead,    \
@@ -104,7 +106,7 @@ class ServerPackets:
     SMapList, \
     SLeft,       \
     SHighIndex   \
-    = range(50)
+    = range(51)
 
 
 class MessagePackets:

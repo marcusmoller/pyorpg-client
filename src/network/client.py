@@ -236,6 +236,10 @@ class TCPConnection():
         packet = json.dumps([{"packet": ClientPackets.CUseItem, "invnum": invNum}])
         self.sendData(packet)
 
+    def sendCastSpell(self, spellslot):
+        packet = json.dumps([{"packet": ClientPackets.CCast, "spellslot": spellslot}])
+        self.sendData(packet)
+
     def sendTarget(self, x, y):
         packet = json.dumps([{"packet": ClientPackets.CTarget, 'x': x, 'y': y}])
         self.sendData(packet)

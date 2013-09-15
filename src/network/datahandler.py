@@ -79,6 +79,9 @@ class DataHandler():
         elif packetType == ServerPackets.SAttack:
             self.handleAttack(jsonData)
 
+        elif packetType == ServerPackets.SCastSpell:
+            self.handleSpellCast(jsonData)
+
         elif packetType == ServerPackets.SCheckForMap:
             self.handleCheckForMap(jsonData)
 
@@ -346,6 +349,31 @@ class DataHandler():
         # play attack sound
         g.soundEngine.playAttack()
         print "attacksound!"
+
+    def handleSpellCast(self, jsonData):
+        targetType = jsonData[0]['targettype']
+        target = jsonData[0]['target']
+        spellNum = jsonData[0]['spellnum']
+
+        if target is None or spellNum is None:
+            return
+
+        tickCount = time.time() * 1000
+        if targetType == TARGET_TYPE_PLAYER:
+            for i in range(MAX_SPELLANIM):
+                if Player[target].spellAnimations[i].spellNum is None:
+                    Player[target].spellAnimations[i].spellNum = spellNum
+                    Player[target].spellAnimations[i].timer = tickCount + 120
+                    Player[target].spellAnimations[i].framePointer = 0
+                    break  
+
+        elif targetType == TARGET_TYPE_NPC:
+            for i in range(MAX_SPELLANIM):
+                if mapNPC[target].spellAnimations[i].spellNum is None:
+                    mapNPC[target].spellAnimations[i].spellNum = spellNum
+                    mapNPC[target].spellAnimations[i].timer = tickCount + 120
+                    mapNPC[target].spellAnimations[i].framePointer = 0
+                    break  
 
     def handleCheckForMap(self, jsonData):
         # erase other players

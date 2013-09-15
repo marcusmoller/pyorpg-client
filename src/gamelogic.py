@@ -504,15 +504,15 @@ def getPlayersOnMap():
                 g.playersOnMap.append(i)
 
 
-def castSpell():
+def castSpell(spellNum):
     # debug
-    spellSelected = 0
+    spellSelected = spellNum
 
     if spellSelected < 0 or spellSelected > MAX_SPELLS:
         return
 
     # check if player has enough mp
-    if getPlayerVital(g.myIndex, vitals.mp) < Spell[spellSelected].reqMp:
+    if getPlayerVital(g.myIndex, Vitals.mp) < Spell[spellSelected].reqMp:
         addText('Not enough MP to cast ' + Spell[spellSelected].name + '.', textColor.BRIGHT_RED)
 
     if PlayerSpells[spellSelected] != None:
@@ -529,8 +529,6 @@ def castSpell():
 
     else:
         addText('No spell here.', textColor.BRIGHT_RED)
-
-    # todo more
 
 def findTarget(x, y):
     g.targetType = TARGET_TYPE_NONE

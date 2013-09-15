@@ -1,4 +1,4 @@
-from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_MAP_ITEMS, MAX_NPCS, MAX_MAP_NPCS, MAX_SPELLS, MAX_PLAYER_SPELLS, MAX_TRADES, MAX_SHOPS
+from constants import MAX_PLAYERS, MAX_MAPX, MAX_MAPY, MAX_INV, MAX_ITEMS, MAX_MAP_ITEMS, MAX_NPCS, MAX_MAP_NPCS, MAX_SPELLS, MAX_SPELLANIM, MAX_PLAYER_SPELLS, MAX_TRADES, MAX_SHOPS
 import pygame
 
 # Public data structures
@@ -34,6 +34,12 @@ class PlayerInvClass():
         self.num = None
         self.value = 0
         self.dur = 0
+
+class SpellAnimClass():
+    def __init__(self):
+        self.spellNum = None
+        self.timer = 0
+        self.framePointer = 0
 
 class PlayerClass():
     def __init__(self):
@@ -73,6 +79,8 @@ class PlayerClass():
         self.attackTimer = 0
         self.mapGetTimer = 0
         self.castedSpell = 0
+
+        self.spellAnimations = [SpellAnimClass() for i in range(MAX_SPELLANIM)]
 
 
 class ClassClass():
@@ -198,6 +206,8 @@ class MapNPCClass():
         self.moving = 0
         self.attacking = False
         self.attackTimer = 0
+
+        self.spellAnimations = [SpellAnimClass() for i in range(MAX_SPELLANIM)]
 
 class TradeItemClass():
     def __init__(self):
