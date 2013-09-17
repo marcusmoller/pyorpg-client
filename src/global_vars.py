@@ -40,6 +40,32 @@ inpDIR_RIGHT = False
 inpSHIFT = False
 inpCTRL = False
 
+# spell hotkeys
+SPELLBOOK_HOTKEYS =         {pygame.K_1: None, 
+                             pygame.K_2: None,
+                             pygame.K_3: None,
+                             pygame.K_4: None,
+                             pygame.K_5: None,
+                             pygame.K_6: None,
+                             pygame.K_7: None,
+                             pygame.K_8: None,
+                             pygame.K_9: None}
+
+SPELLBOOK_HOTKEYS_STRINGS = {pygame.K_1: '1', 
+                             pygame.K_2: '2',
+                             pygame.K_3: '3',
+                             pygame.K_4: '4',
+                             pygame.K_5: '5',
+                             pygame.K_6: '6',
+                             pygame.K_7: '7',
+                             pygame.K_8: '8',
+                             pygame.K_9: '9'}
+HOTKEY_1 = None
+HOTKEY_2 = None
+HOTKEY_3 = None
+HOTKYE_4 = None
+
+
 # used for improved looping
 highIndex = 0
 playersOnMapHighIndex = 0

@@ -25,9 +25,6 @@ GUI_NPCEDITOR = 5
 GUI_SPELLEDITOR = 6
 GUI_SHOPEDITOR = 7
 
-#TODO: get rid of g.canMoveNow...
-
-
 class QuitDialog(gui.Dialog):
     def __init__(self, **params):
         title = gui.Label(_("Exit Game"))
@@ -390,6 +387,14 @@ class GameGUI():
         self.app.paint()
 
     def update(self, event):
+        def pressed(key):
+            keys = pygame.key.get_pressed()
+
+            if keys[key]:
+                return True
+            else:
+                return False
+
         self.app.event(event)
 
         if event.type == KEYDOWN:
@@ -427,6 +432,10 @@ class GameGUI():
             for i in range(len(self.spellbookBoxes)):
                 if self.spellbookBoxes[i].collidepoint(g.cursorX, g.cursorY):
                     if event.type == pygame.MOUSEBUTTONDOWN:
+                        for key in g.SPELLBOOK_HOTKEYS.keys():
+                            if pressed(key):
+                                setSpellbookHotkey(i, key)
+
                         # mouse click
                         self.handleSpellbookMouseClick(event.button, i)
 
@@ -917,6 +926,7 @@ class GameGUI():
 
         for y in range(0, 3):
             for x in range(0, 3):
+
                 if PlayerSpells[curSpellSlot] is not None:
                     spellNum = PlayerSpells[curSpellSlot]
                     spellPic = Spell[spellNum].pic
@@ -927,6 +937,18 @@ class GameGUI():
                     tempPos = (524 + x*(66+24) + 1, 90 + y*(66+24) + 1)
 
                     g.guiSurface.blit(tempSurface, tempPos, (0, 0, 64, 64))
+
+                # check if theres a hotkey attached to the slot
+                if curSpellSlot in g.SPELLBOOK_HOTKEYS.values():
+                    # find the key
+                    for key, spellSlot in g.SPELLBOOK_HOTKEYS.items():
+                        if spellSlot == curSpellSlot:
+                            img = g.tooltipFont.render(g.SPELLBOOK_HOTKEYS_STRINGS[key], 0, (255, 255, 255))
+                            imgPos = (524 + x*(66+24) + 1, 90 + y*(66+24) + 1)
+
+                            g.guiSurface.blit(img, (imgPos[0] + 5, imgPos[1] + 5))
+
+
 
                 curSpellSlot += 1
 

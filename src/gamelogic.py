@@ -513,7 +513,7 @@ def castSpell(spellNum):
 
     # check if player has enough mp
     if getPlayerVital(g.myIndex, Vitals.mp) < Spell[spellSelected].reqMp:
-        addText('Not enough MP to cast ' + Spell[spellSelected].name + '.', textColor.BRIGHT_RED)
+        addText(_('Not enough MP to cast ') + Spell[spellSelected].name + '.', textColor.BRIGHT_RED)
 
     if PlayerSpells[spellSelected] != None:
         tickCount = time.time() * 1000
@@ -525,14 +525,23 @@ def castSpell(spellNum):
                 Player[g.myIndex].castedSpell = True
 
             else:
-                addText('Cannot cast while walking!', textColor.BRIGHT_RED)
+                addText(_('Cannot cast while walking!'), textColor.BRIGHT_RED)
 
     else:
-        addText('No spell here.', textColor.BRIGHT_RED)
+        addText(_('No spell here.'), textColor.BRIGHT_RED)
+
+def setSpellbookHotkey(slotNum, key):
+    if key in g.SPELLBOOK_HOTKEYS:
+        if slotNum not in g.SPELLBOOK_HOTKEYS.values():
+            g.SPELLBOOK_HOTKEYS[key] = slotNum
+
+def getSpellbookHotkey(key):
+    if key in g.SPELLBOOK_HOTKEYS:
+        slotNum = g.SPELLBOOK_HOTKEYS[key]
+
+    return slotNum
 
 def findTarget(x, y):
-    g.targetType = TARGET_TYPE_NONE
-
     # check for player
     for i in range(0, len(g.playersOnMap)):
         if getPlayerMap(g.myIndex) == getPlayerMap(g.playersOnMap[i]):

@@ -252,6 +252,14 @@ class Engine:
             g.inpSHIFT = False
             g.inpCTRL = False
 
+        # check hotkeys
+        for key in g.SPELLBOOK_HOTKEYS.keys():
+            if pressed(key):
+                spellNum = getSpellbookHotkey(key)
+
+                if spellNum is not None:
+                    castSpell(spellNum)
+
     def handleMouse(self, event):
         g.cursorX = event.pos[0]
         g.cursorY = event.pos[1]

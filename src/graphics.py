@@ -283,7 +283,7 @@ class GraphicsEngine():
     def drawPlayer(self, index):
         sprite = getPlayerSprite(index)
 
-        tickCount = time.time()
+        tickCount = time.time() * 1000
 
         # check for animation
         anim = 0
@@ -297,12 +297,12 @@ class GraphicsEngine():
                 elif direction == DIR_LEFT or direction == DIR_RIGHT:
                     anim = self.calculatePlrAnimFrame(Player[index].xOffset, SIZE_X)
 
-        elif (Player[index].attackTimer + 0.5) > tickCount:
+        elif (Player[index].attackTimer + 500) > tickCount:
             # todo: attack animation
             anim = 2
 
         # do we want to stop sprite from attacking?
-        if (Player[index].attackTimer + 1) < tickCount:
+        if (Player[index].attackTimer + 1000) < tickCount:
             Player[index].attacking = 0
             Player[index].attackTimer = 0
 
@@ -346,7 +346,7 @@ class GraphicsEngine():
         ''' comment this out of if you want to use 32x32 sprites only '''
         sprite = getPlayerSprite(index)
 
-        tickCount = time.time()
+        tickCount = time.time() * 1000
 
         # check for animation
         anim = 0
@@ -360,11 +360,11 @@ class GraphicsEngine():
                 elif direction == DIR_LEFT or direction == DIR_RIGHT:
                     anim = self.calculatePlrAnimFrame(Player[index].xOffset, SIZE_X)
 
-        elif (Player[index].attackTimer + 0.5) > tickCount:
+        elif (Player[index].attackTimer + 500) > tickCount:
                 anim = 2
 
         # do we want to stop sprite from attacking?
-        if (Player[index].attackTimer + 1) < tickCount:
+        if (Player[index].attackTimer + 1000) < tickCount:
             Player[index].attacking = 0
             Player[index].attackTimer = 0
 
@@ -391,7 +391,7 @@ class GraphicsEngine():
         if mapNPC[mapNpcNum].num is None:
             return
 
-        tickCount = time.time()
+        tickCount = time.time() * 1000
 
         sprite = NPC[mapNPC[mapNpcNum].num].sprite
 
@@ -406,11 +406,11 @@ class GraphicsEngine():
             elif direction == DIR_LEFT or direction == DIR_RIGHT:
                     anim = self.calculatePlrAnimFrame(mapNPC[mapNpcNum].xOffset, SIZE_X)
 
-        elif (mapNPC[mapNpcNum].attackTimer + 0.5) > tickCount:
+        elif (mapNPC[mapNpcNum].attackTimer + 500) > tickCount:
             anim = 2
 
         # do we want to stop sprite from attacking?
-        if (mapNPC[mapNpcNum].attackTimer + 1) < tickCount:
+        if (mapNPC[mapNpcNum].attackTimer + 1000) < tickCount:
             mapNPC[mapNpcNum].attacking = 0
             mapNPC[mapNpcNum].attackTimer = 0
 
@@ -453,7 +453,7 @@ class GraphicsEngine():
         if mapNPC[mapNpcNum].num is None:
             return
 
-        tickCount = time.time()
+        tickCount = time.time() * 1000
 
         sprite = NPC[mapNPC[mapNpcNum].num].sprite
 
@@ -468,11 +468,11 @@ class GraphicsEngine():
             elif direction == DIR_LEFT or direction == DIR_RIGHT:
                     anim = self.calculatePlrAnimFrame(mapNPC[mapNpcNum].xOffset, SIZE_X)
 
-        elif (mapNPC[mapNpcNum].attackTimer + 0.5) > tickCount:
+        elif (mapNPC[mapNpcNum].attackTimer + 500) > tickCount:
             anim = 2
 
         # do we want to stop sprite from attacking?
-        if (mapNPC[mapNpcNum].attackTimer + 1) < tickCount:
+        if (mapNPC[mapNpcNum].attackTimer + 1000) < tickCount:
             mapNPC[mapNpcNum].attacking = 0
             mapNPC[mapNpcNum].attackTimer = 0
 
