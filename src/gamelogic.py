@@ -519,10 +519,11 @@ def castSpell(spellNum):
         tickCount = time.time() * 1000
         if tickCount > Player[g.myIndex].attackTimer + 1000:
             if Player[g.myIndex].moving == 0:
-                g.tcpConn.sendCastSpell(spellSelected)
-                Player[g.myIndex].attacking = 1
-                Player[g.myIndex].attackTimer = tickCount
-                Player[g.myIndex].castedSpell = True
+                if g.target is not None:
+                    g.tcpConn.sendCastSpell(spellSelected)
+                    Player[g.myIndex].attacking = 1
+                    Player[g.myIndex].attackTimer = tickCount
+                    Player[g.myIndex].castedSpell = True
 
             else:
                 addText(_('Cannot cast while walking!'), textColor.BRIGHT_RED)

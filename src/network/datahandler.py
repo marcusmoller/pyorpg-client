@@ -658,6 +658,11 @@ class DataHandler():
         mapNpcNum = jsonData[0]['mapnpcnum']
         clearMapNpc(mapNpcNum)
 
+        # remove target if current target
+        if mapNpcNum == g.target:
+            g.target = None
+            g.targetType = TARGET_TYPE_NONE
+
 
     def handleUpdateNpc(self, jsonData):
         npcNum = jsonData[0]['npcnum']
