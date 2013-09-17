@@ -30,12 +30,12 @@ GUI_SHOPEDITOR = 7
 
 class QuitDialog(gui.Dialog):
     def __init__(self, **params):
-        title = gui.Label("Exit Game")
+        title = gui.Label(_("Exit Game"))
 
         t = gui.Table()
 
         t.tr()
-        t.td(gui.Label("Are you sure you want to quit?"), colspan=2)
+        t.td(gui.Label(_("Are you sure you want to quit?")), colspan=2)
 
         t.tr()
         t.td(gui.Spacer(10, 20))
@@ -44,11 +44,11 @@ class QuitDialog(gui.Dialog):
             g.gameEngine.quitGame()
 
         t.tr()
-        e = gui.Button("Quit")
+        e = gui.Button(_("Quit"))
         e.connect(gui.CLICK, btnQuit, None)
         t.td(e)
 
-        e = gui.Button("Cancel")
+        e = gui.Button(_("Cancel"))
         e.connect(gui.CLICK, self.close, None)
         t.td(e)
 
@@ -168,20 +168,20 @@ class uiContainer(gui.Container):
         self.tBottom = gui.Table(width=272, height=200)
 
         self.tBottom.tr()
-        e = gui.Button("Stats", width=100, height=40)
+        e = gui.Button(_("Stats"), width=100, height=40)
         e.connect(gui.CLICK, self.toggleStats, None)
         self.tBottom.td(e)
-        e = gui.Button("Inventory", width=100, height=40)
+        e = gui.Button(_("Inventory"), width=100, height=40)
         e.connect(gui.CLICK, self.toggleInventory, None)
         self.tBottom.td(e)
 
         self.tBottom.tr()
-        e = gui.Button('Spellbook', width=100, height=40)
+        e = gui.Button(_('Spellbook'), width=100, height=40)
         e.connect(gui.CLICK, self.toggleSpellbook, None)
         self.tBottom.td(e, colspan=2)
 
         self.tBottom.tr()
-        e = gui.Button('Settings', width=100, height=40)
+        e = gui.Button(_('Settings'), width=100, height=40)
         e.connect(gui.CLICK, self.toggleSettings, None)
         self.tBottom.td(e, colspan=2)
 
@@ -200,16 +200,16 @@ class uiContainer(gui.Container):
 
     def toggleInventory(self, value):
         self.engine.setState(GUI_INVENTORY)
-        self.updateTitle('Inventory')
+        self.updateTitle(_('Inventory'))
 
     def toggleSpellbook(self, value):
         self.engine.setState(GUI_SPELLBOOK)
-        self.updateTitle('Spellbook')
+        self.updateTitle(_('Spellbook'))
         g.tcpConn.sendRequestSpells()
 
     def toggleSettings(self, value):
         self.engine.setState(GUI_STATS)
-        self.updateTitle('Settings')
+        self.updateTitle(_('Settings'))
 
     def updateTitle(self, title, titleColor=(251, 230, 204)):
         if self.tTitle.find('uiTitle'):
@@ -789,8 +789,8 @@ class GameGUI():
                 nameColor = (33, 96, 167)  # textColor.BLUE
 
                 # calculate stats string length
-                strString = '+' + str(Item[itemNum].data2) + ' strength'
-                strDurability = str(getPlayerInvItemDur(g.myIndex, itemSlot)) + '/' + str(Item[itemNum].data1) + ' durability'
+                strString = '+' + str(Item[itemNum].data2) + _(' strength')
+                strDurability = str(getPlayerInvItemDur(g.myIndex, itemSlot)) + '/' + str(Item[itemNum].data1) + _(' durability')
 
                 statStrSize = g.tooltipFont.size(strString)
                 statDurSize = g.tooltipFont.size(strDurability)
@@ -839,7 +839,7 @@ class GameGUI():
             elif itemType == ITEM_TYPE_CURRENCY:
                 nameColor = textColor.YELLOW
 
-                strValue = 'Amount: ' + str(getPlayerInvItemValue(g.myIndex, itemSlot))
+                strValue = _('Amount: ') + str(getPlayerInvItemValue(g.myIndex, itemSlot))
                 strValueSize = g.tooltipFont.size(strValue)
 
                 # draw surface
@@ -947,7 +947,7 @@ class GameGUI():
                 nameColor = textColor.WHITE
 
                 # create strings
-                strReqMp = str(Spell[spellNum].reqMp) + ' Mana'
+                strReqMp = str(Spell[spellNum].reqMp) + _(' Mana')
                 if spellType == SPELL_TYPE_ADDHP:
                     strEffect = 'Effect: +' + str(Spell[spellNum].data1) + ' HP'
                 elif spellType == SPELL_TYPE_ADDMP:
@@ -1019,101 +1019,3 @@ class GameGUI():
 
             # render tooltip on surface
             g.guiSurface.blit(tooltipSurface, self.tooltipRect)
-
-            '''
-
-                # draw border
-                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
-
-                # render information
-                # - name
-                img = g.tooltipFont.render(itemName, 0, nameColor)
-                imgRect = img.get_rect()
-                imgRect.x = 5
-                imgRect.centery = tempSurface.get_rect().h / 4
-
-                tempSurface.blit(img, imgRect)
-
-                # - strength
-                img = g.tooltipFont.render(strString, 0, (255, 255, 255))
-                imgRect = img.get_rect()
-                imgRect.x = 5
-                imgRect.centery = (tempSurface.get_rect().h / 4) * 2
-
-                tempSurface.blit(img, imgRect)
-
-                # - durability
-                img = g.tooltipFont.render(strDurability, 0, (255, 255, 255))
-                imgRect = img.get_rect()
-                imgRect.x = 5
-                imgRect.centery = (tempSurface.get_rect().h / 4) * 3
-
-                tempSurface.blit(img, imgRect)
-
-            elif itemType == ITEM_TYPE_CURRENCY:
-                nameColor = textColor.YELLOW
-
-                strValue = 'Amount: ' + str(getPlayerInvItemValue(g.myIndex, itemSlot))
-                strValueSize = g.tooltipFont.size(strValue)
-
-                # draw surface
-                if textSize[0] > strValueSize[0]:
-                    tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + strValueSize[1] + 10))
-                else:
-                    tempSurface = pygame.Surface((strValueSize[0] + 10, textSize[1] + strValueSize[1] + 10))
-
-                tempSurface.fill((0, 0, 0))
-
-                # draw border
-                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
-
-                # render information
-                # - name
-                img = g.tooltipFont.render(itemName, 0, nameColor)
-                imgRect = img.get_rect()
-                imgRect.x = 5
-                imgRect.centery = tempSurface.get_rect().h / 3
-
-                tempSurface.blit(img, imgRect)
-
-                # - value
-                img = g.tooltipFont.render(strValue, 0, (255, 255, 255))
-                imgRect = img.get_rect()
-                imgRect.x = 5
-                imgRect.centery = (tempSurface.get_rect().h / 3) * 2
-
-                tempSurface.blit(img, imgRect)
-
-            else:
-                nameColor = textColor.GREY
-
-                # draw surface
-                tempSurface = pygame.Surface((textSize[0] + 10, textSize[1] + 10))
-                tempSurface.fill((0, 0, 0))
-
-                # draw border
-                pygame.draw.rect(tempSurface, (100, 100, 100), (0, 0, tempSurface.get_rect().w, tempSurface.get_rect().h), 1)
-
-
-                # render information
-                # - name
-                img = g.tooltipFont.render(itemName, 0, nameColor)
-                imgRect = img.get_rect()
-                imgRect.centerx = tempSurface.get_rect().w / 2
-                imgRect.centery = tempSurface.get_rect().h / 2
-
-                tempSurface.blit(img, imgRect)
-
-            return tempSurface
-
-        if getPlayerInvItemNum(g.myIndex, itemSlot) != None:
-            # generate tooltip
-            itemNum = getPlayerInvItemNum(g.myIndex, itemSlot)
-            tooltipSurface = generateTooltip(itemNum, itemSlot)
-
-            # position the tooltip at the mouse
-            self.tooltipRect.x = g.cursorX
-            self.tooltipRect.y = g.cursorY - tooltipSurface.get_rect().h
-
-            # render tooltip on surface
-            g.guiSurface.blit(tooltipSurface, self.tooltipRect)'''

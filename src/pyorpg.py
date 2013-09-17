@@ -5,6 +5,7 @@ import argparse
 import pygame
 from pygame.locals import *
 
+from localizations import initLocalization
 import engine
 import global_vars as g
 from constants import *
@@ -22,5 +23,9 @@ pygame.display.set_caption(GAME_NAME)
 g.screenSurface = pygame.display.set_mode((g.SCREEN_WIDTH, g.SCREEN_HEIGHT))
 
 if __name__ == "__main__":
+    # initialize localisation
+    initLocalization()
+
+    # start game
     g.gameEngine = engine.Engine()
     g.gameEngine.init()

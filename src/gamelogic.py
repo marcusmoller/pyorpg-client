@@ -29,19 +29,19 @@ def handleMsg(text):
             command = msg.split()
 
             if command[0] == "/help":
-                addText("Social Commands:", helpColor)
-                addText("  'msghere = Broadcast Message", helpColor)
-                addText("  -msghere = Emote Message", helpColor)
-                addText("  !namehere msghere = Player Message", helpColor)
-                addText("Available Commands: /help, /info, /who, /fps, /inv, /stats, /train, /trade, /party, /join, /leave, /resetui", helpColor)
+                addText(_("Social Commands:"), helpColor)
+                addText(_("  'msghere = Broadcast Message"), helpColor)
+                addText(_("  -msghere = Emote Message"), helpColor)
+                addText(_("  !namehere msghere = Player Message"), helpColor)
+                addText(_("Available Commands: /help, /info, /who, /fps, /inv, /stats, /train, /trade, /party, /join, /leave, /resetui"), helpColor)
 
             if command[0] == "/info":
                 if len(command) <= 1:
-                    addText("Usage: /info (name)", alertColor)
+                    addText(_("Usage: /info (name)"), alertColor)
                     return
 
                 if command[1].isdigit():
-                    addText("Usage: /info (name)", alertColor)
+                    addText(_("Usage: /info (name)"), alertColor)
                     return
 
                 g.tcpConn.sendInfoRequest(command[1])
@@ -66,26 +66,26 @@ def handleMsg(text):
             ''' shows a list of admin commands '''
             if command[0] == "/admin":
                 if getPlayerAccess(g.myIndex) < ADMIN_MONITOR:
-                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    addText(_("You need to be a high enough staff member to do this!"), alertColor)
                     return
 
-                addText("Social Commands:", helpColor)
-                addText('  ""msghere = Global Admin Message', helpColor)
-                addText("  =msghere  = Private Admin Message", helpColor)
-                addText("  !namehere msghere = Player Message", helpColor)
-                addText("Available Commands: /admin, /loc, /mapeditor, /warpmeto, /warptome, /warpto, /setsprite, /giveitem, /mapreport, /kick, /ban, /edititem, /respawn, /editnpc, /motd, /editshop, /editspell, /debug", helpColor)
+                addText(_("Social Commands:"), helpColor)
+                addText(_('  ""msghere = Global Admin Message'), helpColor)
+                addText(_("  =msghere  = Private Admin Message"), helpColor)
+                addText(_("  !namehere msghere = Player Message"), helpColor)
+                addText(_("Available Commands: /admin, /loc, /mapeditor, /warpmeto, /warptome, /warpto, /setsprite, /giveitem, /mapreport, /kick, /ban, /edititem, /respawn, /editnpc, /motd, /editshop, /editspell, /debug"), helpColor)
 
             if command[0] == "/kick":
                 if getPlayerAccess(g.myIndex) < ADMIN_MONITOR:
-                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    addText(_("You need to be a high enough staff member to do this!"), alertColor)
                     return
 
                 if len(command) <= 1:
-                    addText("Usage: /kick (name)", alertColor)
+                    addText(_("Usage: /kick (name)"), alertColor)
                     return
 
                 if command[1].isdigit():
-                    addText("Usage: /kick (name)", alertColor)
+                    addText(_("Usage: /kick (name)"), alertColor)
                     return
 
                 # sendKick
@@ -97,7 +97,7 @@ def handleMsg(text):
             ''' displays the current location (x, y, map id) '''
             if command[0] == "/loc":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
-                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    addText(_("You need to be a high enough staff member to do this!"), alertColor)
                     return
 
                 g.boolLoc = not g.boolLoc
@@ -107,22 +107,22 @@ def handleMsg(text):
             ''' enables the map editor '''
             if command[0] == "/mapeditor":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
-                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    addText(_("You need to be a high enough staff member to do this!"), alertColor)
                     return
 
                 g.tcpConn.sendRequestEditMap()
 
             if command[0] == "/warpmeto":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
-                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    addText(_("You need to be a high enough staff member to do this!"), alertColor)
                     return
 
                 if len(command) <= 1:
-                    addText("Usage: /warpmeto (name)", alertColor)
+                    addText(_("Usage: /warpmeto (name)"), alertColor)
                     return
 
                 if command[1].isdigit():
-                    addText("Usage: /warpmeto (name)", alertColor)
+                    addText(_("Usage: /warpmeto (name)"), alertColor)
                     return
 
                 playerName = command[1]
@@ -130,15 +130,15 @@ def handleMsg(text):
 
             if command[0] == "/warptome":
                 if getPlayerAccess(g.myIndex) < ADMIN_MAPPER:
-                    addText("You need to be a high enough staff member to do this!", alertColor)
+                    addText(_("You need to be a high enough staff member to do this!"), alertColor)
                     return
 
                 if len(command) <= 1:
-                    addText("Usage: /warptome (name)", alertColor)
+                    addText(_("Usage: /warptome (name)"), alertColor)
                     return
 
                 if command[1].isdigit():
-                    addText("Usage: /warptome (name)", alertColor)
+                    addText(_("Usage: /warptome (name)"), alertColor)
                     return
 
                 playerName = command[1]
