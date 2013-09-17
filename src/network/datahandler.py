@@ -659,7 +659,7 @@ class DataHandler():
         clearMapNpc(mapNpcNum)
 
         # remove target if current target
-        if mapNpcNum == g.target:
+        if g.targetType == TARGET_TYPE_NPC and mapNpcNum == g.target:
             g.target = None
             g.targetType = TARGET_TYPE_NONE
 

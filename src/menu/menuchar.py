@@ -69,7 +69,7 @@ class characterControl(gui.Table):
 class menuCharacters():
     def __init__(self, surface):
         self.surface = surface
-        self.backgroundImage = pygame.image.load(g.dataPath + '/gui/menu_background.png')
+        self.backgroundImage = pygame.image.load(g.dataPath + '/gui/bg_characterselection.png')
 
         # character selection
         self.characters = []
