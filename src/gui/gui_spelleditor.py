@@ -4,6 +4,7 @@ from pgu import gui
 import pygUI as pygUI
 
 from objects import Spell, Item
+from resourcemanager import ResourceManager
 from constants import *
 import global_vars as g
 
@@ -17,12 +18,12 @@ class OpenSpellDialog(gui.Dialog):
 
         self._count = 0
 
-        title = gui.Label("Open Spell")
+        title = gui.Label(_("Open Spell"))
 
         t = gui.Table()
 
         t.tr()
-        t.td(gui.Label('Select a spell:'), colspan=2)
+        t.td(gui.Label(_('Select a spell:')), colspan=2)
 
         t.tr()
         t.td(gui.Spacer(10, 20))
@@ -35,11 +36,11 @@ class OpenSpellDialog(gui.Dialog):
         t.td(gui.Spacer(10, 20))
 
         t.tr()
-        e = gui.Button('Open spell')
+        e = gui.Button(_('Open spell'))
         e.connect(gui.CLICK, self.openSpell, None)
         t.td(e)
 
-        e = gui.Button('Cancel')
+        e = gui.Button(_('Cancel'))
         e.connect(gui.CLICK, self.close, None)
         t.td(e)
 
@@ -84,19 +85,19 @@ class DataGiveItem(gui.Table):
         gui.Table.__init__(self, **params)
 
         self.tr()
-        self.lblItemNum = gui.Label('Item: 0', color=UI_FONT_COLOR)
+        self.lblItemNum = gui.Label(_('Item: 0'), color=UI_FONT_COLOR)
         self.td(self.lblItemNum)
 
         self.tr()
-        e = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataItemNum')
-        e.connect(gui.CHANGE, self.updateLabelItemNum, e)
-        self.td(e)
+        self.sliItemNum = gui.HSlider(value=0, min=0, max=99, size=10, width=120, name='selDataItemNum')
+        self.sliItemNum.connect(gui.CHANGE, self.updateLabelItemNum, self.sliItemNum)
+        self.td(self.sliItemNum)
 
         self.tr()
         self.td(gui.Spacer(10, 20))
 
         self.tr()
-        self.lblStr = gui.Label('Item Value: 0', color=UI_FONT_COLOR)
+        self.lblStr = gui.Label(_('Item Value: 0'), color=UI_FONT_COLOR)
         self.td(self.lblStr)
 
         self.tr()
@@ -104,11 +105,18 @@ class DataGiveItem(gui.Table):
         e.connect(gui.CHANGE, self.updateLabelStr, e)
         self.td(e)
 
+    def updateMaxValues(self, maxItemNum):
+        self.sliItemNum.max = maxItemNum
+
     def updateLabelStr(self, value):
-        self.lblStr.set_text('Strength: ' + str(value.value))
+        self.lblStr.set_text(_('Item Value: ') + str(value.value))
 
     def updateLabelItemNum(self, value):
-        self.lblItemNum.set_text('Item: ' + Item[value.value].name)
+        if Item[value.value].name != '':
+            self.lblItemNum.set_text(_('Item: ') + Item[value.value].name)
+
+        else:
+            self.lblItemNum.set_text(_('Not a valid item num!'))
 
 
 class DataVitalMod(gui.Table):
@@ -117,7 +125,7 @@ class DataVitalMod(gui.Table):
         gui.Table.__init__(self, **params)
 
         self.tr()
-        self.lblVital = gui.Label('Vital Mod: Use the slider', color=UI_FONT_COLOR)
+        self.lblVital = gui.Label(_('Vital Mod: 0'), color=UI_FONT_COLOR)
         self.td(self.lblVital)
 
         self.tr()
@@ -126,8 +134,7 @@ class DataVitalMod(gui.Table):
         self.td(e)
 
     def updateVitalName(self, value):
-        self.lblVital.set_text('Vital Mod: ' + str(value.value))
-
+        self.lblVital.set_text(_('Vital Mod: ') + str(value.value))
 
 
 class SpellEditorContainer(gui.Container):
@@ -151,7 +158,7 @@ class SpellEditorContainer(gui.Container):
         self.tTitle = gui.Table(width=272, height=32)
 
         self.tTitle.tr()
-        self.tTitle.td(gui.Label("Spell Editor", name='spellTitle', color=UI_FONT_COLOR))
+        self.tTitle.td(gui.Label(_("Spell Editor"), name='spellTitle', color=UI_FONT_COLOR))
 
         # content
         self.tContent = gui.Table(width=272, height=123)
@@ -203,6 +210,9 @@ class SpellEditorContainer(gui.Container):
         self.add(self.tContent, 0, 100)
         self.add(self.tData, 0, 255)
         self.add(self.tBottom, 0, 368)
+
+    def initialize(self):
+        self.dataGiveItem.updateMaxValues(3)
 
     def requestOpenSpell(self, spellNum):
         # request edit spell
@@ -338,7 +348,7 @@ class SpellEditorGUI():
 
     def draw(self):
         # update selected sprite surface
-        tempImage = pygame.image.load(g.dataPath + '/spells/' + str(self.selectedSpriteNum) + '.bmp').convert()
+        tempImage = ResourceManager.spellSprites[self.selectedSpriteNum]
         pygame.draw.rect(self.selectedSpriteSurface, (0, 0, 0), (0, 0, 32, 32))
         self.selectedSpriteSurface.blit(tempImage, (0, 0))
 
@@ -363,7 +373,7 @@ class SpellEditorGUI():
 
         if 'click' in self.scrollButtons[1].handleEvents(event):
             # next
-            if self.selectedSpriteNum < 18:
+            if self.selectedSpriteNum < len(ResourceManager.spellSprites)-1:
                 self.selectedSpriteNum += 1
 
             self.draw()

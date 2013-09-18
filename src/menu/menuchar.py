@@ -3,7 +3,10 @@ from pygame.locals import *
 from pgu import gui
 
 import global_vars as g
+from resourcemanager import ResourceManager
 from constants import *
+
+UI_NAME_FONT_COLOR = (0, 0, 0)
 
 class characterControl(gui.Table):
     def __init__(self, **params):
@@ -32,11 +35,11 @@ class characterControl(gui.Table):
             print "not yet implemented"
 
         self.tr()
-        self.lblPlayerName = gui.Label('#PLAYER_NAME', antialias=0, color=(255, 0, 0), font=g.charSelFont)
+        self.lblPlayerName = gui.Label('#PLAYER_NAME', antialias=1, color=UI_NAME_FONT_COLOR, font=g.charSelFont)
         self.td(self.lblPlayerName, colspan=3, valign=1, align=0)
 
         self.tr()
-        self.lblPlayerExtra = gui.Label('#PLAYER_LEVEL_CLASS', antialias=0, color=(255, 0, 0), font=g.charSelFont, name='lblExtra')
+        self.lblPlayerExtra = gui.Label('#PLAYER_LEVEL_CLASS', antialias=1, color=UI_NAME_FONT_COLOR, font=g.charSelFont, name='lblExtra')
         self.td(self.lblPlayerExtra, colspan=3, align=0)
 
         self.tr()
@@ -146,12 +149,12 @@ class menuCharacters():
 
         if self.charName != "":
             self.charControl.lblPlayerName.set_text(self.charName)
-            self.charControl.lblPlayerExtra.set_text("Level " + str(self.charLevel) + " " + str(self.charClass))
+            self.charControl.lblPlayerExtra.set_text(_("Level ") + str(self.charLevel) + " " + str(self.charClass))
 
         else:
             # the character doesnt exist (it's empty)
-            self.charControl.lblPlayerName.set_text('Empty')
-            self.charControl.lblPlayerExtra.set_text('Create a new character!')
+            self.charControl.lblPlayerName.set_text(_('Empty'))
+            self.charControl.lblPlayerExtra.set_text(_('Create a new character!'))
 
             # todo: change btn text
             #self.charControl.btnSelChar.value = 'New Character'
@@ -159,7 +162,7 @@ class menuCharacters():
         self.updateCharSprite(self.charSprite)
 
     def updateCharSprite(self, sprite):
-        tempImage = g.gameEngine.graphicsEngine.sprites[sprite]
+        tempImage = ResourceManager.plrSprites[sprite]
         tempSprite = pygame.Surface((64, 64))
 
         tempSprite.blit(tempImage, (0, 0), (0, 128, 64, 64))

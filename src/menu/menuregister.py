@@ -94,7 +94,7 @@ class registerControl(gui.Table):
 class menuRegister():
     def __init__(self, surface):
         self.surface = surface
-        self.backgroundImage = pygame.image.load(g.dataPath + '/gui/menu_background.png')
+        self.backgroundImage = pygame.image.load(g.dataPath + '/gui/bg_menu.png')
 
         # GUI
         self.app = gui.App()

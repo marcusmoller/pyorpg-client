@@ -24,7 +24,7 @@ class loginControl(gui.Table):
                 g.gameEngine.initConnection()
 
         self.tr()
-        self.td(gui.Input(name="username", value="Username"))
+        self.td(gui.Input(name="username", value=_("Username")))
 
         self.tr()
         self.td(gui.Password(name="password", value="password"))
@@ -33,7 +33,7 @@ class loginControl(gui.Table):
         self.td(gui.Spacer(0, 30))
 
         self.tr()
-        btn = gui.Button("Login", width=120)
+        btn = gui.Button(_("Login"), width=120)
         btn.connect(gui.CLICK, btnLogin, None)
         self.td(btn)
 
@@ -41,7 +41,7 @@ class loginControl(gui.Table):
         self.td(gui.Spacer(0, 5))
 
         self.tr()
-        btn = gui.Button("Register", width=120)
+        btn = gui.Button(_("Register"), width=120)
         btn.connect(gui.CLICK, btnRegister, None)
         self.td(btn)
 
@@ -69,7 +69,7 @@ class menuLogin():
         self.x = 10
         self.y = 10
 
-        self.backgroundImage = pygame.image.load(g.dataPath + '/gui/menu_background.png')
+        self.backgroundImage = pygame.image.load(g.dataPath + '/gui/bg_menu.png')
 
     def draw(self):
         # background

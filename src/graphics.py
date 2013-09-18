@@ -6,6 +6,7 @@ from gui.gui import *
 from network.database import *
 from objects import *
 from constants import *
+from resourcemanager import ResourceManager
 import global_vars as g
 from utils.utils import countFiles
 
@@ -24,11 +25,6 @@ class GraphicsEngine():
         # game surface offset
         self.surfaceRect.top = 16
         self.surfaceRect.left = 16
-
-        # sprites
-        self.itemSprites = []
-        self.spellSprites = []
-        self.sprites = []
 
         # surfaces
         self.tileSurface = pygame.image.load(g.dataPath + "/tilesets/Tiles1.png").convert()
@@ -89,13 +85,10 @@ class GraphicsEngine():
         self.gameGUI = GameGUI(self)
 
         # gui background
-        self.backgroundGUI = pygame.image.load(g.dataPath + '/gui/game_background.png')
+        self.backgroundGUI = pygame.image.load(g.dataPath + '/gui/bg_ingame.png')
         g.guiSurface.blit(self.backgroundGUI, (0, 0))
 
         self.guiState = GUI_STATS
-
-        # initial calls
-        self.loadSprites()
 
     def renderGraphics(self):
         # lower tiles
@@ -171,37 +164,6 @@ class GraphicsEngine():
         #self.tileSurface.set_colorkey((255, 0, 0))
         print "lawl"
 
-    def loadSprites(self):
-        # count how many sprites there are
-        spriteAmount = countFiles(g.dataPath + '/sprites/')
-
-        # load them all
-        for i in range(0, spriteAmount):
-            try:
-                tempImage = pygame.image.load(g.dataPath + "/sprites/" + str(i) + ".png").convert_alpha()
-                tempImage.set_colorkey((0, 0, 0))
-                self.sprites.append(tempImage)
-            except:
-                # cant load file
-                continue
-
-        # count how many sprites there are
-        itemAmount = countFiles(g.dataPath + '/items/')
-
-        # load them all
-        for i in range(0, itemAmount):
-            tempImage = pygame.image.load(g.dataPath + "/items/" + str(i) + ".png").convert_alpha()
-            self.itemSprites.append(tempImage)
-
-        # count how many sprites there are
-        spellAmount = countFiles(g.dataPath + '/spells/')
-
-        # load them all
-        for i in range(0, spellAmount):
-            tempImage = pygame.image.load(g.dataPath + "/spells/" + str(i) + ".bmp").convert()
-            tempImage.set_colorkey((0, 0, 0))
-            self.spellSprites.append(tempImage)
-
     def drawMapTile(self, x, y):
         if Map.tile[x][y].ground != None:
             self.surface.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
@@ -222,16 +184,16 @@ class GraphicsEngine():
         x = MapItem[itemNum].x
         y = MapItem[itemNum].y
 
-        self.surface.blit(self.itemSprites[picNum], (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
+        self.surface.blit(ResourceManager.itemSprites[picNum], (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
 
     def drawSprite(self, sprite, x, y, rect):
-        self.surface.blit(self.sprites[sprite], (x, y), rect)
+        self.surface.blit(ResourceManager.plrSprites[sprite], (x, y), rect)
 
     def drawSpell(self, spellNum, x, y, rect):
         if spellNum < 0 or spellNum > MAX_SPELLS:
             return
 
-        self.surface.blit(self.spellSprites[spellNum], (x, y), rect)
+        self.surface.blit(ResourceManager.spellSprites[spellNum], (x, y), rect)
 
     def drawShadow(self, x, y):
         ''' render a shadow under the sprite '''

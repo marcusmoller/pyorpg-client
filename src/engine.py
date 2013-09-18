@@ -9,6 +9,7 @@ import ConfigParser
 from twisted.internet import reactor
 
 import global_vars as g
+from resourcemanager import ResourceManager
 
 from gamelogic import *
 from graphics import *
@@ -41,6 +42,7 @@ class Engine:
         self.clockTick = 0
 
     def init(self):
+        ResourceManager.loadEverything()
         g.soundEngine = SoundEngine()
         g.soundEngine.loadSounds()
 

@@ -32,7 +32,7 @@ class newCharControl(gui.Table):
             g.gameState = MENU_CHAR
 
         self.tr()
-        self.lblCharName = gui.Label('Character Name', color=(255, 255, 255))
+        self.lblCharName = gui.Label(_('Character Name'), color=(255, 255, 255))
         self.td(self.lblCharName, colspan=3, valign=1)
 
         self.tr()
@@ -40,21 +40,21 @@ class newCharControl(gui.Table):
         self.td(self.inpCharName, colspan=3)
 
         self.tr()
-        self.lblClassName = gui.Label('CLASS NAME', color=(255, 255, 255))
+        self.lblClassName = gui.Label(_('CLASS NAME'), color=(255, 255, 255))
         self.td(self.lblClassName, colspan=3, valign=1)
 
         self.tr()
-        btn = gui.Button("Previous", width=160, height=40)
+        btn = gui.Button(_("Previous"), width=160, height=40)
         btn.connect(gui.CLICK, btnPrevClass, None)
         self.td(btn)
         self.td(gui.Spacer(300, 160))
-        btn = gui.Button("Next", width=160, height=40)
+        btn = gui.Button(_("Next"), width=160, height=40)
         btn.connect(gui.CLICK, btnNextClass, None)
         self.td(btn)
 
         self.tr()
         self.td(gui.Spacer(0, 0))
-        self.btnSelChar = gui.Button("Create Character", width=160, height=30)
+        self.btnSelChar = gui.Button(_("Create Character"), width=160, height=30)
         self.btnSelChar.connect(gui.CLICK, btnCreateChar, None)
         self.td(self.btnSelChar)
         self.td(gui.Spacer(0, 0))
@@ -75,13 +75,13 @@ class menuNewCharacter():
         self.x = 10
         self.y = 10
 
-        self.backgroundImage = pygame.image.load(g.dataPath + '/gui/menu_background.png')
+        self.backgroundImage = pygame.image.load(g.dataPath + '/gui/bg_menu.png')
 
         # class selection
         self.classIndex = 0
 
         # - statistics
-        self.labelInfoStats = pygUI.pygLabel((544, 50, 256, 20), "Class Statistics", align=pygUI.ALIGN_CENTER)
+        self.labelInfoStats = pygUI.pygLabel((544, 50, 256, 20), _("Class Statistics"), align=pygUI.ALIGN_CENTER)
 
         self.labelHP = pygUI.pygLabel((544, 70, 10, 10), "HP: ")
         self.labelMP = pygUI.pygLabel((544, 90, 10, 10), "MP: ")
@@ -136,7 +136,7 @@ class menuNewCharacter():
 
         for i in range(len(string)):
             if string[i] not in restricted:
-                alertMessageDialog(msg='The name is not valid! The name may only contain a-z and 0-9.', title='An error occured')
+                alertMessageDialog(msg=_('The name is not valid! The name may only contain a-z and 0-9.'), title=_('An error occured'))
                 return False
 
         return True

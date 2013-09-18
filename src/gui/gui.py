@@ -265,6 +265,7 @@ class GUIContainer(gui.Container):
     # spell editor
     def openSpellEditor(self, value=0):
         self.add(self.spellEditorControl, 512, 16)
+        self.engine.spellEditorGUI.init()
         g.canMoveNow = False
 
         # close ui
@@ -300,7 +301,7 @@ class GameGUI():
         self.graphicsEngine = graphicsEngine
         self.state = GUI_STATS
 
-        self.background = pygame.image.load(g.dataPath + '/gui/game_background.png')
+        self.background = pygame.image.load(g.dataPath + '/gui/bg_ingame.png')
         g.guiSurface.blit(self.background, (0, 0))
 
         # events

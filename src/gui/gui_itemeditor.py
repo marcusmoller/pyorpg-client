@@ -4,6 +4,7 @@ from pgu import gui
 import pygUI as pygUI
 
 from objects import Item
+from resourcemanager import ResourceManager
 from constants import *
 import global_vars as g
 
@@ -35,7 +36,7 @@ class OpenItemDialog(gui.Dialog):
         t.td(gui.Spacer(10, 20))
 
         t.tr()
-        e = gui.Button('Open item')
+        e = gui.Button(_('Open item'))
         e.connect(gui.CLICK, self.openItem, None)
         t.td(e)
 
@@ -84,7 +85,7 @@ class DataEquipment(gui.Table):
         gui.Table.__init__(self, **params)
 
         self.tr()
-        self.lblDur = gui.Label('Durability: 0', color=UI_FONT_COLOR)
+        self.lblDur = gui.Label(_('Durability: 0'), color=UI_FONT_COLOR)
         self.td(self.lblDur)
 
         self.tr()
@@ -169,18 +170,18 @@ class ItemEditorContainer(gui.Container):
         self.tTitle = gui.Table(width=272, height=32)
 
         self.tTitle.tr()
-        self.tTitle.td(gui.Label("Item Editor", name='itemTitle', color=UI_FONT_COLOR))
+        self.tTitle.td(gui.Label(_("Item Editor"), name='itemTitle', color=UI_FONT_COLOR))
 
         # content
         self.tContent = gui.Table(width=272, height=123)
 
         self.tContent.tr()
-        e = gui.Button("Open item...", width=100)
+        e = gui.Button(_("Open item..."), width=100)
         e.connect(gui.CLICK, openItemDialog.openDialog, None)
         self.tContent.td(e, colspan=2)
 
         self.tContent.tr()
-        self.tContent.td(gui.Label('Item Name:', color=UI_FONT_COLOR), colspan=2)
+        self.tContent.td(gui.Label(_('Item Name:'), color=UI_FONT_COLOR), colspan=2)
         self.tContent.tr()
         self.tContent.td(gui.Input('', size=26, name='inpItemName'), colspan=2, valign=-1)
 
@@ -372,7 +373,8 @@ class ItemEditorGUI():
 
     def draw(self):
         # update selected sprite surface
-        tempImage = pygame.image.load(g.dataPath + '/items/' + str(self.selectedSpriteNum) + '.png').convert()
+        #tempImage = pygame.image.load(g.dataPath + '/items/' + str(self.selectedSpriteNum) + '.png').convert()
+        tempImage = ResourceManager.itemSprites[self.selectedSpriteNum]
         pygame.draw.rect(self.selectedSpriteSurface, (0, 0, 0), (0, 0, 32, 32))
         self.selectedSpriteSurface.blit(tempImage, (0, 0))
 
@@ -397,7 +399,7 @@ class ItemEditorGUI():
 
         if 'click' in self.scrollButtons[1].handleEvents(event):
             # next
-            if self.selectedSpriteNum < 18:
+            if self.selectedSpriteNum < len(ResourceManager.itemSprites)-1:
                 self.selectedSpriteNum += 1
 
             self.draw()

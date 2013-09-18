@@ -4,6 +4,7 @@ from pgu import gui
 import pygUI as pygUI
 
 from objects import Item, NPC, Stats
+from resourcemanager import ResourceManager
 from constants import *
 import global_vars as g
 
@@ -585,7 +586,7 @@ class NPCEditorGUI():
 
         if self.state == 0:
             # update selected sprite surface
-            tempImage = pygame.image.load(g.dataPath + '/sprites/' + str(self.selectedSpriteNum) + '.png').convert_alpha()
+            tempImage = ResourceManager.plrSprites[self.selectedSpriteNum]
             pygame.draw.rect(self.selectedSpriteSurface, (0, 0, 0), (0, 0, 65, 75))
             self.selectedSpriteSurface.blit(tempImage, (0, 0), (0, 128, 64, 64))
 
@@ -610,7 +611,7 @@ class NPCEditorGUI():
 
         if 'click' in self.scrollButtons[1].handleEvents(event):
             # next
-            if self.selectedSpriteNum < 16:
+            if self.selectedSpriteNum < len(ResourceManager.plrSprites)-1:
                 self.selectedSpriteNum += 1
 
             self.draw()
