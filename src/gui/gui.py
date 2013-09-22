@@ -68,6 +68,11 @@ class ChatControl(gui.Table):
 
         def clickChatMsg(value):
             # disable movement when chat msg is mouse clicked
+            if self.focused:
+                self.focused = False
+            else:
+                self.focused = True
+
             g.canMoveNow = False
 
         self.tr()
@@ -400,6 +405,7 @@ class GameGUI():
 
         if event.type == KEYDOWN:
             if event.key == pygame.K_RETURN:
+                print self.guiContainer.chatCtrl.focused
                 if self.guiContainer.chatCtrl.focused == False:
                     self.guiContainer.chatCtrl.chatMsg.focus()
                     self.guiContainer.chatCtrl.focused = True
