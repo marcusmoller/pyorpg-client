@@ -205,7 +205,12 @@ class GraphicsEngine():
 
         rect = self.targetSurface.get_rect()
         rect.centerx = x + (PIC_X / 2)
-        rect.y = y - 15
+
+        if y == 0 or y == 1:
+            # draw the pointer below sprite
+            rect.y = y + 70
+        else:
+            rect.y = y - 15
 
         self.surface.blit(self.targetSurface, rect)
 

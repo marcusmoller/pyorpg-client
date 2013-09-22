@@ -128,15 +128,15 @@ class TCPConnection():
         self.sendData(packet)
 
     def broadcastMsg(self, msg):
-        packet = json.dumps([{"packet": ClientPackets.CSayMsg, "msg": msg}])
+        packet = json.dumps([{"packet": ClientPackets.CBroadcastMsg, "msg": msg}])
         self.sendData(packet)
 
     def emoteMsg(self, msg):
-        packet = json.dumps([{"packet": ClientPackets.CSayMsg, "msg": msg}])
+        packet = json.dumps([{"packet": ClientPackets.CEmoteMsg, "msg": msg}])
         self.sendData(packet)
 
-    def playerMsg(self, msg):
-        packet = json.dumps([{"packet": ClientPackets.CPlayerMsg, "msg": msg}])
+    def playerMsg(self, msg, msgTo):
+        packet = json.dumps([{"packet": ClientPackets.CPlayerMsg, "msg": msg, "msgto": msgTo}])
         self.sendData(packet)
 
     def adminMsg(self, msg):

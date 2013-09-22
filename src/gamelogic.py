@@ -15,17 +15,55 @@ def addText(text, color):
 def handleMsg(text):
         msg = text.lower()
 
-        ''' global msg '''
-        if msg[0] == '"':
+        # broadcast msg
+        if msg[0] == "'":
+            msg = msg[1:len(msg)]
+            if len(msg) > 0:
+                g.tcpConn.broadcastMsg(msg)
+            return
+
+        # emote msg
+        elif msg[0] == "-":
+            msg = msg[1:len(msg)]
+            if len(msg) > 0:
+                g.tcpConn.emoteMsg(msg)
+            return
+
+        # player msg
+        elif msg[0] == '!':
+            msg = msg[1:len(msg)]
+            name = msg.split(' ')[0]
+
+            # make sure that they are sending something
+            if len(msg.split(' ')[1]) > 0:
+                msg = msg[len(name)+1:len(msg)]
+
+                # send the message to the player
+                g.tcpConn.playerMsg(msg, name)
+
+            else:
+                addText(_("Usage: !playername (message)"), alertColor)
+
+            return
+
+        # global msg
+        elif msg[0] == '"':
             if getPlayerAccess(g.myIndex) >= ADMIN_MAPPER:
                 msg = msg[1:len(msg)]
-
                 if len(msg) > 0:
                     g.tcpConn.globalMsg(msg)
+            return
 
+        # admin msg
+        elif msg[0] == "=":
+            if getPlayerAccess(g.myIndex) >= ADMIN_MAPPER:
+                msg = msg[1:len(msg)]
+                if len(msg) > 0:
+                    g.tcpConn.adminMsg(msg)
                 return
 
-        if msg[0] == "/":
+        # commands
+        elif msg[0] == "/":
             command = msg.split()
 
             if command[0] == "/help":
@@ -70,7 +108,7 @@ def handleMsg(text):
                     return
 
                 addText(_("Social Commands:"), helpColor)
-                addText(_('  ""msghere = Global Admin Message'), helpColor)
+                addText(_('  "msghere = Global Admin Message'), helpColor)
                 addText(_("  =msghere  = Private Admin Message"), helpColor)
                 addText(_("  !namehere msghere = Player Message"), helpColor)
                 addText(_("Available Commands: /admin, /loc, /mapeditor, /warpmeto, /warptome, /warpto, /setsprite, /giveitem, /mapreport, /kick, /ban, /edititem, /respawn, /editnpc, /motd, /editshop, /editspell, /debug"), helpColor)
