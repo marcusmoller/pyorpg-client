@@ -69,6 +69,12 @@ MAX_MAPY = 11
 MAP_MORAL_NONE = 0
 MAP_MORAL_SAFE = 1
 
+# map layer constants
+MAP_MAX_LAYERS = 2
+
+MAP_LAYER_GROUND = 0
+MAP_LAYER_FRINGE = 1
+
 # text colors
 class textColor():
     BLACK      = (  0,   0,   0)

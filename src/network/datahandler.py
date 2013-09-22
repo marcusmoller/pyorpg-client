@@ -473,7 +473,9 @@ class DataHandler():
         for i in range(MAX_MAP_NPCS):
             if Map.npc[i] != None:
                 g.npcHighIndex += 1
-            calcTilePositions()
+        
+        calcTilePositions()
+        g.gameEngine.graphicsEngine.redrawMap()
 
         g.gettingMap = False
         g.canMoveNow = True

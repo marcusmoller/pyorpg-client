@@ -2,6 +2,7 @@ import time
 import pygame
 from pygame.locals import *
 
+from sprites import MapLayerSprite
 from gui.gui import *
 from network.database import *
 from objects import *
@@ -41,6 +42,9 @@ class GraphicsEngine():
         # fringe tiles
         self.tileSurfaceTrans = pygame.image.load(g.dataPath + "/tilesets/Tiles1.png").convert()
         self.tileSurfaceTrans.set_colorkey((0, 0, 0))
+
+        # map surfaces
+        self.mapLayerSurface = [MapLayerSprite() for i in range(MAP_MAX_LAYERS)]
 
         ###############
         # GAME EDITOR #
@@ -90,11 +94,14 @@ class GraphicsEngine():
 
         self.guiState = GUI_STATS
 
+        # PYGAME SPRITE
+        #self.allSprites = pygame.sprite.RenderPlain()
+        #for sprite in self.mapLayerSurface:
+        #    self.allSprites.add(sprite)
+
     def renderGraphics(self):
-        # lower tiles
-        for x in range(MAX_MAPX):
-            for y in range(MAX_MAPY):
-                self.drawMapTile(x, y)
+        # draw map ground layer
+        self.drawMapLayer(layer=MAP_LAYER_GROUND)
 
         # items
         for i in range(MAX_MAP_ITEMS):
@@ -118,10 +125,10 @@ class GraphicsEngine():
         for i in range(0, MAX_MAP_NPCS):
             self.drawNPCTop(i)
 
-        # upper tiles
-        for x in range(MAX_MAPX):
-            for y in range(MAX_MAPY):
-                self.drawMapFringeTile(x, y)
+        # draw map fringe layer
+        self.drawMapLayer(layer=MAP_LAYER_FRINGE)
+
+        #self.allSprites.draw(self.surface)
 
         # draw tile outline if in the map editor
         if g.editor == EDITOR_MAP:
@@ -174,6 +181,26 @@ class GraphicsEngine():
     def drawMapFringeTile(self, x, y):
         if Map.tile[x][y].fringe != None:
             self.surface.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].fringe))
+
+    def drawMapLayer(self, layer=0):
+        self.mapLayerSurface[layer].draw(self.surface)
+
+    def redrawMap(self):
+        # draw all the sprites onto the mapSurface sprite
+        # clean surfaces
+        self.mapLayerSurface = [MapLayerSprite() for i in range(MAP_MAX_LAYERS)]
+
+        for x in range(MAX_MAPX):
+            for y in range(MAX_MAPY):
+                if Map.tile[x][y].ground != None:
+                    self.mapLayerSurface[MAP_LAYER_GROUND].image.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
+                else:
+                    # draw black square
+                    pygame.draw.rect(self.mapLayerSurface[MAP_LAYER_GROUND].image, (0, 0, 0), (MapTilePosition[x][y].x, MapTilePosition[x][y].y, 32, 32))
+
+                if Map.tile[x][y].fringe != None:
+                    self.mapLayerSurface[MAP_LAYER_FRINGE].image.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].fringe))
+
 
     def drawMapItem(self, itemNum):
         picNum = Item[MapItem[itemNum].num].pic
