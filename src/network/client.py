@@ -3,8 +3,7 @@ from twisted.protocols.basic import LineReceiver
 from twisted.internet import reactor, error
 
 import json
-
-import sys
+import base64
 
 from database import *
 from packettypes import *
@@ -47,14 +46,18 @@ class gameClientProtocol(LineReceiver):
     def lineReceived(self, data):
         global dataHandler
 
-        log("Received data from server")
-        log(" -> " + data)
+        # handle base64 data
+        decodedData = base64.b64decode(data)
 
-        print data
-        dataHandler.handleData(data)
+        log("Received data from server")
+        log(" -> " + decodedData)
+
+        dataHandler.handleData(decodedData)
 
     def sendData(self, data):
-        self.sendLine(data)
+        # encode data using base64
+        encodedData = base64.b64encode(data)
+        self.sendLine(encodedData)
 
 
 class gameClientFactory(ClientFactory):

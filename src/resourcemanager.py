@@ -21,7 +21,10 @@ class ResourceManagerClass():
 
     def loadImage(self, image):
         if image.endswith('.bmp'):
-            return pygame.image.load(image).convert()
+            tempImage = pygame.image.load(image).convert()
+            tempImage.set_colorkey((0, 0, 0)) # set black color to transparent
+            return tempImage
+
         elif image.endswith('.png'):
             return pygame.image.load(image).convert_alpha()
 

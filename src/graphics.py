@@ -293,7 +293,7 @@ class GraphicsEngine():
                         Player[index].spellAnimations[i].framePointer += 1
                         Player[index].spellAnimations[i].timer = tickCount + 120
 
-                        if Player[index].spellAnimations[i].framePointer >= self.spellSprites[Spell[spellNum].pic].get_rect().w // SIZE_X:
+                        if Player[index].spellAnimations[i].framePointer >= ResourceManager.spellSprites[Spell[spellNum].pic].get_rect().w // SIZE_X:
                             Player[index].spellAnimations[i].spellNum = 0
                             Player[index].spellAnimations[i].timer = 0
                             Player[index].spellAnimations[i].framePointer = 0
@@ -402,7 +402,7 @@ class GraphicsEngine():
                         mapNPC[mapNpcNum].spellAnimations[i].framePointer += 1
                         mapNPC[mapNpcNum].spellAnimations[i].timer = tickCount + 120
 
-                        if mapNPC[mapNpcNum].spellAnimations[i].framePointer >= self.spellSprites[Spell[spellNum].pic].get_rect().w // SIZE_X:
+                        if mapNPC[mapNpcNum].spellAnimations[i].framePointer >= ResourceManager.spellSprites[Spell[spellNum].pic].get_rect().w // SIZE_X:
                             mapNPC[mapNpcNum].spellAnimations[i].spellNum = None
                             mapNPC[mapNpcNum].spellAnimations[i].timer = 0
                             mapNPC[mapNpcNum].spellAnimations[i].framePointer = 0
