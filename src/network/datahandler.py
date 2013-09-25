@@ -386,7 +386,9 @@ class DataHandler():
                     mapNPC[target].spellAnimations[i].spellNum = spellNum
                     mapNPC[target].spellAnimations[i].timer = tickCount + 120
                     mapNPC[target].spellAnimations[i].framePointer = 0
-                    break  
+                    break
+
+        g.soundEngine.playSpellHit(Spell[spellNum].type)
 
     def handleCheckForMap(self, jsonData):
         # erase other players

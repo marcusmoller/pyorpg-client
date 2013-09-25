@@ -3,6 +3,7 @@ import pygame
 import pygame.mixer
 from pygame.locals import *
 
+from constants import *
 import global_vars as g
 
 
@@ -11,14 +12,16 @@ class SoundEngine():
         if not pygame.mixer: print "Warning, sounds are disabled!"
         pygame.mixer.init()
 
+        # states
         self.playingSound = False
         self.sfxMuted = False
         self.musicMuted = False
 
+        # sounds
         self.soundList = []
         self.musicList = []
-
         self.attackSounds = []
+        self.spellSounds = []
 
     def loadSounds(self):
         self.soundList.append(self.loadFile(g.dataPath + "/music/0.ogg"))
@@ -27,6 +30,9 @@ class SoundEngine():
         self.attackSounds.append(self.loadFile(g.dataPath + "/sounds/swing_1.ogg"))
         self.attackSounds.append(self.loadFile(g.dataPath + "/sounds/swing_2.ogg"))
         self.attackSounds.append(self.loadFile(g.dataPath + "/sounds/swing_3.ogg"))
+
+        self.spellSounds.append(self.loadFile(g.dataPath + "/sounds/spell.ogg"))
+        self.spellSounds.append(self.loadFile(g.dataPath + "/sounds/spell_subhp.ogg"))
 
     def loadFile(self, filename):
         sound = pygame.mixer.Sound(filename)
@@ -57,3 +63,16 @@ class SoundEngine():
         if not self.sfxMuted:
             rand = random.randint(0, 2)
             self.attackSounds[rand].play()
+
+    def playSpell(self, soundNum=0):
+        ''' plays spell sound '''
+        if not self.sfxMuted:
+            self.spellSounds[soundNum].play()
+
+    def playSpellHit(self, spellType):
+        if not self.sfxMuted:
+            if spellType == SPELL_TYPE_ADDHP:
+                self.spellSounds[0].play()
+
+            elif spellType == SPELL_TYPE_SUBHP:
+                self.spellSounds[1].play()

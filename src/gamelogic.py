@@ -363,12 +363,16 @@ def isTryingToMove():
 
 def checkAttack():
     if g.inpCTRL == True:
-        if Player[g.myIndex].attackTimer + 1 < time.time():
+        tickCount = time.time() * 1000
+        if Player[g.myIndex].attackTimer + 1000 < tickCount:
             if Player[g.myIndex].attacking == 0:
                 Player[g.myIndex].attacking = 1
-                Player[g.myIndex].attackTimer = time.time()
+                Player[g.myIndex].attackTimer = tickCount
 
                 g.tcpConn.sendPlayerAttack()
+
+                # play attack sound
+                g.soundEngine.playAttack()
 
 def canMove():
     d = getPlayerDir(g.myIndex)
