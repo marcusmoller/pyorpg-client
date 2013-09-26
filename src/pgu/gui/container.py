@@ -145,7 +145,7 @@ class Container(widget.Widget):
 
         for w in self.windows:
             w.paint(self.top_surface(s,w))
-    
+
     def top_surface(self,s,w):
         x,y = s.get_abs_offset()
         s = s.get_abs_parent()

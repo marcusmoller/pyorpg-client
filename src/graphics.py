@@ -94,6 +94,9 @@ class GraphicsEngine():
 
         self.guiState = GUI_STATS
 
+        #
+        self.dirtyRects = []
+
         # PYGAME SPRITE
         #self.allSprites = pygame.sprite.RenderPlain()
         #for sprite in self.mapLayerSurface:

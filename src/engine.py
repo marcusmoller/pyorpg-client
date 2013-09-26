@@ -150,6 +150,7 @@ class Engine:
 
             # flip graphics
             pygame.display.update()
+            #pygame.display.update(self.graphicsEngine.dirtyRects)
 
         pygame.event.pump()
         for event in pygame.event.get():

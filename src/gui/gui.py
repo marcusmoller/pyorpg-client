@@ -382,9 +382,9 @@ class GameGUI():
     def draw(self, surface, surfaceRect):
         # surface and surfaceRect is a part of a stupid hack. See graphics.py
 
-        # render ui
-        #g.guiSurface.blit(self.background, (0, 0))
-        self.drawUI()
+        # render ui (REMOVED DUE TO CPU USAGE)
+        # % g.guiSurface.blit(self.background, (0, 0))
+        # % self.drawUI()
 
         # part of the hack. game map is blitted so that the gui (app.paint) is ABOVE the game screen
         g.screenSurface.blit(surface, surfaceRect)
@@ -402,6 +402,7 @@ class GameGUI():
                 return False
 
         self.app.event(event)
+        #self.graphicsEngine.dirtyRects = self.app.update()
 
         if event.type == KEYDOWN:
             if event.key == pygame.K_RETURN:
@@ -533,8 +534,6 @@ class GameGUI():
 
     def drawStats(self):
         ''' the stats interface '''
-        # todo: redraw the player name and level
-
         self.drawHealthBar()
         self.drawManaBar()
         self.drawLevelText()
@@ -565,7 +564,7 @@ class GameGUI():
         font = g.nameFont
         fontColor = (251, 230, 204)
 
-        label = font.render('EXP: ' + str(getPlayerExp(g.myIndex)) +' / ' + str(g.expToNextLvl), 0, fontColor)
+        label = font.render('Level ' + str(getPlayerLevel(g.myIndex)) + ' (' + str(getPlayerExp(g.myIndex)) +'/' + str(g.expToNextLvl) + ')', 0, fontColor)
         labelRect = label.get_rect()
         labelRect.centerx = 648
         labelRect.centery = 130
