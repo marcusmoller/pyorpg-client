@@ -688,7 +688,7 @@ class MapEditorGUI():
         self.draw()
 
     def draw(self):
-        #g.gameEngine.graphicsEngine.gameGUI.reset()
+        g.gameEngine.graphicsEngine.gameGUI.reset()
 
         if self.state == PLACE_TILE:
             self.surface.blit(self.selectedTileSurface, self.selectedTileRect)
@@ -853,6 +853,9 @@ class MapEditorGUI():
                     Map.tile[x][y].data1 = 0
                     Map.tile[x][y].data2 = 0
                     Map.tile[x][y].data3 = 0
+
+            # assume something has happened, so redraw map
+            g.gameEngine.graphicsEngine.redrawMap()
 
     def setState(self, state):
         self.state = state

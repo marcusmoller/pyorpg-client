@@ -383,7 +383,7 @@ class GameGUI():
         # surface and surfaceRect is a part of a stupid hack. See graphics.py
 
         # render ui (SHOULD BE REMOVED DUE TO CPU USAGE)
-        g.guiSurface.blit(self.background, (0, 0))
+        #g.guiSurface.blit(self.background, (0, 0))
         self.drawUI()
 
         # part of the hack. game map is blitted so that the gui (app.paint) is ABOVE the game screen
@@ -519,8 +519,8 @@ class GameGUI():
         # EDITORS
 
         elif self.state == GUI_MAPEDITOR:
-            self.mapEditorGUI.draw()
-            #self.mapEditorGUI.drawElements()
+            #self.mapEditorGUI.draw()
+            self.mapEditorGUI.drawElements()
 
         elif self.state == GUI_ITEMEDITOR:
             self.itemEditorGUI.drawElements()
