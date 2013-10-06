@@ -688,7 +688,7 @@ class MapEditorGUI():
         self.draw()
 
     def draw(self):
-        g.gameEngine.graphicsEngine.gameGUI.reset()
+        #g.gameEngine.graphicsEngine.gameGUI.reset()
 
         if self.state == PLACE_TILE:
             self.surface.blit(self.selectedTileSurface, self.selectedTileRect)
