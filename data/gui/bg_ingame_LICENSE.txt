@@ -1,0 +1,2 @@
+The in-game background and it's template (bg_ingame.png) is created by Waterseas @ GitHub: https://github.com/Waterseas
+It is licensed under the Creative Commons License: http://creativecommons.org/licenses/by/3.0/
