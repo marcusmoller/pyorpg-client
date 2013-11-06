@@ -434,7 +434,9 @@ class DataHandler():
         i = 1
         for x in range(MAX_MAPX):
             for y in range(MAX_MAPY):
-                Map.tile[x][y].ground = jsonData[i][0]["ground"]
+                Map.tile[x][y].layer1 = jsonData[i][0]["layer1"]
+                Map.tile[x][y].layer2 = jsonData[i][0]["layer2"]
+                Map.tile[x][y].layer3 = jsonData[i][0]["layer3"]
                 Map.tile[x][y].mask   = jsonData[i][0]["mask"]
                 Map.tile[x][y].anim   = jsonData[i][0]["animation"]
                 Map.tile[x][y].fringe = jsonData[i][0]["fringe"]

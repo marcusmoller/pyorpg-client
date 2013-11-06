@@ -184,14 +184,16 @@ class TCPConnection():
         for x in range(MAX_MAPX):
             for y in range(MAX_MAPY):
                 tempTile = Map.tile[x][y]
-                packet.append([{"ground": tempTile.ground, \
-                                "mask": tempTile.mask, \
+                packet.append([{"layer1":    tempTile.layer1, \
+                                "layer2":    tempTile.layer2, \
+                                "layer3":    tempTile.layer3, \
+                                "mask":      tempTile.mask, \
                                 "animation": tempTile.anim, \
-                                "fringe": tempTile.fringe, \
-                                "type": tempTile.type, \
-                                "data1": tempTile.data1, \
-                                "data2": tempTile.data2, \
-                                "data3": tempTile.data3}])
+                                "fringe":    tempTile.fringe, \
+                                "type":      tempTile.type, \
+                                "data1":     tempTile.data1, \
+                                "data2":     tempTile.data2, \
+                                "data3":     tempTile.data3}])
 
 
         for i in range(MAX_MAP_NPCS):

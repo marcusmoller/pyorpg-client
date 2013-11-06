@@ -619,11 +619,23 @@ def calcTilePositions():
             MapTilePosition[x][y].x = x * PIC_X
             MapTilePosition[x][y].y = y * PIC_Y
 
-            if Map.tile[x][y].ground != None:
-                MapTilePosition[x][y].ground.top    = (Map.tile[x][y].ground // TILESHEET_WIDTH) * PIC_Y
-                MapTilePosition[x][y].ground.left   = (Map.tile[x][y].ground % TILESHEET_WIDTH) * PIC_X
-                MapTilePosition[x][y].ground.width  = PIC_X
-                MapTilePosition[x][y].ground.height = PIC_Y
+            if Map.tile[x][y].layer1 != None:
+                MapTilePosition[x][y].layer1.top    = (Map.tile[x][y].layer1 // TILESHEET_WIDTH) * PIC_Y
+                MapTilePosition[x][y].layer1.left   = (Map.tile[x][y].layer1 % TILESHEET_WIDTH) * PIC_X
+                MapTilePosition[x][y].layer1.width  = PIC_X
+                MapTilePosition[x][y].layer1.height = PIC_Y
+
+            if Map.tile[x][y].layer2 != None:
+                MapTilePosition[x][y].layer2.top    = (Map.tile[x][y].layer2 // TILESHEET_WIDTH) * PIC_Y
+                MapTilePosition[x][y].layer2.left   = (Map.tile[x][y].layer2 % TILESHEET_WIDTH) * PIC_X
+                MapTilePosition[x][y].layer2.width  = PIC_X
+                MapTilePosition[x][y].layer2.height = PIC_Y
+
+            if Map.tile[x][y].layer3 != None:
+                MapTilePosition[x][y].layer3.top    = (Map.tile[x][y].layer3 // TILESHEET_WIDTH) * PIC_Y
+                MapTilePosition[x][y].layer3.left   = (Map.tile[x][y].layer3 % TILESHEET_WIDTH) * PIC_X
+                MapTilePosition[x][y].layer3.width  = PIC_X
+                MapTilePosition[x][y].layer3.height = PIC_Y
 
             if Map.tile[x][y].fringe != None:
                 MapTilePosition[x][y].fringe.top    = (Map.tile[x][y].fringe // TILESHEET_WIDTH) * PIC_Y

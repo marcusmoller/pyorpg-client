@@ -104,7 +104,10 @@ class GraphicsEngine():
 
     def renderGraphics(self):
         # draw map ground layer
-        self.drawMapLayer(layer=MAP_LAYER_GROUND)
+        #self.drawMapLayer(layer=MAP_LAYER_GROUND)
+        self.drawMapLayer(layer=MAP_LAYER_1)
+        self.drawMapLayer(layer=MAP_LAYER_2)
+        self.drawMapLayer(layer=MAP_LAYER_3)
 
         # items
         for i in range(MAX_MAP_ITEMS):
@@ -174,13 +177,6 @@ class GraphicsEngine():
         #self.tileSurface.set_colorkey((255, 0, 0))
         print "lawl"
 
-    def drawMapTile(self, x, y):
-        if Map.tile[x][y].ground != None:
-            self.surface.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
-        else:
-            # draw black square
-            pygame.draw.rect(self.surface, (0, 0, 0), (MapTilePosition[x][y].x, MapTilePosition[x][y].y, 32, 32))
-
     def drawMapFringeTile(self, x, y):
         if Map.tile[x][y].fringe != None:
             self.surface.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].fringe))
@@ -195,11 +191,17 @@ class GraphicsEngine():
 
         for x in range(MAX_MAPX):
             for y in range(MAX_MAPY):
-                if Map.tile[x][y].ground != None:
-                    self.mapLayerSurface[MAP_LAYER_GROUND].image.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].ground))
+                if Map.tile[x][y].layer1 != None:
+                    self.mapLayerSurface[MAP_LAYER_1].image.blit(self.tileSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].layer1))
                 else:
                     # draw black square
-                    pygame.draw.rect(self.mapLayerSurface[MAP_LAYER_GROUND].image, (0, 0, 0), (MapTilePosition[x][y].x, MapTilePosition[x][y].y, 32, 32))
+                    pygame.draw.rect(self.mapLayerSurface[MAP_LAYER_1].image, (0, 0, 0), (MapTilePosition[x][y].x, MapTilePosition[x][y].y, 32, 32))
+
+                if Map.tile[x][y].layer2 != None:
+                    self.mapLayerSurface[MAP_LAYER_2].image.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].layer2))
+
+                if Map.tile[x][y].layer3 != None:
+                    self.mapLayerSurface[MAP_LAYER_3].image.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].layer3))
 
                 if Map.tile[x][y].fringe != None:
                     self.mapLayerSurface[MAP_LAYER_FRINGE].image.blit(self.tileSurfaceTrans, (MapTilePosition[x][y].x, MapTilePosition[x][y].y), (MapTilePosition[x][y].fringe))

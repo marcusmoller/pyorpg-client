@@ -94,7 +94,9 @@ class ClassClass():
 
 class TileClass():
     def __init__(self):
-        self.ground = None
+        self.layer1 = None
+        self.layer2 = None
+        self.layer3 = None
         self.mask = 0
         self.anim = 0
         self.fringe = None
@@ -109,7 +111,9 @@ class TilePosClass():
         self.x = 0
         self.y = 0
 
-        self.ground = pygame.Rect(0, 0, 0, 0)
+        self.layer1 = pygame.Rect(0, 0, 0, 0)
+        self.layer2 = pygame.Rect(0, 0, 0, 0)
+        self.layer3 = pygame.Rect(0, 0, 0, 0)
         self.mask = pygame.Rect(0, 0, 0, 0)
         self.anim = pygame.Rect(0, 0, 0, 0)
         self.fringe = pygame.Rect(0, 0, 0, 0)

@@ -357,6 +357,14 @@ class placeTileControl(gui.Table):
         self.td(gui.Spacer(10, 0))
         self.td(gui.Radio(g, value=2))
 
+        e = gui.Select(name='selTileType')
+        e.add('Layer 1', 0)
+        e.add('Layer 2', 1)
+        e.add('Layer 3', 2)
+        e.add('Fringe', 3)
+        e.value = 0
+        self.td(e)
+        
 
 class placeBlockControl(gui.Table):
     def __init__(self, **params):
@@ -562,7 +570,7 @@ class MapEditorContainer(gui.Container):
         self.quitEditor()
 
     def getTileType(self):
-        return self.tileCtrl.value['grpTileType'].value
+        return self.tileCtrl.value['selTileType'].value
 
     def cancelMap(self, value):
         self.toggleProperties(None)
@@ -750,33 +758,54 @@ class MapEditorGUI():
 
     def fillLayer(self):
         ''' fills the layer with the currently selected tile '''
-        # fill ground layer
-        if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+        if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 0:
             for x in range(MAX_MAPX):
                 for y in range(MAX_MAPY):
-                    Map.tile[x][y].ground = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+                    Map.tile[x][y].layer1 = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
 
+        elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+            for x in range(MAX_MAPX):
+                for y in range(MAX_MAPY):
+                    Map.tile[x][y].layer2 = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
 
-        # clear fringe layer
         elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
+            for x in range(MAX_MAPX):
+                for y in range(MAX_MAPY):
+                    Map.tile[x][y].layer3 = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+
+        elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 3:
             for x in range(MAX_MAPX):
                 for y in range(MAX_MAPY):
                     Map.tile[x][y].fringe = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
 
+        calcTilePositions()
+        g.gameEngine.graphicsEngine.redrawMap()
+
     def clearLayer(self):
         ''' clears the layer '''
-        # clear ground layer
-        if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+        if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 0:
             for x in range(MAX_MAPX):
                 for y in range(MAX_MAPY):
-                    Map.tile[x][y].ground = None
+                    Map.tile[x][y].layer1 = None
 
+        elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+            for x in range(MAX_MAPX):
+                for y in range(MAX_MAPY):
+                    Map.tile[x][y].layer2 = None
 
-        # clear fringe layer
         elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
             for x in range(MAX_MAPX):
                 for y in range(MAX_MAPY):
+                    Map.tile[x][y].layer3 = None
+
+        # fill fringe layer
+        elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 3:
+            for x in range(MAX_MAPX):
+                for y in range(MAX_MAPY):
                     Map.tile[x][y].fringe = None
+
+        calcTilePositions()
+        g.gameEngine.graphicsEngine.redrawMap()
 
     def handleMouseDown(self, event):
         # todo: better mouse rightclick/leftclick
@@ -801,10 +830,16 @@ class MapEditorGUI():
                         self.fillLayer()
                         return
 
-                    if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
-                        Map.tile[x][y].ground = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+                    if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 0:
+                        Map.tile[x][y].layer1 = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+
+                    elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+                        Map.tile[x][y].layer2 = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
 
                     elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
+                        Map.tile[x][y].layer3 = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
+
+                    elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 3:
                         Map.tile[x][y].fringe = self.selectedTileY * TILESHEET_WIDTH + self.selectedTileX
 
                     calcTilePositions()
@@ -841,10 +876,17 @@ class MapEditorGUI():
                         return
 
                     # remove tile
-                    Map.tile[x][y].ground = None
-                    Map.tile[x][y].mask = 0
-                    Map.tile[x][y].anim = 0
-                    Map.tile[x][y].fringe = None
+                    if g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 0:
+                        Map.tile[x][y].layer1 = None
+
+                    elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 1:
+                        Map.tile[x][y].layer2 = None
+
+                    elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 2:
+                        Map.tile[x][y].layer3 = None
+
+                    elif g.gameEngine.graphicsEngine.gameGUI.guiContainer.mapEditorControl.getTileType() == 3:
+                        Map.tile[x][y].fringe = None
 
                     calcTilePositions()
 

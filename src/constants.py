@@ -70,10 +70,12 @@ MAP_MORAL_NONE = 0
 MAP_MORAL_SAFE = 1
 
 # map layer constants
-MAP_MAX_LAYERS = 2
+MAP_MAX_LAYERS = 4
 
-MAP_LAYER_GROUND = 0
-MAP_LAYER_FRINGE = 1
+MAP_LAYER_1 = 0
+MAP_LAYER_2 = 1
+MAP_LAYER_3 = 2
+MAP_LAYER_FRINGE = 3
 
 # text colors
 class textColor():
