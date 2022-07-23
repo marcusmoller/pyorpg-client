@@ -47,7 +47,7 @@ class Hexvid(Vid):
             tmp,y2 = self.tile_to_view((w+1,h+1))
             x2,tmp = self.tile_to_view((w+1,0))
             self.bounds = pygame.Rect(x1,y1,x2-x1,y2-y1)
-            print self.bounds
+            print(self.bounds)
         #""
         
         if self.bounds != None: self.view.clamp_ip(self.bounds)

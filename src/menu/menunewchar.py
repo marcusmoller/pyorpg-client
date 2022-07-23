@@ -8,7 +8,7 @@ import global_vars as g
 from objects import *
 from constants import *
 
-import gui.pygUI as pygUI
+import gui.python_gui as pygUI
 from gui.dialogs import alertMessageDialog
 
 class newCharControl(gui.Table):

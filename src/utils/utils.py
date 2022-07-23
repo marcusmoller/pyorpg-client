@@ -8,7 +8,7 @@ def log(msg):
     localTime = time.localtime(time.time())
     stringTime = str(localTime[3]) + ":" + str(localTime[4]) + ":" + str(localTime[5])
 
-    print stringTime + ": " + msg
+    print(stringTime + ": " + msg)
 
 
 def decodeJSON(data):

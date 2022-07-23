@@ -17,7 +17,7 @@ parser.add_argument('--no-sound', help='disables sound', action='store_false')
 args = vars(parser.parse_args())
 
 if args['ip'] != None:
-    print "ip todo"
+    print("ip todo")
 
 pygame.display.set_caption(GAME_NAME)
 g.screenSurface = pygame.display.set_mode((g.SCREEN_WIDTH, g.SCREEN_HEIGHT))

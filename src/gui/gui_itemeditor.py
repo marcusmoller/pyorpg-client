@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from pgu import gui
-import pygUI as pygUI
+from .python_gui import *
 
 from objects import Item
 from resourcemanager import ResourceManager
@@ -363,8 +363,8 @@ class ItemEditorGUI():
 
         # scroll buttons
         # - scroll buttons (place them near self.selectedSpriteRect)
-        btnScrollLeft = pygUI.pygButton((600, 88, 32, 32), normal=g.dataPath + '/themes/default/hslider.left.tga')
-        btnScrollRight = pygUI.pygButton((680, 88, 32, 32), normal=g.dataPath + '/themes/default/hslider.right.tga')
+        btnScrollLeft = pygButton((600, 88, 32, 32), normal=g.dataPath + '/themes/default/hslider.left.tga')
+        btnScrollRight = pygButton((680, 88, 32, 32), normal=g.dataPath + '/themes/default/hslider.right.tga')
 
         self.scrollButtons = (btnScrollLeft, btnScrollRight)
 

@@ -9,10 +9,10 @@ from constants import *
 import global_vars as g
 from utils.utils import countFiles
 
-from gui_mapeditor import MapEditorContainer, MapEditorGUI
-from gui_itemeditor import ItemEditorContainer, ItemEditorGUI
-from gui_spelleditor import SpellEditorContainer, SpellEditorGUI
-from gui_npceditor import NPCEditorContainer, NPCEditorGUI
+from .gui_mapeditor import MapEditorContainer, MapEditorGUI
+from .gui_itemeditor import ItemEditorContainer, ItemEditorGUI
+from .gui_spelleditor import SpellEditorContainer, SpellEditorGUI
+from .gui_npceditor import NPCEditorContainer, NPCEditorGUI
 
 # gui states
 GUI_STATS = 0
@@ -154,7 +154,7 @@ class ChatControl(gui.Table):
             write(text, color)
 
     def clearChat(self):
-        print "todo"
+        print("todo")
 
 
 class uiContainer(gui.Container):
@@ -406,7 +406,7 @@ class GameGUI():
 
         if event.type == KEYDOWN:
             if event.key == pygame.K_RETURN:
-                print self.guiContainer.chatCtrl.focused
+                print(self.guiContainer.chatCtrl.focused)
                 if self.guiContainer.chatCtrl.focused == False:
                     self.guiContainer.chatCtrl.chatMsg.focus()
                     self.guiContainer.chatCtrl.focused = True

@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from pgu import gui
 
-import pygUI as pygUI
+from .python_gui import *
 from gamelogic import *
 from objects import *
 from constants import *
@@ -471,7 +471,7 @@ class placeItemControl(gui.Table):
 
         if typeValue == ITEM_TYPE_CURRENCY:
             # do stuff
-            print "todo: add value scroller"
+            print("todo: add value scroller")
 
         # update item num
         self.itemNum = itemNum
@@ -676,10 +676,10 @@ class MapEditorGUI():
 
         # scroll buttons
         # - scroll buttons (place them near self.tileSurfaceRect)
-        btnScrollLeft = pygUI.pygButton((self.tilesetSurfaceRect.x, (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/hslider.left.tga')
-        btnScrollRight = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width-16), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/hslider.right.tga')
-        btnScrollUp = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), self.tilesetSurfaceRect.y, 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/vslider.up.tga')
-        btnScrollDown = pygUI.pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height-16), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/vslider.down.tga')
+        btnScrollLeft = pygButton((self.tilesetSurfaceRect.x, (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/hslider.left.tga')
+        btnScrollRight = pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width-16), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/hslider.right.tga')
+        btnScrollUp = pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), self.tilesetSurfaceRect.y, 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/vslider.up.tga')
+        btnScrollDown = pygButton((self.tilesetSurfaceRect.x + (self.tilesetSurfaceRect.width), (self.tilesetSurfaceRect.y+self.tilesetSurfaceRect.height-16), 32, 32), fgcolor=(255, 255, 255), normal=g.dataPath + '/themes/default/vslider.down.tga')
 
         self.tileButtons = (btnScrollLeft, btnScrollRight, btnScrollUp, btnScrollDown)
 
@@ -920,5 +920,5 @@ class MapEditorGUI():
 
         g.editor = EDITOR_NONE
         loadMap(getPlayerMap(g.myIndex))
-        print "load map?"
+        print("load map?")
         initMapData()

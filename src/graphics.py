@@ -175,7 +175,7 @@ class GraphicsEngine():
         # TODO: THIS IS NOT WORKING ATM
         #self.tileSurface = pygame.image.load("data/tilesets/Tiles1.bmp").convert_alpha()
         #self.tileSurface.set_colorkey((255, 0, 0))
-        print "lawl"
+        print("lawl")
 
     def drawMapFringeTile(self, x, y):
         if Map.tile[x][y].fringe != None:

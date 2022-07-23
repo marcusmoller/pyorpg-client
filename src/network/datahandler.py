@@ -3,12 +3,12 @@ import os.path
 
 from pgu import gui
 from gui.dialogs import alertMessageDialog
-from database import *
+from .database import *
 from gamelogic import *
 import global_vars as g
 from objects import *
 from constants import *
-from packettypes import *
+from .packettypes import *
 from utils.utils import *
 
 
@@ -168,7 +168,7 @@ class DataHandler():
 
         else:
             # Packet is unknown - hacking attempt
-            print "hacking attempt"
+            print("hacking attempt")
 
     def handleAlertMsg(self, jsonData):
         msg = jsonData[0]['msg']
@@ -361,7 +361,7 @@ class DataHandler():
 
         # play attack sound
         g.soundEngine.playAttack()
-        print "attacksound!"
+        print("attacksound!")
 
     def handleSpellCast(self, jsonData):
         targetType = jsonData[0]['targettype']

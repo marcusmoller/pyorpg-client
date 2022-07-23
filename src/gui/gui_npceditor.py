@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import *
 from pgu import gui
-import pygUI as pygUI
+from .python_gui import *
 
 from objects import Item, NPC, Stats
 from resourcemanager import ResourceManager
@@ -450,7 +450,7 @@ class NPCEditorContainer(gui.Container):
         self.npcNum = npcNum
 
     def updateType(self, value):
-        print 'todo'
+        print('todo')
 
     def saveNPC(self, value):
          # if it's a new NPC then find a new NPC id to use
@@ -572,8 +572,8 @@ class NPCEditorGUI():
 
         # scroll buttons
         # - scroll buttons (place them near self.selectedSpriteRect)
-        btnScrollLeft = pygUI.pygButton((600, 146, 32, 32), normal=g.dataPath + '/themes/default/hslider.left.tga')
-        btnScrollRight = pygUI.pygButton((680, 146, 32, 32), normal=g.dataPath + '/themes/default/hslider.right.tga')
+        btnScrollLeft = pygButton((600, 146, 32, 32), normal=g.dataPath + '/themes/default/hslider.left.tga')
+        btnScrollRight = pygButton((680, 146, 32, 32), normal=g.dataPath + '/themes/default/hslider.right.tga')
 
         self.scrollButtons = (btnScrollLeft, btnScrollRight)
 

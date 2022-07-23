@@ -535,7 +535,7 @@ def checkMapGetItem():
 
 def updateInventory():
     # redraw the inventory interface
-    print "todo"
+    print("todo")
 
 def getPlayersOnMap():
     g.playersOnMap = []

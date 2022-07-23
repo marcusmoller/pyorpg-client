@@ -32,7 +32,7 @@ class characterControl(gui.Table):
                 g.gameEngine.setState(MENU_NEWCHAR)
 
         def btnDelChar(btn):
-            print "not yet implemented"
+            print("not yet implemented")
 
         self.tr()
         self.lblPlayerName = gui.Label('#PLAYER_NAME', antialias=1, color=UI_NAME_FONT_COLOR, font=g.charSelFont)
