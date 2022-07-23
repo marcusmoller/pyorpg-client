@@ -47,16 +47,17 @@ class gameClientProtocol(LineReceiver):
         global dataHandler
 
         # handle base64 data
-        decodedData = base64.b64decode(data)
+        decodedData = base64.b64decode(data).decode('utf-8')
 
         log("Received data from server")
-        log(" -> " + decodedData)
+        log(f'-> {decodedData}')
 
         dataHandler.handleData(decodedData)
 
     def sendData(self, data):
         # encode data using base64
-        encodedData = base64.b64encode(data)
+        data_bytes = data.encode("utf-8")
+        encodedData = base64.b64encode(data_bytes)
         self.sendLine(encodedData)
 
 

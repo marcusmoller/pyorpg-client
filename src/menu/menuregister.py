@@ -37,9 +37,9 @@ class registerControl(gui.Table):
                     return True
 
 
-            username = self.value.items()[0][1]
-            password = self.value.items()[1][1]
-            passwordConfirm = self.value.items()[2][1]
+            username = list(self.value.items())[0][1]
+            password = list(self.value.items())[1][1]
+            passwordConfirm = list(self.value.items())[2][1]
 
             if isLoginLegal(username, password):
                 if checkPasswords(password, passwordConfirm):

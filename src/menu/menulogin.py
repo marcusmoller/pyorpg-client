@@ -86,8 +86,8 @@ class menuLogin():
             g.gameEngine.quitGame()
 
     def doLogin(self):
-        self.username = self.loginCtrl.value.items()[0][1]
-        self.password = self.loginCtrl.value.items()[1][1]
+        self.username = list(self.loginCtrl.value.items())[0][1]
+        self.password = list(self.loginCtrl.value.items())[1][1]
 
         if len(self.username) >= 3 and len(self.password) >= 3:
             if g.tcpConn is None or (g.tcpConn is not None and len(g.gameEngine.menuChar.characters) == 0):
