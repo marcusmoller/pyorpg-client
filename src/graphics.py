@@ -598,4 +598,4 @@ class GraphicsEngine():
 
         if x >= 0 and x < MAX_MAPX:
             if y >= 0 and y < MAX_MAPY:
-                self.surface.blit(self.tileOutlineSurface, (MapTilePosition[x][y].x, MapTilePosition[x][y].y))
+                self.surface.blit(self.tileOutlineSurface, (MapTilePosition[int(x)][int(y)].x, MapTilePosition[int(x)][int(y)].y))
