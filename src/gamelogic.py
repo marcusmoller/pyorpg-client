@@ -471,7 +471,7 @@ def checkDirection(direction):
         y = getPlayerY(g.myIndex)
 
     # check if map tile is blocked
-    if Map.tile[x][y].type == TILE_TYPE_BLOCKED:
+    if Map.tile[int(x)][int(y)].type == TILE_TYPE_BLOCKED:
         return True
 
     # check if player is on tile
@@ -520,7 +520,7 @@ def checkMovement():
                     if Map.tile[getPlayerX(g.myIndex)][getPlayerY(g.myIndex)].type == TILE_TYPE_WARP:
                         g.gettingMap = True
 
-    if Map.tile[getPlayerX(g.myIndex)][getPlayerY(g.myIndex)].type == TILE_TYPE_WARP:
+    if Map.tile[int(getPlayerX(g.myIndex))][int(getPlayerY(g.myIndex))].type == TILE_TYPE_WARP:
         #print "cannot move (todo)"
         g.canMoveNow = False
 
